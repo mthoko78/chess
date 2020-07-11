@@ -82,7 +82,7 @@ public class Main {
       output.add("The time is: " + new Date());
 
       model.put("records", output);
-      return "db";
+      return "time";
     } catch (Exception e) {
       model.put("message", e.getMessage());
       return "error";
