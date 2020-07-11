@@ -1,12 +1,11 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
-
-import com.mthoko.mobile.annotations.JoinColumn;
-import com.mthoko.mobile.entity.Property;
-import com.mthoko.mobile.entity.UniqueEntity;
-import com.mthoko.mobile.exception.ApplicationException;
-import com.mthoko.mobile.util.EntityMapper;
+import static com.mthoko.mobile.util.EntityMapper.deleteByIdsQuery;
+import static com.mthoko.mobile.util.EntityMapper.getInsertQuery;
+import static com.mthoko.mobile.util.EntityMapper.getTimeStampFromDate;
+import static com.mthoko.mobile.util.EntityMapper.joinClause;
+import static com.mthoko.mobile.util.EntityMapper.setForeignKeyOnChildrenFromParentPrimaryKey;
+import static com.mthoko.mobile.util.EntityMapper.setJoinField;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -18,12 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import static com.mthoko.mobile.util.EntityMapper.deleteByIdsQuery;
-import static com.mthoko.mobile.util.EntityMapper.getInsertQuery;
-import static com.mthoko.mobile.util.EntityMapper.getTimeStampFromDate;
-import static com.mthoko.mobile.util.EntityMapper.joinClause;
-import static com.mthoko.mobile.util.EntityMapper.setForeignKeyOnChildrenFromParentPrimaryKey;
-import static com.mthoko.mobile.util.EntityMapper.setJoinField;
+import com.mthoko.mobile.annotations.JoinColumn;
+import com.mthoko.mobile.entity.Property;
+import com.mthoko.mobile.entity.UniqueEntity;
+import com.mthoko.mobile.exception.ApplicationException;
+import com.mthoko.mobile.util.EntityMapper;
 
 public abstract class EntityResource<T extends UniqueEntity> {
 

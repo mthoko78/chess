@@ -1,10 +1,6 @@
 package com.mthoko.mobile.service.proxy;
 
-import android.content.Context;
-import android.location.Location;
-
 import com.mthoko.mobile.entity.LocationStamp;
-import com.mthoko.mobile.resource.internal.BaseResource;
 import com.mthoko.mobile.resource.remote.BaseResourceRemote;
 import com.mthoko.mobile.service.LocationStampService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
@@ -16,8 +12,8 @@ public class LocationStampServiceProxy extends BaseServiceImpl<LocationStamp> im
 
     private final LocationStampServiceImpl service;
 
-    public LocationStampServiceProxy(Context context) {
-        service = new LocationStampServiceImpl(context);
+    public LocationStampServiceProxy() {
+        service = new LocationStampServiceImpl();
     }
 
     public List<LocationStamp> findRemoteLocationStampsByImei(String imei) {

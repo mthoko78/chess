@@ -1,15 +1,6 @@
 package com.mthoko.mobile.util;
 
-import com.mthoko.mobile.annotations.Constraints;
-import com.mthoko.mobile.annotations.ForeignKey;
-import com.mthoko.mobile.annotations.JoinColumn;
-import com.mthoko.mobile.annotations.PrimaryKey;
-import com.mthoko.mobile.entity.UniqueEntity;
-import com.mthoko.mobile.exception.ApplicationException;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import static org.json.JSONObject.NULL;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
@@ -24,7 +15,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.json.JSONObject.NULL;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.mthoko.mobile.annotations.Constraints;
+import com.mthoko.mobile.annotations.ForeignKey;
+import com.mthoko.mobile.annotations.JoinColumn;
+import com.mthoko.mobile.annotations.PrimaryKey;
+import com.mthoko.mobile.entity.UniqueEntity;
+import com.mthoko.mobile.exception.ApplicationException;
 
 public class EntityMapper<T> extends BaseMapper {
 

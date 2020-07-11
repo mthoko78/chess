@@ -1,5 +1,17 @@
 package com.mthoko.mobile.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.mthoko.mobile.annotations.Constraints;
 import com.mthoko.mobile.annotations.ForeignKey;
 import com.mthoko.mobile.annotations.PrimaryKey;
@@ -17,18 +29,6 @@ import com.mthoko.mobile.entity.SimContact;
 import com.mthoko.mobile.entity.Sms;
 import com.mthoko.mobile.entity.UniqueEntity;
 import com.mthoko.mobile.exception.ApplicationException;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public abstract class BaseMapper {
 

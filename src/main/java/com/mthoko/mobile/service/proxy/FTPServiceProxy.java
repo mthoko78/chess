@@ -1,9 +1,6 @@
 package com.mthoko.mobile.service.proxy;
 
-import android.content.Context;
-
 import com.mthoko.mobile.entity.FileInfo;
-import com.mthoko.mobile.resource.internal.BaseResource;
 import com.mthoko.mobile.resource.remote.BaseResourceRemote;
 import com.mthoko.mobile.service.FTPService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
@@ -17,13 +14,8 @@ public class FTPServiceProxy extends BaseServiceImpl<FileInfo> implements FTPSer
 
     private final FTPServiceImpl service;
 
-    public FTPServiceProxy(Context context) {
-        service = new FTPServiceImpl(context);
-    }
-
-    @Override
-    public BaseResource getResource() {
-        return service.getResource();
+    public FTPServiceProxy() {
+        service = new FTPServiceImpl();
     }
 
     @Override
@@ -31,10 +23,6 @@ public class FTPServiceProxy extends BaseServiceImpl<FileInfo> implements FTPSer
         return service.getRemoteResource();
     }
 
-    @Override
-    public void setContext(Context context) {
-
-    }
 
     @Override
     public FTPFile[] getClientFiles(String dir) {

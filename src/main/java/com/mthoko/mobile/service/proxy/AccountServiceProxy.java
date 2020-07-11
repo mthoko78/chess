@@ -1,47 +1,25 @@
 package com.mthoko.mobile.service.proxy;
 
-import android.content.Context;
+import java.util.List;
+import java.util.Set;
 
 import com.mthoko.mobile.model.Account;
-import com.mthoko.mobile.resource.internal.BaseResource;
 import com.mthoko.mobile.resource.remote.BaseResourceRemote;
 import com.mthoko.mobile.service.AccountService;
 import com.mthoko.mobile.service.internal.AccountServiceImpl;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 public class AccountServiceProxy extends BaseServiceImpl<Account> implements AccountService {
 
     private final AccountServiceImpl service;
 
-    public AccountServiceProxy(Context context) {
-        service = new AccountServiceImpl(context);
-    }
-
-    @Override
-    public BaseResource getResource() {
-        return service.getResource();
+    public AccountServiceProxy() {
+        service = new AccountServiceImpl();
     }
 
     @Override
     public BaseResourceRemote getRemoteResource() {
         return service.getRemoteResource();
-    }
-
-    @Override
-    public void setContext(Context context) {
-        service.setContext(context);
-    }
-
-    @Override
-    public Account findByEmail(String email) {
-        boolean openConnection = service.openConnection();
-        Account account = service.findByEmail(email);
-        service.closeConnectionIf(openConnection);
-        return account;
     }
 
     @Override
@@ -53,57 +31,11 @@ public class AccountServiceProxy extends BaseServiceImpl<Account> implements Acc
     }
 
     @Override
-    public void register(Account account) {
-        boolean openConnection = service.openConnection();
-        boolean inTransaction = service.beginTransaction();
-        service.register(account);
-        service.endTransactionIf(inTransaction);
-        service.closeConnectionIf(openConnection);
-    }
-
-    @Override
-    public void attemptToVerify(Account account) {
-        boolean openConnection = service.openConnection();
-        boolean inTransaction = service.beginTransaction();
-        boolean openRemoteConnection = service.openRemoteConnection();
-        boolean inRemoteTransaction = service.beginRemoteTransaction();
-        service.attemptToVerify(account);
-        service.endRemoteTransactionIf(inRemoteTransaction);
-        service.closeRemoteConnectionIf(openRemoteConnection);
-        service.endTransactionIf(inTransaction);
-        service.closeConnectionIf(openConnection);
-    }
-
-    @Override
-    public Account findBySimNo(String simNo) {
-        boolean openConnection = service.openConnection();
-        Account account = service.findBySimNo(simNo);
-        service.closeConnectionIf(openConnection);
-        return account;
-    }
-
-    @Override
     public Account findRemoteAccountBySimNo(String simNo) {
         boolean openConnection = service.openRemoteConnection();
         Account account = service.findRemoteAccountBySimNo(simNo);
         service.closeRemoteConnectionIf(openConnection);
         return account;
-    }
-
-    @Override
-    public Account findByMemberId(long memberId) {
-        boolean openConnection = service.openConnection();
-        Account account = service.findByMemberId(memberId);
-        service.closeConnectionIf(openConnection);
-        return account;
-    }
-
-    @Override
-    public List<Account> findVerifiedMatchingAccounts(Account account) {
-        boolean openConnection = service.openConnection();
-        ArrayList<Account> accounts = service.findVerifiedMatchingAccounts(account);
-        service.closeConnectionIf(openConnection);
-        return accounts;
     }
 
     @Override
@@ -126,11 +58,4 @@ public class AccountServiceProxy extends BaseServiceImpl<Account> implements Acc
         service.closeRemoteConnectionIf(connection);
     }
 
-    @Override
-    public List<Account> findMatchingAccounts(Account account) {
-        boolean openConnection = service.openConnection();
-        ArrayList<Account> accounts = service.findMatchingAccounts(account);
-        service.closeConnectionIf(openConnection);
-        return accounts;
-    }
 }

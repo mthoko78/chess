@@ -1,26 +1,17 @@
 package com.mthoko.mobile.service.internal;
 
-import android.content.Context;
-
-import com.mthoko.mobile.entity.DevContact;
-import com.mthoko.mobile.entity.DevContactValue;
-import com.mthoko.mobile.entity.Device;
-import com.mthoko.mobile.entity.SimContact;
-import com.mthoko.mobile.resource.internal.BaseResource;
-import com.mthoko.mobile.resource.internal.DevContactResource;
-import com.mthoko.mobile.resource.internal.DevContactValueResource;
-import com.mthoko.mobile.resource.internal.DeviceResource;
-import com.mthoko.mobile.resource.internal.SimContactResource;
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
-import com.mthoko.mobile.resource.remote.DevContactResourceRemote;
-import com.mthoko.mobile.service.DevContactService;
-import com.mthoko.mobile.util.ConnectionWrapper;
-import com.mthoko.mobile.util.DatabaseWrapper;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.mthoko.mobile.entity.DevContact;
+import com.mthoko.mobile.entity.DevContactValue;
+import com.mthoko.mobile.entity.SimContact;
+import com.mthoko.mobile.resource.remote.BaseResourceRemote;
+import com.mthoko.mobile.resource.remote.DevContactResourceRemote;
+import com.mthoko.mobile.service.DevContactService;
+import com.mthoko.mobile.util.ConnectionWrapper;
 
 public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implements DevContactService {
 
@@ -72,29 +63,10 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
         STRING_TYPE[TYPE_MMS] = "MMS";
     }
 
-    private final DevContactResource devContactResource;
     private final DevContactResourceRemote devContactResourceRemote;
-    private final DeviceResource deviceResource;
-    private final SimContactResource simContactResource;
-    private final DevContactValueResource devContactValueResource;
 
-    public DevContactServiceImpl(Context context) {
-        DatabaseWrapper databaseWrapper = new DatabaseWrapper();
-        devContactResourceRemote = new DevContactResourceRemote(context, new ConnectionWrapper(null));
-        devContactResource = new DevContactResource(context, databaseWrapper);
-        deviceResource = new DeviceResource(context, databaseWrapper);
-        simContactResource = new SimContactResource(context, databaseWrapper);
-        devContactValueResource = new DevContactValueResource(context, databaseWrapper);
-    }
-
-    @Override
-    public void saveOnDevice(DevContact contact) {
-        devContactResource.saveOnDevice(contact);
-    }
-
-    @Override
-    public List<DevContact> getActualDevContacts() {
-        return devContactResource.getActualDevContacts();
+    public DevContactServiceImpl() {
+        devContactResourceRemote = new DevContactResourceRemote(new ConnectionWrapper(null));
     }
 
     @Override
@@ -113,27 +85,6 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
     }
 
     @Override
-    public void save(Long devId, List<DevContact> contacts) {
-        for (DevContact contact : contacts) {
-            contact.setDevId(devId);
-        }
-        saveAll(contacts);
-    }
-
-    @Override
-    public void setContext(Context context) {
-        devContactResource.setContext(context);
-        deviceResource.setContext(context);
-        simContactResource.setContext(context);
-        devContactValueResource.setContext(context);
-    }
-
-    @Override
-    public List<DevContact> findByDeviceId(Long deviceId) {
-        return devContactResource.findByDeviceId(deviceId);
-    }
-
-    @Override
     public List<DevContact> toDevContacts(List<SimContact> simContacts) {
         List<DevContact> devContacts = new ArrayList<>();
         for (SimContact simContact : simContacts) {
@@ -146,70 +97,8 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
     }
 
     @Override
-    public BaseResource getResource() {
-        return devContactResource;
-    }
-
-    @Override
-    public Context getContext() {
-        return devContactResource.getContext();
-    }
-
-    @Override
     public BaseResourceRemote getRemoteResource() {
         return devContactResourceRemote;
-    }
-
-    @Override
-    public void integrateContactsExternally(Device device) {
-        if (device == null || device.getImei() == null) {
-            return;
-        }
-        String imei = device.getImei();
-        List<DevContact> unverified = devContactResource.findUnverifiedByImei(imei);
-        if (!unverified.isEmpty()) {
-            verify(device, unverified);
-        }
-        List<DevContact> remoteContacts = findRemoteContactsMissingInternally(imei);
-        if (!remoteContacts.isEmpty()) {
-            devContactResource.saveAll(remoteContacts);
-            if (getImei().equals(device.getImei())) {
-                // TODO: check if current user owns device before the operation below
-                devContactResource.saveAllOnDevice(remoteContacts);
-            }
-        }
-    }
-
-    @Override
-    public List<DevContact> findRemoteContactsMissingInternally(String imei) {
-        List<Long> remoteIds = devContactResource.retrieveVerificationIdsByImei(imei);
-        List<DevContact> contacts = devContactResourceRemote.findByImeiWithIdsNotIn(remoteIds, imei);
-        return contacts;
-    }
-
-    @Override
-    public void verify(Device device, List<DevContact> contacts) {
-        List<DevContact> unverified = new ArrayList<>(contacts);
-        removeVerified(unverified);
-        if (unverified.isEmpty()) {
-            return;
-        }
-        String imei = device.getImei();
-        int count = devContactResourceRemote.countByImei(imei);
-        if (count > 0) {
-            Map<String, Long> verification = devContactResourceRemote.retrieveVerificationByImei(imei);
-            verifyAll(unverified, verification);
-            removeVerified(unverified);
-        }
-        if (!unverified.isEmpty()) {
-            devContactResourceRemote.saveAll(unverified);
-            updateAll(unverified);
-        }
-    }
-
-    @Override
-    public List<List<DevContact>> findContactsWithDuplicateValuesByImei(String imei) {
-        return extractDuplicates(devContactResource.findByImei(imei));
     }
 
     private Map<DevContactValue, List<DevContact>> filterDuplicates(List<DevContact> contacts) {
@@ -221,20 +110,6 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
             }
         }
         return duplicateValues;
-    }
-
-    private void removeDuplicateValues(List<DevContact> contacts, boolean deletePermanently) {
-        Map<DevContactValue, List<DevContact>> devContactValueListMap = filterDuplicates(contacts);
-        for (Map.Entry<DevContactValue, List<DevContact>> entry : devContactValueListMap.entrySet()) {
-            DevContactValue contactValue = entry.getKey();
-            List<DevContact> devContacts = entry.getValue();
-            for (int i = 1; i < devContacts.size(); i++) {
-                devContacts.get(i).getValues().remove(contactValue);
-                if (deletePermanently) {
-                    devContactValueResource.delete(contactValue);
-                }
-            }
-        }
     }
 
     @Override
@@ -261,18 +136,6 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
     }
 
     @Override
-    public void verifyAll(List<DevContact> devContacts, Map<String, Long> verification) {
-        devContactResource.verifyAll(devContacts, verification);
-        devContactValueResource.verifyAll(extractContactValues(devContacts), verification);
-    }
-
-    @Override
-    public void verify(DevContact entity, Map<String, Long> verification) {
-        devContactResource.verify(entity, verification);
-        devContactValueResource.verifyAll(entity.getValues(), verification);
-    }
-
-    @Override
     public List<DevContactValue> extractContactValues(List<DevContact> unverified) {
         List<DevContactValue> values = new ArrayList<>();
         for (DevContact contact : unverified) {
@@ -281,42 +144,4 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
         return values;
     }
 
-    @Override
-    public void integrateContactsInternally(Device device) {
-        if (device == null || !getImei().equals(device.getImei())) {
-            return;
-        }
-
-        List<DevContact> internalContacts = devContactResource.findByImei(device.getImei());
-        List<DevContact> contactsInDevice = getActualDevContacts();
-        List<DevContact> contactsNotInDevice = new ArrayList<>(internalContacts);
-        contactsNotInDevice.removeAll(contactsInDevice);
-        contactsInDevice.removeAll(internalContacts);
-        if (!contactsInDevice.isEmpty()) {
-            for (DevContact devContact : contactsInDevice) {
-                devContact.setDevId(device.getId());
-            }
-            devContactResource.saveAll(contactsInDevice);
-        }
-        if (!contactsNotInDevice.isEmpty()) {
-            devContactResource.saveAllOnDevice(contactsNotInDevice);
-        }
-    }
-
-    @Override
-    public List<DevContact> findByImei(String imei) {
-        return devContactResource.findByImei(imei);
-    }
-
-    @Override
-    public List<DevContact> findUnverifiedContactsByImei(String imei) {
-        String whereClause = String.format("%s.imei = '%s' AND %s.verificationId IS NULL", Device.class.getSimpleName(), imei, Device.class.getSimpleName());
-        return devContactResource.findWhereJoining(Device.class, DevContact.class, whereClause);
-    }
-
-    @Override
-    public List<Long> retrieveVerificationIdsByImei(String imei) {
-        String whereClause = String.format("%s.imei = '%s' AND %s.verificationId IS NOT NULL", Device.class.getSimpleName(), imei, Device.class.getSimpleName());
-        return devContactResource.retrieveVerificationIdsJoiningWhere(Device.class, DevContact.class, whereClause);
-    }
 }

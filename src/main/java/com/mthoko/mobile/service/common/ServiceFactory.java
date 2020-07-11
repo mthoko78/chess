@@ -1,8 +1,5 @@
 package com.mthoko.mobile.service.common;
 
-import android.content.Context;
-
-import com.mthoko.mobile.resource.internal.MyResources;
 import com.mthoko.mobile.service.AccountService;
 import com.mthoko.mobile.service.CredentialsService;
 import com.mthoko.mobile.service.DevContactService;
@@ -28,62 +25,47 @@ import com.mthoko.mobile.service.proxy.SmsServiceProxy;
 
 public class ServiceFactory {
 
-    public static AccountService getAccountService(Context context) {
-        return new AccountServiceProxy(parseContext(context));
+    public static AccountService getAccountService() {
+        return new AccountServiceProxy();
     }
 
-    public static DevContactService getContactService(Context context) {
-        return new DevContactServiceProxy(parseContext(context));
+    public static DevContactService getContactService() {
+        return new DevContactServiceProxy();
     }
 
-    public static SimContactService getSimContactService(Context context) {
-        return new SimContactServiceProxy(parseContext(context));
+    public static SimContactService getSimContactService() {
+        return new SimContactServiceProxy();
     }
 
-    public static CredentialsService getCredentialsService(Context context) {
-        return new CredentialsServiceProxy(parseContext(context));
+    public static CredentialsService getCredentialsService() {
+        return new CredentialsServiceProxy();
     }
 
-    public static DeviceService getDeviceService(Context context) {
-        return new DeviceServiceProxy(parseContext(context));
+    public static DeviceService getDeviceService() {
+        return new DeviceServiceProxy();
     }
 
-    public static MemberService getMemberService(Context context) {
-        return new MemberServiceProxy(parseContext(context));
+    public static MemberService getMemberService() {
+        return new MemberServiceProxy();
     }
 
-    public static RecordedCallService getRecordedCallService(Context context) {
-        return new RecordedCallServiceProxy(parseContext(context));
+    public static RecordedCallService getRecordedCallService() {
+        return new RecordedCallServiceProxy();
     }
 
-    public static RecordingService getRecordingService(Context  context) {
-        return new RecordingService();
+    public static SimCardService getSimCardService() {
+        return new SimCardServiceProxy();
     }
 
-    public static SimCardService getSimCardService(Context context) {
-        return new SimCardServiceProxy(parseContext(context));
+    public static SmsService getSmsService() {
+        return new SmsServiceProxy();
     }
 
-    private static Context parseContext(Context context) {
-        if (context == null) {
-            context = MyResources.getInstance().getContext();
-        }
-        return context;
+    public static FTPService getFtpService() {
+        return new FTPServiceProxy();
     }
 
-    public static LocationService getLocationService(Context context) {
-        return new LocationService(parseContext(context));
-    }
-
-    public static SmsService getSmsService(Context context) {
-        return new SmsServiceProxy(parseContext(context));
-    }
-
-    public static FTPService getFtpService(Context context) {
-        return new FTPServiceProxy(parseContext(context));
-    }
-
-    public static LocationStampService getLocationStampService(Context context) {
-        return new LocationStampServiceProxy(context);
+    public static LocationStampService getLocationStampService() {
+        return new LocationStampServiceProxy();
     }
 }

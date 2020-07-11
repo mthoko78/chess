@@ -1,7 +1,5 @@
 package com.mthoko.mobile.resource.remote;
 
-import static com.mthoko.mobile.service.common.RecordingService.RECORDING_DIRECTORY;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,7 +16,8 @@ import com.mthoko.mobile.util.ConnectionWrapper;
 
 public class FTPResourceRemote extends BaseResourceRemote {
 
-    private final String host;
+    private static final String RECORDING_DIRECTORY = "";
+	private final String host;
     private final int port;
     private final String username;
     private final String password;

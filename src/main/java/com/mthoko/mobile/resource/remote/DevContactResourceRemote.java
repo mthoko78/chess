@@ -1,12 +1,12 @@
 package com.mthoko.mobile.resource.remote;
 
+import java.util.List;
+import java.util.Map;
+
 import com.mthoko.mobile.entity.DevContact;
 import com.mthoko.mobile.entity.Device;
 import com.mthoko.mobile.entity.UniqueEntity;
 import com.mthoko.mobile.util.ConnectionWrapper;
-
-import java.util.List;
-import java.util.Map;
 
 public class DevContactResourceRemote extends BaseResourceRemote<DevContact> {
 

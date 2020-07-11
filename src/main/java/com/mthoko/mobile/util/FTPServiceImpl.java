@@ -1,17 +1,13 @@
 package com.mthoko.mobile.util;
 
-import android.content.Context;
-
-import com.mthoko.mobile.entity.FileInfo;
-import com.mthoko.mobile.resource.internal.BaseResource;
-import com.mthoko.mobile.resource.internal.FTPResource;
-import com.mthoko.mobile.resource.remote.FTPResourceRemote;
-import com.mthoko.mobile.service.FTPService;
-import com.mthoko.mobile.service.internal.BaseServiceImpl;
+import java.io.File;
 
 import org.apache.commons.net.ftp.FTPFile;
 
-import java.io.File;
+import com.mthoko.mobile.entity.FileInfo;
+import com.mthoko.mobile.resource.remote.FTPResourceRemote;
+import com.mthoko.mobile.service.FTPService;
+import com.mthoko.mobile.service.internal.BaseServiceImpl;
 
 /**
  * A program that demonstrates how to upload files from local computer
@@ -21,12 +17,10 @@ import java.io.File;
  */
 public class FTPServiceImpl extends BaseServiceImpl<FileInfo> implements FTPService {
 
-    private final FTPResource ftpResource;
     private final FTPResourceRemote ftpResourceRemote;
 
-    public FTPServiceImpl(Context context) {
-        ftpResource = new FTPResource(context);
-        ftpResourceRemote = new FTPResourceRemote(FileInfo.class, context, new ConnectionWrapper(null));
+    public FTPServiceImpl() {
+        ftpResourceRemote = new FTPResourceRemote(FileInfo.class, new ConnectionWrapper(null));
     }
 
     @Override
@@ -55,17 +49,8 @@ public class FTPServiceImpl extends BaseServiceImpl<FileInfo> implements FTPServ
     }
 
     @Override
-    public BaseResource getResource() {
-        return ftpResource;
-    }
-
-    @Override
     public FTPResourceRemote getRemoteResource() {
         return ftpResourceRemote;
     }
 
-    @Override
-    public void setContext(Context context) {
-        ftpResource.setContext(context);
-    }
 }

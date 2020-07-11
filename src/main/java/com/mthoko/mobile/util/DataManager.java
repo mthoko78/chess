@@ -1,9 +1,5 @@
 package com.mthoko.mobile.util;
 
-import android.util.Log;
-
-import com.mthoko.mobile.exception.ApplicationException;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -16,6 +12,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
+
+import com.mthoko.mobile.exception.ApplicationException;
 
 public class DataManager {
     public static String getFileText(Path path, boolean addLineBreaks) { //
@@ -100,7 +98,7 @@ public class DataManager {
         File sourceFile = new File(sourceFileUri);
 
         if (!sourceFile.isFile()) {
-            Log.e("Error", "Source File not exist :"
+            System.out.println("Error: Source File not exist :"
                     + fileName);
             return 0;
 
@@ -126,13 +124,13 @@ public class DataManager {
     }
 
     private static void processServerResponse(String fileName, HttpURLConnection conn) throws IOException {
-        Log.i("uploadFile", "HTTP Response is : "
+        System.out.println("uploadFile: HTTP Response is : "
                 + conn.getResponseMessage() + ": " + conn.getResponseCode());
 
         if (conn.getResponseCode() == 200) {
             String msg = "File Upload Completed.\n\n See uploaded file here : \n\n"
                     + fileName;
-            Log.i("info", msg);
+            System.out.println("info: " + msg);
         }
     }
 

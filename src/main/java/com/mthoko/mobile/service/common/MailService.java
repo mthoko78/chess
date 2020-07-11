@@ -1,9 +1,5 @@
 package com.mthoko.mobile.service.common;
 
-import android.content.Context;
-
-import com.mthoko.mobile.exception.ApplicationException;
-
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -14,12 +10,11 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.mthoko.mobile.exception.ApplicationException;
+
 public class MailService {
 
-    private Context context;
-
-    public MailService(Context context) {
-        this.context = context;
+    public MailService() {
     }
 
     public static void sendEmail(String subject, String text) {

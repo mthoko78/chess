@@ -1,8 +1,5 @@
 package com.mthoko.mobile.util;
 
-import android.content.Context;
-import android.util.Log;
-
 import com.mthoko.mobile.exception.ApplicationException;
 
 import java.io.BufferedReader;
@@ -17,14 +14,12 @@ import java.net.URL;
  */
 
 public class HttpManager {
-    Context context;
 
-    public HttpManager(Context context) {
-        this.context = context;
+    public HttpManager() {
     }
 
     public static String getData(RequestPackage requestPackage) {
-        Log.e("REQUEST PARAMS: ", ">>>" + requestPackage.getParams() + "<<<");
+        System.out.println("REQUEST PARAMS: >>>" + requestPackage.getParams() + "<<<");
         BufferedReader reader = null;
         String uri = requestPackage.getUrl();
         if (requestPackage.getMethod().equals("GET")) {
@@ -59,7 +54,7 @@ public class HttpManager {
             if (uri.contains("monitor.php")) {
                 response = response.substring(sb.indexOf(" ")).trim();
             }
-            Log.e("RAW RESPONSE", "" + response);
+            System.out.println("RAW RESPONSE: " + response);
             return response;
         } catch (IOException e) {
             throw new ApplicationException(e);

@@ -1,9 +1,5 @@
 package com.mthoko.mobile.service.common;
 
-import android.content.Context;
-
-import com.mthoko.mobile.exception.ApplicationException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,14 +7,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.mthoko.mobile.exception.ApplicationException;
+
 public class FileManagementService {
 
     public static boolean firstRun = true;
 
-    private Context context;
-
-    public FileManagementService(Context context) {
-        this.context = context;
+    public FileManagementService() {
     }
 
     public void copyFileUsingStream(File source, File dest, boolean override) {
@@ -52,13 +47,5 @@ public class FileManagementService {
 
     public void copyFileUsingStream(File source, File dest) {
         this.copyFileUsingStream(source, dest, false);
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
     }
 }
