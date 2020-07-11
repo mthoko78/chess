@@ -2,9 +2,7 @@ package com.mthoko.mobile.service.internal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.mthoko.mobile.entity.SimCard;
 import com.mthoko.mobile.entity.Sms;
 import com.mthoko.mobile.entity.UniqueEntity;
 import com.mthoko.mobile.resource.remote.BaseResourceRemote;
@@ -50,25 +48,6 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     private List<Sms> findRemoteSmsesByRecipient(String recipient) {
         List<Sms> smsList = smsResourceRemote.findByRecipient(recipient);
         return smsList;
-    }
-
-    private void verify(SimCard simCard, List<Sms> smsList) {
-        List<Sms> unverified = new ArrayList<>(smsList);
-        removeVerified(unverified);
-        if (unverified.isEmpty()) {
-            return;
-        }
-        String recipient = simCard.getPhone();
-        int count = smsResourceRemote.countSmsesByRecipient(recipient);
-        if (count > 0) {
-            Map<String, Long> verification = smsResourceRemote.retrieveVerificationByRecipient(recipient);
-            verifyAll(unverified, verification);
-            removeVerified(unverified);
-        }
-        if (!unverified.isEmpty()) {
-            saveAllToRemote(unverified);
-            updateAll(unverified);
-        }
     }
 
     public void saveAllToRemote(List<Sms> unverified) {
