@@ -74,6 +74,20 @@ public class Main {
     }
   }
 
+  @RequestMapping("/time")
+  String time(Map<String, Object> model) {
+    try {
+      ArrayList<String> output = new ArrayList<String>();
+      output.add("The time is: " + new Date());
+
+      model.put("records", output);
+      return "db";
+    } catch (Exception e) {
+      model.put("message", e.getMessage());
+      return "error";
+    }
+  }
+
   @Bean
   public DataSource dataSource() throws SQLException {
     if (dbUrl == null || dbUrl.isEmpty()) {
