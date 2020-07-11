@@ -1,17 +1,16 @@
 package com.mthoko.mobile.service.proxy;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.mthoko.mobile.entity.DevContact;
 import com.mthoko.mobile.entity.DevContactValue;
-import com.mthoko.mobile.entity.Device;
 import com.mthoko.mobile.entity.SimContact;
 import com.mthoko.mobile.resource.remote.BaseResourceRemote;
 import com.mthoko.mobile.service.DevContactService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.service.internal.DevContactServiceImpl;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class DevContactServiceProxy extends BaseServiceImpl<DevContact> implements DevContactService {
 
