@@ -1,14 +1,12 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
-
 import com.mthoko.mobile.entity.Property;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
 public class PropertyResourceRemote extends BaseResourceRemote<Property> {
 
-	public PropertyResourceRemote(Context context, ConnectionWrapper connectionWrapper) {
-		super(Property.class, context, connectionWrapper);
+	public PropertyResourceRemote(ConnectionWrapper connectionWrapper) {
+		super(Property.class, connectionWrapper);
 	}
 
 	public String getProperty(String key) {

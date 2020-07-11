@@ -1,13 +1,6 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
-
-import com.mthoko.mobile.exception.ApplicationException;
-import com.mthoko.mobile.util.ConnectionWrapper;
-
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
+import static com.mthoko.mobile.service.common.RecordingService.RECORDING_DIRECTORY;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static com.mthoko.mobile.service.common.RecordingService.RECORDING_DIRECTORY;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+
+import com.mthoko.mobile.exception.ApplicationException;
+import com.mthoko.mobile.util.ConnectionWrapper;
 
 public class FTPResourceRemote extends BaseResourceRemote {
 
@@ -25,8 +23,8 @@ public class FTPResourceRemote extends BaseResourceRemote {
     private final String username;
     private final String password;
 
-    public FTPResourceRemote(Class entityType, Context context, ConnectionWrapper connectionWrapper) {
-        super(entityType, context, connectionWrapper);
+    public FTPResourceRemote(Class entityType, ConnectionWrapper connectionWrapper) {
+        super(entityType, connectionWrapper);
         host = getAppProperty("ftp.host");
         port = Integer.parseInt(getAppProperty("ftp.port"));
         username = getAppProperty("ftp.username");

@@ -1,7 +1,5 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
-
 import com.mthoko.mobile.entity.LocationStamp;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
@@ -11,8 +9,8 @@ import java.util.Map;
 
 public class LocationStampResourceRemote extends BaseResourceRemote<LocationStamp> {
 
-	public LocationStampResourceRemote(Context context, ConnectionWrapper connectionWrapper) {
-		super(LocationStamp.class, context, connectionWrapper);
+	public LocationStampResourceRemote(ConnectionWrapper connectionWrapper) {
+		super(LocationStamp.class, connectionWrapper);
 	}
 
 	public List<LocationStamp> findByImei(String imei) {

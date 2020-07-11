@@ -1,19 +1,17 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.mthoko.mobile.entity.Device;
 import com.mthoko.mobile.entity.Member;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class DeviceResourceRemote extends BaseResourceRemote<Device> {
 
-	public DeviceResourceRemote(Context context, ConnectionWrapper connectionWrapper) {
-		super(Device.class, context, connectionWrapper);
+	public DeviceResourceRemote(ConnectionWrapper connectionWrapper) {
+		super(Device.class, connectionWrapper);
 	}
 
 	public long save(Long memberId, Device device) {

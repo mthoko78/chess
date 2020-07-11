@@ -1,15 +1,8 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
+import static com.mthoko.mobile.util.EntityMapper.getDateFromTimeStamp;
+import static com.mthoko.mobile.util.EntityMapper.getTimeStampFromDate;
 
-import com.mthoko.mobile.entity.Property;
-import com.mthoko.mobile.entity.UniqueEntity;
-import com.mthoko.mobile.exception.ApplicationException;
-import com.mthoko.mobile.util.ConnectionWrapper;
-import com.mthoko.mobile.util.DataManager;
-import com.mthoko.mobile.util.EntityMapper;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -18,10 +11,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
-import static com.mthoko.mobile.util.EntityMapper.getDateFromTimeStamp;
-import static com.mthoko.mobile.util.EntityMapper.getTimeStampFromDate;
+import com.mthoko.mobile.entity.Property;
+import com.mthoko.mobile.entity.UniqueEntity;
+import com.mthoko.mobile.exception.ApplicationException;
+import com.mthoko.mobile.util.ConnectionWrapper;
+import com.mthoko.mobile.util.DataManager;
+import com.mthoko.mobile.util.EntityMapper;
 
 public class BaseResourceRemote<T extends UniqueEntity> extends EntityResource<T> {
 
@@ -29,8 +25,8 @@ public class BaseResourceRemote<T extends UniqueEntity> extends EntityResource<T
 
     private final ConnectionWrapper connectionWrapper;
 
-    public BaseResourceRemote(Class<T> entityType, Context context, ConnectionWrapper connectionWrapper) {
-        super(entityType, context);
+    public BaseResourceRemote(Class<T> entityType,ConnectionWrapper connectionWrapper) {
+        super(entityType);
         this.connectionWrapper = connectionWrapper;
     }
 
@@ -40,11 +36,6 @@ public class BaseResourceRemote<T extends UniqueEntity> extends EntityResource<T
 
     public void setConnection(Connection connection) {
         connectionWrapper.setConnection(connection);
-    }
-
-    @Override
-    public String getAppProperty(String propertyName) {
-        return getAppProperty(getContext(), propertyName);
     }
 
     @Override
@@ -70,16 +61,6 @@ public class BaseResourceRemote<T extends UniqueEntity> extends EntityResource<T
         }
         return inTransaction;
 
-    }
-
-    private static String getAppProperty(Context context, String propertyName) {
-        Properties properties = new Properties();
-        try {
-            properties.load(context.getAssets().open(APPLICATION_PROPERTIES));
-            return properties.getProperty(propertyName);
-        } catch (IOException e) {
-            throw new ApplicationException(e);
-        }
     }
 
     @Override
@@ -188,7 +169,7 @@ public class BaseResourceRemote<T extends UniqueEntity> extends EntityResource<T
 
     @Override
     public void setProperty(String key, String value) {
-        PropertyResourceRemote propertyResource = new PropertyResourceRemote(getContext(), connectionWrapper);
+        PropertyResourceRemote propertyResource = new PropertyResourceRemote(connectionWrapper);
         propertyResource.setConnection(getConnection());
         Property property = propertyResource.findByKey(key);
         if (property != null) {
@@ -204,7 +185,7 @@ public class BaseResourceRemote<T extends UniqueEntity> extends EntityResource<T
 
     @Override
     public String getProperty(String key) {
-        PropertyResourceRemote propertyResource = new PropertyResourceRemote(getContext(), connectionWrapper);
+        PropertyResourceRemote propertyResource = new PropertyResourceRemote(connectionWrapper);
         propertyResource.setConnection(getConnection());
         Property property = propertyResource.findByKey(key);
         if (property != null) {
@@ -303,4 +284,10 @@ public class BaseResourceRemote<T extends UniqueEntity> extends EntityResource<T
         }
         return entities;
     }
+
+	@Override
+	public String getAppProperty(String propertyName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

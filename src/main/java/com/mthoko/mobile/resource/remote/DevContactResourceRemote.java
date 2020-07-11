@@ -1,7 +1,5 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
-
 import com.mthoko.mobile.entity.DevContact;
 import com.mthoko.mobile.entity.Device;
 import com.mthoko.mobile.entity.UniqueEntity;
@@ -12,8 +10,8 @@ import java.util.Map;
 
 public class DevContactResourceRemote extends BaseResourceRemote<DevContact> {
 
-	public DevContactResourceRemote(Context context, ConnectionWrapper connectionWrapper) {
-		super(DevContact.class, context, connectionWrapper);
+	public DevContactResourceRemote(ConnectionWrapper connectionWrapper) {
+		super(DevContact.class, connectionWrapper);
 	}
 
 	public List<DevContact> findByImei(String imei) {

@@ -1,7 +1,5 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
-
 import com.mthoko.mobile.entity.SimCard;
 import com.mthoko.mobile.entity.SimContact;
 import com.mthoko.mobile.entity.UniqueEntity;
@@ -12,8 +10,8 @@ import java.util.Map;
 
 public class SimContactResourceRemote extends BaseResourceRemote<SimContact> {
 
-	public SimContactResourceRemote(Context context, ConnectionWrapper connectionWrapper) {
-		super(SimContact.class, context, connectionWrapper);
+	public SimContactResourceRemote(ConnectionWrapper connectionWrapper) {
+		super(SimContact.class, connectionWrapper);
 	}
 
 	public int countSimContactsBySimNo(String simNo) {

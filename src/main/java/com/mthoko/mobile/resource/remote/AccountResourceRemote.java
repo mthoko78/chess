@@ -1,6 +1,11 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.mthoko.mobile.entity.Member;
 import com.mthoko.mobile.entity.SimCard;
@@ -9,13 +14,6 @@ import com.mthoko.mobile.exception.ApplicationException;
 import com.mthoko.mobile.model.Account;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 public class AccountResourceRemote extends BaseResourceRemote<Account> {
 
     private final MemberResourceRemote memberResource;
@@ -23,12 +21,12 @@ public class AccountResourceRemote extends BaseResourceRemote<Account> {
     private final SimCardResourceRemote simCardResource;
     private final DeviceResourceRemote deviceResource;
 
-    public AccountResourceRemote(Context context, ConnectionWrapper connectionWrapper) {
-        super(Account.class, context, connectionWrapper);
-        memberResource = new MemberResourceRemote(context, connectionWrapper);
-        credentialsResource = new CredentialsResourceRemote(context, connectionWrapper);
-        simCardResource = new SimCardResourceRemote(context, connectionWrapper);
-        deviceResource = new DeviceResourceRemote(context, connectionWrapper);
+    public AccountResourceRemote(ConnectionWrapper connectionWrapper) {
+        super(Account.class, connectionWrapper);
+        memberResource = new MemberResourceRemote(connectionWrapper);
+        credentialsResource = new CredentialsResourceRemote(connectionWrapper);
+        simCardResource = new SimCardResourceRemote(connectionWrapper);
+        deviceResource = new DeviceResourceRemote(connectionWrapper);
     }
 
     public List<Account> findMatchingAccounts(Account targetAccount) {

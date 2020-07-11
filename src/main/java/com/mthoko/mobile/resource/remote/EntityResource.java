@@ -28,23 +28,12 @@ import static com.mthoko.mobile.util.EntityMapper.setJoinField;
 public abstract class EntityResource<T extends UniqueEntity> {
 
     public static final String NULL = "NULL";
-    private Context context;
 
     private Class<T> entityType;
 
-    public EntityResource(Class<T> entityType, Context context) {
+    public EntityResource(Class<T> entityType) {
         this.entityType = entityType;
-        this.context = context;
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
+    }	
     public <V> List<V> getValues(List<T> entities, String fieldName, Class<V> fieldType) {
         if (entities.size() > 0) {
             return EntityMapper.getValues(entities, fieldName);

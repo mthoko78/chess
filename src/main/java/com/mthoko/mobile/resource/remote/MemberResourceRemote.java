@@ -1,15 +1,13 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
-
 import com.mthoko.mobile.entity.Member;
 import com.mthoko.mobile.entity.SimCard;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
 public class MemberResourceRemote extends BaseResourceRemote<Member> {
 
-	public MemberResourceRemote(Context context, ConnectionWrapper connectionWrapper) {
-		super(Member.class, context, connectionWrapper);
+	public MemberResourceRemote(ConnectionWrapper connectionWrapper) {
+		super(Member.class, connectionWrapper);
 	}
 
 	public Member findBySimNo(String simNo) {

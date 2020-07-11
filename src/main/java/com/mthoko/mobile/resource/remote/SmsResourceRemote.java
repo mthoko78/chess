@@ -1,7 +1,5 @@
 package com.mthoko.mobile.resource.remote;
 
-import android.content.Context;
-
 import com.mthoko.mobile.entity.Sms;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
@@ -10,8 +8,8 @@ import java.util.Map;
 
 public class SmsResourceRemote extends BaseResourceRemote<Sms> {
 
-    public SmsResourceRemote(Context context, ConnectionWrapper connectionWrapper) {
-        super(Sms.class, context, connectionWrapper);
+    public SmsResourceRemote(ConnectionWrapper connectionWrapper) {
+        super(Sms.class, connectionWrapper);
     }
 
     public int countSmsesByRecipient(String recipient) {
