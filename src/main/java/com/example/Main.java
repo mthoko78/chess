@@ -16,6 +16,9 @@
 
 package com.example;
 
+import com.mthoko.mobile.entity.Device;
+import com.mthoko.mobile.service.DeviceService;
+import com.mthoko.mobile.service.common.ServiceFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +65,9 @@ public class Main {
       stmt.executeUpdate("INSERT INTO ticks VALUES (now())");
       ResultSet rs = stmt.executeQuery("SELECT tick FROM ticks");
 
+      Device device = ServiceFactory.getDeviceService().findRemoteDeviceByImei("869378049683352");
       ArrayList<String> output = new ArrayList<String>();
+      output.add(""+device);
       while (rs.next()) {
         output.add("Read from DB: " + rs.getTimestamp("tick"));
       }
