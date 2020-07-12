@@ -63,10 +63,10 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
         STRING_TYPE[TYPE_MMS] = "MMS";
     }
 
-    private final DevContactResourceRemote devContactResourceRemote;
+    private final DevContactResourceRemote resource;
 
     public DevContactServiceImpl() {
-        devContactResourceRemote = new DevContactResourceRemote(new ConnectionWrapper(null));
+        resource = new DevContactResourceRemote(new ConnectionWrapper(null));
     }
 
     @Override
@@ -98,7 +98,7 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
 
     @Override
     public BaseResourceRemote getResource() {
-        return devContactResourceRemote;
+        return resource;
     }
 
     private Map<DevContactValue, List<DevContact>> filterDuplicates(List<DevContact> contacts) {
@@ -143,5 +143,10 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
         }
         return values;
     }
+
+	@Override
+	public List<DevContact> findByImei(String imei) {
+		return resource.findByImei(imei);
+	}
 
 }

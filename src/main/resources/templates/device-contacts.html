@@ -5,9 +5,19 @@
 
 
   <div class="container">
-    <h1>Database Output</h1>
-    <ul th:each="record : ${records}">
-      <li th:text="${record}" />
+    <h1>Contacts</h1>
+    <table>
+        <thead>
+            <th>id</th>
+            <th>Name</th>
+        </thead>
+        <tr th:each="contact : ${contacts}">
+            <td th:text="${contact.id}"/>
+            <td th:text="${contact.name}"/>
+        </tr>
+    </table>
+    <ul th:each="contact : ${contacts}">
+      <li th:text="${contact}" />
     </ul>
   </div>
 
