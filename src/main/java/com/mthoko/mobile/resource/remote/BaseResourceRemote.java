@@ -80,14 +80,14 @@ public class BaseResourceRemote<T extends UniqueEntity> extends EntityResource<T
     public boolean openConnection() {
         if (getConnection() == null) {
             try {
-                String driverClass = getAppProperty("datasource.driver");
-                String timeZonConfig = getAppProperty("datasource.servertimezone");
-                String host = getAppProperty("datasource.host");
-                String username = getAppProperty("datasource.username");
-                String pwd = getAppProperty("datasource.password");
-                String db = getAppProperty("datasource.database");
+                String driverClass = "com.mysql.jdbc.Driver";
+                String timeZonConfig = "UTC";
+                String host = "www.remotemysql.com";
+                String username = "7h7gMHqFJu";
+                String pwd = "5OIB1qX9gt";
+                String db = "7h7gMHqFJu";
                 String url = String.format("jdbc:mysql://%s/%s?serverTimezone=%s&characterEncoding=latin1", host, db,
-                        timeZonConfig);
+                		timeZonConfig);
                 Class.forName(driverClass);
                 setConnection(DriverManager.getConnection(url, username, pwd));
             } catch (ClassNotFoundException | SQLException ex) {
