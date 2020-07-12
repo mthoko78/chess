@@ -91,7 +91,7 @@ public class Main {
 		}
 	}
 
-	@RequestMapping("/deviceContacts")
+	@RequestMapping("/device-contacts")
 	String time(Map<String, Object> model) {
 		try {
 			String imei = "869378049683352";
@@ -105,6 +105,7 @@ public class Main {
 	}
 
 	@RequestMapping("/device-contacts/{imei}")
+	@ResponseBody
 	public List<DevContact> findDeviceContactsByImei(@PathVariable("imei") String imei) {
 		return contactService.findByImei(imei);
 	}
