@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +34,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -96,11 +98,10 @@ public class Main {
 		}
 	}
 
-	@RequestMapping("/account")
+	@RequestMapping("/account/{email}")
 	@ResponseBody
-	public Account findAccountByEmail() {
+	public Account findAccountByEmail(@PathVariable("email") String email) {
 		AccountService service = ServiceFactory.getAccountService();
-		String email = "mthoko78@gmail.com";
 		return service.findExternalAccountByEmail(email);
 	}
 
