@@ -67,7 +67,6 @@ public class Main {
 
       Device device = ServiceFactory.getDeviceService().findRemoteDeviceByImei("869378049683352");
       ArrayList<String> output = new ArrayList<String>();
-      output.add(""+device);
       while (rs.next()) {
         output.add("Read from DB: " + rs.getTimestamp("tick"));
       }
