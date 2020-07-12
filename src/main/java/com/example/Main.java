@@ -34,8 +34,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mthoko.mobile.entity.DevContact;
+import com.mthoko.mobile.model.Account;
+import com.mthoko.mobile.service.AccountService;
 import com.mthoko.mobile.service.DevContactService;
 import com.mthoko.mobile.service.common.ServiceFactory;
 import com.zaxxer.hikari.HikariConfig;
@@ -92,13 +95,13 @@ public class Main {
 			return "error";
 		}
 	}
-	
-	@RequestMapping("/data")
-	String  data(Map<String, Object> model) {
-		ArrayList<String> output = new ArrayList<String>();
-		output.add("The time is: " + new Date());
-		model.put("records", output);
-		return "data";
+
+	@RequestMapping("/account")
+	@ResponseBody
+	public Account findAccountByEmail() {
+		AccountService service = ServiceFactory.getAccountService();
+		String email = "mthoko78@gmail.com";
+		return service.findExternalAccountByEmail(email);
 	}
 
 	@Bean
