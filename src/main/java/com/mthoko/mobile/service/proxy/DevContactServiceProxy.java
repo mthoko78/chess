@@ -50,4 +50,12 @@ public class DevContactServiceProxy extends BaseServiceImpl<DevContact> implemen
         return service.extractContactValues(contacts);
     }
 
+	@Override
+	public List<DevContact> findByImei(String imei) {
+		boolean openConnection = service.openConnection();
+		List<DevContact> deviceContacts = service.findByImei(imei);
+		service.closeConnectionIf(openConnection);
+		return deviceContacts;
+	}
+
 }

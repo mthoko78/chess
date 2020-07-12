@@ -1,13 +1,12 @@
 package com.mthoko.mobile.service;
 
-import com.mthoko.mobile.entity.DevContact;
-import com.mthoko.mobile.entity.DevContactValue;
-import com.mthoko.mobile.entity.Device;
-import com.mthoko.mobile.entity.SimContact;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.mthoko.mobile.entity.DevContact;
+import com.mthoko.mobile.entity.DevContactValue;
+import com.mthoko.mobile.entity.SimContact;
 
 public interface DevContactService extends BaseService<DevContact> {
 
@@ -20,5 +19,7 @@ public interface DevContactService extends BaseService<DevContact> {
     List<List<DevContact>> extractDuplicates(List<DevContact> contacts);
 
     List<DevContactValue> extractContactValues(List<DevContact> unverified);
+
+	List<DevContact> findByImei(String imei);
 
 }

@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -32,11 +33,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mthoko.mobile.entity.Member;
-import com.mthoko.mobile.service.MemberService;
+import com.mthoko.mobile.entity.DevContact;
+import com.mthoko.mobile.service.DevContactService;
 import com.mthoko.mobile.service.common.ServiceFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -83,12 +83,9 @@ public class Main {
 	@RequestMapping("/device-contacts")
 	String time(Map<String, Object> model) {
 		try {
-			MemberService memberService = ServiceFactory.getMemberService();
-			Member member = memberService.findById(1l);
-			ArrayList<String> output = new ArrayList<String>();
-			output.add("The time is: " + new Date());
-			output.add("The member is: " + member);
-			model.put("records", output);
+			DevContactService contactService = ServiceFactory.getContactService();
+			List<DevContact> output = contactService.findByImei("869378049683352");
+			model.put("contacts", output);
 			return "device-contacts";
 		} catch (Exception e) {
 			model.put("message", e.getMessage());
@@ -97,8 +94,11 @@ public class Main {
 	}
 	
 	@RequestMapping("/data")
-	String  data() {
-		return "DATA";
+	String  data(Map<String, Object> model) {
+		ArrayList<String> output = new ArrayList<String>();
+		output.add("The time is: " + new Date());
+		model.put("records", output);
+		return "data";
 	}
 
 	@Bean
