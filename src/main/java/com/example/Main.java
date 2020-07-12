@@ -94,13 +94,19 @@ public class Main {
 	@RequestMapping("/device-contacts")
 	String time(Map<String, Object> model) {
 		try {
-			List<DevContact> output = contactService.findByImei("869378049683352");
+			String imei = "869378049683352";
+			List<DevContact> output = findDeviceContactsByImei(imei);
 			model.put("contacts", output);
 			return "device-contacts";
 		} catch (Exception e) {
 			model.put("message", e.getMessage());
 			return "error";
 		}
+	}
+
+	@RequestMapping("/device-contacts/{imei}")
+	public List<DevContact> findDeviceContactsByImei(@PathVariable("imei") String imei) {
+		return contactService.findByImei(imei);
 	}
 
 	@RequestMapping("/account/{email}")
