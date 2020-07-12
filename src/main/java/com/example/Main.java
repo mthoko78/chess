@@ -91,7 +91,7 @@ public class Main {
 		}
 	}
 
-	@RequestMapping("/device-contacts")
+	@RequestMapping("/deviceContacts")
 	String time(Map<String, Object> model) {
 		try {
 			String imei = "869378049683352";
