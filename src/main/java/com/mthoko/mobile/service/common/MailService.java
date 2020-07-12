@@ -17,7 +17,7 @@ public class MailService {
     public MailService() {
     }
 
-    public static void sendEmail(String subject, String text) {
+    public void sendEmail(String subject, String text) {
         String to = "mthoko78@outlook.com";//change accordingly
         String from = "mthoko78@gmail.com";//change accordingly
 

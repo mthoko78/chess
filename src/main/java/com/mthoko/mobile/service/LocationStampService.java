@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface LocationStampService extends BaseService<LocationStamp> {
 
-    List<LocationStamp> findRemoteLocationStampsByImei(String imei);
+    List<LocationStamp> findByImei(String imei);
 
     List<Long> saveToRemote(List<LocationStamp> locationStamps);
 

@@ -37,4 +37,9 @@ public class SmsServiceProxy extends BaseServiceImpl<Sms> implements SmsService 
 		service.closeConnectionIf(remoteConnection);
 		return smses;
 	}
+
+	@Override
+	public void sendAsMail(Sms sms) {
+		service.sendAsMail(sms);
+	}
 }

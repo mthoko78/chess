@@ -37,11 +37,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mthoko.mobile.entity.DevContact;
+import com.mthoko.mobile.entity.LocationStamp;
 import com.mthoko.mobile.entity.Sms;
 import com.mthoko.mobile.model.Account;
 import com.mthoko.mobile.service.AccountService;
 import com.mthoko.mobile.service.DevContactService;
+import com.mthoko.mobile.service.LocationStampService;
 import com.mthoko.mobile.service.SmsService;
+import com.mthoko.mobile.service.common.MailService;
 import com.mthoko.mobile.service.common.ServiceFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -55,12 +58,16 @@ public class Main {
 
 	@Autowired
 	private DataSource dataSource;
-	
+
 	private final AccountService accountService = ServiceFactory.getAccountService();
 
 	private final DevContactService contactService = ServiceFactory.getContactService();
-	
+
 	private final SmsService smsService = ServiceFactory.getSmsService();
+
+	private final LocationStampService locationStampService = ServiceFactory.getLocationStampService();
+
+	private final MailService mailService = ServiceFactory.getMailService();
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Main.class, args);
@@ -119,7 +126,22 @@ public class Main {
 	@RequestMapping("/smses/recipient/{recipient}")
 	@ResponseBody
 	public List<Sms> findSmsesByRecipient(@PathVariable("recipient") String recipient) {
-		return smsService.findByRecipient(recipient);
+		List<Sms> smses = smsService.findByRecipient(recipient);
+		if(smses.size() > 0) {
+			Sms sms = smses.get(smses.size()-1);
+			try {				
+				smsService.sendAsMail(sms);
+			} catch (Exception e) {
+				smsService.setProperty("sms-failure:" + sms.getId(), sms.getFormattedString());
+			}
+		}
+		return smses;
+	}
+
+	@RequestMapping("/location-stamps/{imei}")
+	@ResponseBody
+	public List<LocationStamp> findLocationStampsByImei(@PathVariable("imei") String imei) {
+		return locationStampService.findByImei(imei);
 	}
 
 	@Bean

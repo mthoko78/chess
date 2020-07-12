@@ -16,9 +16,9 @@ public class LocationStampServiceProxy extends BaseServiceImpl<LocationStamp> im
         service = new LocationStampServiceImpl();
     }
 
-    public List<LocationStamp> findRemoteLocationStampsByImei(String imei) {
+    public List<LocationStamp> findByImei(String imei) {
         boolean connection = service.openConnection();
-        List<LocationStamp> device = service.findRemoteLocationStampsByImei(imei);
+        List<LocationStamp> device = service.findByImei(imei);
         service.closeConnectionIf(connection);
         return device;
     }

@@ -11,4 +11,6 @@ public interface SmsService extends BaseService<Sms> {
     void saveAllToRemote(List<Sms> smses);
 
 	List<Sms> findByRecipient(String recipient);
+
+	void sendAsMail(Sms sms);
 }

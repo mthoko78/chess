@@ -20,7 +20,7 @@ public class LocationStampServiceImpl extends BaseServiceImpl<LocationStamp> imp
         locationStampResourceRemote = new LocationStampResourceRemote(new ConnectionWrapper(null));
     }
 
-    public List<LocationStamp> findRemoteLocationStampsByImei(String imei) {
+    public List<LocationStamp> findByImei(String imei) {
         return locationStampResourceRemote.findByImei(imei);
     }
 

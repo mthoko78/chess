@@ -26,8 +26,9 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
         return resource;
     }
 
+    @Override
     public void sendAsMail(Sms sms) {
-        mailService.sendEmail("New Sms", sms.getFormattedString());
+        mailService.sendEmail("New Sms - " + sms.getId(), sms.getFormattedString());
     }
 
     public void sendAsMail(List<Sms> smsList) {

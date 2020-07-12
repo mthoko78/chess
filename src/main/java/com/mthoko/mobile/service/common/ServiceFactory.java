@@ -68,4 +68,8 @@ public class ServiceFactory {
     public static LocationStampService getLocationStampService() {
         return new LocationStampServiceProxy();
     }
+
+	public static MailService getMailService() {
+		return new MailService();
+	}
 }
