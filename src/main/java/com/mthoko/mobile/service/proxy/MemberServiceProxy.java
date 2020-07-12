@@ -20,4 +20,13 @@ public class MemberServiceProxy extends BaseServiceImpl<Member> implements Membe
         return service.getRemoteResource();
     }
 
+
+	@Override
+	public Member findById(Long id) {
+		boolean openRemoteConnection = openRemoteConnection();
+		Member member = service.findById(id);
+		closeRemoteConnectionIf(openRemoteConnection);
+		return member;
+	}
+
 }
