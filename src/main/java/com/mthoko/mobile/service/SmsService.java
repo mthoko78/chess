@@ -9,4 +9,6 @@ public interface SmsService extends BaseService<Sms> {
     void setProperty(String key, String value);
     
     void saveAllToRemote(List<Sms> smses);
+
+	List<Sms> findByRecipient(String recipient);
 }

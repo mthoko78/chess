@@ -17,7 +17,7 @@ public class SmsServiceProxy extends BaseServiceImpl<Sms> implements SmsService 
 	}
 
 	@Override
-	public BaseResourceRemote getResource() {
+	public BaseResourceRemote<Sms> getResource() {
 		return service.getResource();
 	}
 
@@ -28,5 +28,13 @@ public class SmsServiceProxy extends BaseServiceImpl<Sms> implements SmsService 
 		getResource().saveAll(smses);
 		service.endTransactionIf(remoteTransaction);
 		service.closeConnectionIf(remoteConnection);
+	}
+
+	@Override
+	public List<Sms> findByRecipient(String recipient) {
+		boolean remoteConnection = service.openConnection();
+		List<Sms> smses = service.findByRecipient(recipient);
+		service.closeConnectionIf(remoteConnection);
+		return smses;
 	}
 }

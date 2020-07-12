@@ -13,17 +13,17 @@ import com.mthoko.mobile.util.ConnectionWrapper;
 
 public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
 
-    private final SmsResourceRemote smsResourceRemote;
+    private final SmsResourceRemote resource;
     private final MailService mailService;
 
     public SmsServiceImpl() {
-        smsResourceRemote = new SmsResourceRemote(new ConnectionWrapper(null));
+        resource = new SmsResourceRemote(new ConnectionWrapper(null));
         mailService = new MailService();
     }
 
     @Override
-    public BaseResourceRemote getResource() {
-        return smsResourceRemote;
+    public BaseResourceRemote<Sms> getResource() {
+        return resource;
     }
 
     public void sendAsMail(Sms sms) {
@@ -45,13 +45,8 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
         mailService.sendEmail(subject, body.toString());
     }
 
-    private List<Sms> findRemoteSmsesByRecipient(String recipient) {
-        List<Sms> smsList = smsResourceRemote.findByRecipient(recipient);
-        return smsList;
-    }
-
     public void saveAllToRemote(List<Sms> unverified) {
-        smsResourceRemote.saveAll(unverified);
+        resource.saveAll(unverified);
     }
 
     private List<List<? extends UniqueEntity>> groupEntities(List<? extends UniqueEntity> entities, int groupSize) {
@@ -65,5 +60,10 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
         }
         return result;
     }
+
+	@Override
+	public List<Sms> findByRecipient(String recipient) {
+		return resource.findByRecipient(recipient);
+	}
 
 }

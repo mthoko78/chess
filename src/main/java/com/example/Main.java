@@ -21,12 +21,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,9 +37,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mthoko.mobile.entity.DevContact;
+import com.mthoko.mobile.entity.Sms;
 import com.mthoko.mobile.model.Account;
 import com.mthoko.mobile.service.AccountService;
 import com.mthoko.mobile.service.DevContactService;
+import com.mthoko.mobile.service.SmsService;
 import com.mthoko.mobile.service.common.ServiceFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -55,6 +55,12 @@ public class Main {
 
 	@Autowired
 	private DataSource dataSource;
+	
+	private final AccountService accountService = ServiceFactory.getAccountService();
+
+	private final DevContactService contactService = ServiceFactory.getContactService();
+	
+	private final SmsService smsService = ServiceFactory.getSmsService();
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Main.class, args);
@@ -88,7 +94,6 @@ public class Main {
 	@RequestMapping("/device-contacts")
 	String time(Map<String, Object> model) {
 		try {
-			DevContactService contactService = ServiceFactory.getContactService();
 			List<DevContact> output = contactService.findByImei("869378049683352");
 			model.put("contacts", output);
 			return "device-contacts";
@@ -101,8 +106,13 @@ public class Main {
 	@RequestMapping("/account/{email}")
 	@ResponseBody
 	public Account findAccountByEmail(@PathVariable("email") String email) {
-		AccountService service = ServiceFactory.getAccountService();
-		return service.findExternalAccountByEmail(email);
+		return accountService.findExternalAccountByEmail(email);
+	}
+
+	@RequestMapping("/smses/recipient/{recipient}")
+	@ResponseBody
+	public List<Sms> findSmsesByRecipient(@PathVariable("recipient") String recipient) {
+		return smsService.findByRecipient(recipient);
 	}
 
 	@Bean
