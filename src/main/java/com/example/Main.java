@@ -84,7 +84,12 @@ public class Main {
 	String time(Map<String, Object> model) {
 		try {
 			DevContactService contactService = ServiceFactory.getContactService();
+<<<<<<< HEAD
 			List<DevContact> output = contactService.findByImei("869378049683352");
+=======
+			contactService.findByImei("869378049683352");
+			ArrayList<DevContact> output = new ArrayList<>();
+>>>>>>> 8969d2c592d582745e8aceda5d48f61461da4ed2
 			model.put("contacts", output);
 			return "device-contacts";
 		} catch (Exception e) {
