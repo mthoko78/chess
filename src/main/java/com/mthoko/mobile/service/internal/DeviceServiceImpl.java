@@ -19,7 +19,7 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device> implements Device
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
+    public BaseResourceRemote getResource() {
         return deviceResourceRemote;
     }
 

@@ -15,9 +15,9 @@ public class SimCardServiceProxy extends BaseServiceImpl<SimCard> implements Sim
     }
 
 	@Override
-	public BaseResourceRemote getRemoteResource() {
+	public BaseResourceRemote getResource() {
 		// TODO Auto-generated method stub
-		return service.getRemoteResource();
+		return service.getResource();
 	}
 
 }

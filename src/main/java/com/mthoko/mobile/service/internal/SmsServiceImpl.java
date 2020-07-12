@@ -22,7 +22,7 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
+    public BaseResourceRemote getResource() {
         return smsResourceRemote;
     }
 

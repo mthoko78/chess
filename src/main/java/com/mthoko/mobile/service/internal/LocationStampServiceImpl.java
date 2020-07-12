@@ -25,7 +25,7 @@ public class LocationStampServiceImpl extends BaseServiceImpl<LocationStamp> imp
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
+    public BaseResourceRemote getResource() {
         return locationStampResourceRemote;
     }
 

@@ -16,14 +16,14 @@ public class DeviceServiceProxy extends BaseServiceImpl<Device> implements Devic
 
     @Override
     public Device findRemoteDeviceByImei(String imei) {
-        boolean connection = service.openRemoteConnection();
+        boolean connection = service.openConnection();
         Device device = service.findRemoteDeviceByImei(imei);
-        service.closeRemoteConnectionIf(connection);
+        service.closeConnectionIf(connection);
         return device;
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
-        return service.getRemoteResource();
+    public BaseResourceRemote getResource() {
+        return service.getResource();
     }
 }

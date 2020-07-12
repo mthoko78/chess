@@ -17,25 +17,25 @@ public class LocationStampServiceProxy extends BaseServiceImpl<LocationStamp> im
     }
 
     public List<LocationStamp> findRemoteLocationStampsByImei(String imei) {
-        boolean connection = service.openRemoteConnection();
+        boolean connection = service.openConnection();
         List<LocationStamp> device = service.findRemoteLocationStampsByImei(imei);
-        service.closeRemoteConnectionIf(connection);
+        service.closeConnectionIf(connection);
         return device;
     }
 
     @Override
     public List<Long> saveToRemote(List<LocationStamp> locationStamps) {
-        boolean openConnection = service.openRemoteConnection();
-        boolean transaction = service.beginRemoteTransaction();
+        boolean openConnection = service.openConnection();
+        boolean transaction = service.beginTransaction();
         List<Long> ids = service.saveToRemote(locationStamps);
-        service.endRemoteTransactionIf(transaction);
-        service.closeRemoteConnectionIf(openConnection);
+        service.endTransactionIf(transaction);
+        service.closeConnectionIf(openConnection);
         return ids;
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
-        return service.getRemoteResource();
+    public BaseResourceRemote getResource() {
+        return service.getResource();
     }
 
 }

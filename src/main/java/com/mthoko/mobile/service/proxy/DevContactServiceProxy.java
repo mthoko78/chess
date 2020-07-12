@@ -21,8 +21,8 @@ public class DevContactServiceProxy extends BaseServiceImpl<DevContact> implemen
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
-        return service.getRemoteResource();
+    public BaseResourceRemote getResource() {
+        return service.getResource();
     }
 
     @Override

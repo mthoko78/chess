@@ -19,8 +19,8 @@ public class FTPServiceProxy extends BaseServiceImpl<FileInfo> implements FTPSer
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
-        return service.getRemoteResource();
+    public BaseResourceRemote getResource() {
+        return service.getResource();
     }
 
 

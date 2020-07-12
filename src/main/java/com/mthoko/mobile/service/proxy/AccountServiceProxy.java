@@ -18,23 +18,23 @@ public class AccountServiceProxy extends BaseServiceImpl<Account> implements Acc
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
-        return service.getRemoteResource();
+    public BaseResourceRemote getResource() {
+        return service.getResource();
     }
 
     @Override
     public Account findExternalAccountByEmail(String email) {
-        boolean openConnection = service.openRemoteConnection();
+        boolean openConnection = service.openConnection();
         Account account = service.findExternalAccountByEmail(email);
-        service.closeRemoteConnectionIf(openConnection);
+        service.closeConnectionIf(openConnection);
         return account;
     }
 
     @Override
     public Account findRemoteAccountBySimNo(String simNo) {
-        boolean openConnection = service.openRemoteConnection();
+        boolean openConnection = service.openConnection();
         Account account = service.findRemoteAccountBySimNo(simNo);
-        service.closeRemoteConnectionIf(openConnection);
+        service.closeConnectionIf(openConnection);
         return account;
     }
 
@@ -45,17 +45,17 @@ public class AccountServiceProxy extends BaseServiceImpl<Account> implements Acc
 
     @Override
     public List<Account> findExternalMatchingAccounts(Account account) {
-        boolean openConnection = service.openRemoteConnection();
+        boolean openConnection = service.openConnection();
         List<Account> accounts = service.findExternalMatchingAccounts(account);
-        service.closeRemoteConnectionIf(openConnection);
+        service.closeConnectionIf(openConnection);
         return accounts;
     }
 
     @Override
     public void registerExternally(Account accountToRegister) {
-        boolean connection = service.openRemoteConnection();
+        boolean connection = service.openConnection();
         service.registerExternally(accountToRegister);
-        service.closeRemoteConnectionIf(connection);
+        service.closeConnectionIf(connection);
     }
 
 }

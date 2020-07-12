@@ -37,7 +37,7 @@ public class RecordedCallServiceImpl extends BaseServiceImpl<RecordedCall> imple
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
+    public BaseResourceRemote getResource() {
         return this.recordedCallResourceRemote;
     }
 

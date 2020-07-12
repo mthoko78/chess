@@ -32,6 +32,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mthoko.mobile.entity.Member;
@@ -79,7 +80,7 @@ public class Main {
 		}
 	}
 
-	@RequestMapping("/time")
+	@RequestMapping("/device-contacts")
 	String time(Map<String, Object> model) {
 		try {
 			MemberService memberService = ServiceFactory.getMemberService();
@@ -88,11 +89,16 @@ public class Main {
 			output.add("The time is: " + new Date());
 			output.add("The member is: " + member);
 			model.put("records", output);
-			return "db";
+			return "device-contacts";
 		} catch (Exception e) {
 			model.put("message", e.getMessage());
 			return "error";
 		}
+	}
+	
+	@RequestMapping("/data")
+	String  data() {
+		return "DATA";
 	}
 
 	@Bean

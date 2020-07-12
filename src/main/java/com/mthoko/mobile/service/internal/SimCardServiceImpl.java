@@ -15,7 +15,7 @@ public class SimCardServiceImpl extends BaseServiceImpl<SimCard> implements SimC
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
+    public BaseResourceRemote getResource() {
         return simCardResourceRemote;
     }
 }

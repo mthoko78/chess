@@ -17,16 +17,16 @@ public class SmsServiceProxy extends BaseServiceImpl<Sms> implements SmsService 
 	}
 
 	@Override
-	public BaseResourceRemote getRemoteResource() {
-		return service.getRemoteResource();
+	public BaseResourceRemote getResource() {
+		return service.getResource();
 	}
 
 	@Override
 	public void saveAllToRemote(List<Sms> smses) {
-		boolean remoteConnection = service.openRemoteConnection();
-		boolean remoteTransaction = service.beginRemoteTransaction();
-		getRemoteResource().saveAll(smses);
-		service.endRemoteTransactionIf(remoteTransaction);
-		service.closeRemoteConnectionIf(remoteConnection);
+		boolean remoteConnection = service.openConnection();
+		boolean remoteTransaction = service.beginTransaction();
+		getResource().saveAll(smses);
+		service.endTransactionIf(remoteTransaction);
+		service.closeConnectionIf(remoteConnection);
 	}
 }

@@ -16,19 +16,19 @@ public interface BaseService<T extends UniqueEntity> {
 
     boolean isConnectionAvailable();
 
-    BaseResourceRemote getRemoteResource();
+    BaseResourceRemote<T> getResource();
 
     String getAppProperty(String propertyName);
 
-    boolean openRemoteConnection();
+    boolean openConnection();
 
-    void closeRemoteConnection();
+    void closeConnection();
 
-    boolean beginRemoteTransaction();
+    boolean beginTransaction();
 
-    void closeRemoteTransaction();
+    void endTransaction();
 
-    void closeRemoteConnectionIf(boolean openRemoteConnection);
+    void closeConnectionIf(boolean openRemoteConnection);
 
-    void endRemoteTransactionIf(boolean inTransaction);
+    void endTransactionIf(boolean inTransaction);
 }

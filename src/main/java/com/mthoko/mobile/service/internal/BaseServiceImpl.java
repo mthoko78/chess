@@ -12,17 +12,17 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
 
     @Override
     public String getProperty(String key) {
-        boolean openConnection = openRemoteConnection();
-        String property = getRemoteResource().getProperty(key);
-        closeRemoteConnectionIf(openConnection);
+        boolean openConnection = openConnection();
+        String property = getResource().getProperty(key);
+        closeConnectionIf(openConnection);
         return property;
     }
 
     @Override
     public void setProperty(String key, String value) {
-        boolean openConnection = openRemoteConnection();
-        getRemoteResource().setProperty(key, value);
-        closeRemoteConnectionIf(openConnection);
+        boolean openConnection = openConnection();
+        getResource().setProperty(key, value);
+        closeConnectionIf(openConnection);
     }
 
 
@@ -38,41 +38,41 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
 
     @Override
     public boolean isConnectionAvailable() {
-        return getRemoteResource().isConnectionAvailable();
+        return getResource().isConnectionAvailable();
     }
 
     @Override
     public String getAppProperty(String propertyName) {
-        return getRemoteResource().getAppProperty(propertyName);
+        return getResource().getAppProperty(propertyName);
     }
 
     @Override
-    public boolean openRemoteConnection() {
-        return getRemoteResource().openConnection();
+    public boolean openConnection() {
+        return getResource().openConnection();
     }
 
     @Override
-    public void closeRemoteConnection() {
-        getRemoteResource().closeConnection();
+    public void closeConnection() {
+        getResource().closeConnection();
     }
 
     @Override
-    public boolean beginRemoteTransaction() {
-        return getRemoteResource().beginTransaction();
+    public boolean beginTransaction() {
+        return getResource().beginTransaction();
     }
 
     @Override
-    public void closeRemoteTransaction() {
-        getRemoteResource().endTransaction();
+    public void endTransaction() {
+        getResource().endTransaction();
     }
 
     @Override
-    public void closeRemoteConnectionIf(boolean openRemoteConnection) {
-        getRemoteResource().closeConnectionIf(openRemoteConnection);
+    public void closeConnectionIf(boolean isOpenConnection) {
+        getResource().closeConnectionIf(isOpenConnection);
     }
 
     @Override
-    public void endRemoteTransactionIf(boolean inTransaction) {
-        getRemoteResource().endTransactionIf(inTransaction);
+    public void endTransactionIf(boolean inTransaction) {
+        getResource().endTransactionIf(inTransaction);
     }
 }

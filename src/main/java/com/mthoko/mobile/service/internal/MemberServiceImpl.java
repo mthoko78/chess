@@ -15,7 +15,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
+    public BaseResourceRemote<Member> getResource() {
         return resource;
     }
 

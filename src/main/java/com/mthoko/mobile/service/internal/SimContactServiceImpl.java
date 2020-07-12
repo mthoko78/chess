@@ -15,7 +15,7 @@ public class SimContactServiceImpl extends BaseServiceImpl<SimContact> implement
 	}
 
 	@Override
-	public BaseResourceRemote getRemoteResource() {
+	public BaseResourceRemote getResource() {
 		return simContactResourceRemote;
 	}
 

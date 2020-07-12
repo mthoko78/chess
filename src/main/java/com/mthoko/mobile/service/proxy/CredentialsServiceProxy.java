@@ -15,8 +15,8 @@ public class CredentialsServiceProxy extends BaseServiceImpl<Credentials> implem
     }
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
-        return service.getRemoteResource();
+    public BaseResourceRemote getResource() {
+        return service.getResource();
     }
 
 }

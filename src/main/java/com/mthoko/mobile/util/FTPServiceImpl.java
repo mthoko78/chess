@@ -49,7 +49,7 @@ public class FTPServiceImpl extends BaseServiceImpl<FileInfo> implements FTPServ
     }
 
     @Override
-    public FTPResourceRemote getRemoteResource() {
+    public FTPResourceRemote getResource() {
         return ftpResourceRemote;
     }
 

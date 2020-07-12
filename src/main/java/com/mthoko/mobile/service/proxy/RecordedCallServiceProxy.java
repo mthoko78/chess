@@ -16,8 +16,8 @@ public class RecordedCallServiceProxy extends BaseServiceImpl<RecordedCall> impl
 
 
     @Override
-    public BaseResourceRemote getRemoteResource() {
-        return service.getRemoteResource();
+    public BaseResourceRemote getResource() {
+        return service.getResource();
     }
 
 }
