@@ -4,28 +4,31 @@
 <body>
 
 
-  <div class="container">
-    <h1>Contacts</h1>
+    <div class="container">
+        <h1>Contacts</h1>
 
-    <table class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-            </tr>
-        </thead>   
-        <tbody>
-            <tr th:each="contact : ${contacts}">
-                <td th:text="${contact.id}"/>
-                <td th:text="${contact.name}"/>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul th:each="contact : ${contacts}">
-      <li th:text="${contact}" />
-    </ul>
-  </div>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="contact : ${contacts}">
+                    <td th:text="${contact.id}" />
+                    <td th:text="${contact.name}" />
+                    <td>
+                        <ul th:each="value : ${contact.values}">
+                            <li th:text="${value.value}" />
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
 
 </body>
 
