@@ -19,9 +19,9 @@ public class MailService {
 
     public void sendEmail(String subject, String text) {
         String to = "mthoko78@outlook.com";//change accordingly
-        String from = "cbac4c@gmail.com";//change accordingly
+        String from = "mthoko78@gmail.com";//change accordingly
 
-        final String password = "Mthoko78";
+        final String password = "Smj@dbn1";
         final String user = from;
 
         //Get the session object
