@@ -30,8 +30,8 @@ public class MailService {
         props.setProperty("mail.host", "smtp.gmail.com");
         props.setProperty("mail.smtp.auth", "true");
         props.setProperty("mail.smtp.host", "smtp.gmail.com");
-//        props.setProperty("mail.smtp.port", "25");
-        props.setProperty("mail.smtp.port", "587");
+        props.setProperty("mail.smtp.port", "25");
+//        props.setProperty("mail.smtp.port", "587");
         props.setProperty("mail.smtp.socketFactory.port", "465");
         props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.setProperty("mail.smtp.socketFactory.fallback", "false");
