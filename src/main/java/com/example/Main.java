@@ -34,6 +34,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mthoko.mobile.entity.DevContact;
@@ -142,6 +143,17 @@ public class Main {
 	@ResponseBody
 	public List<LocationStamp> findLocationStampsByImei(@PathVariable("imei") String imei) {
 		return locationStampService.findByImei(imei);
+	}
+
+	@RequestMapping("/mail")
+	@ResponseBody
+	public Object sendMail(@RequestParam("subject") String subject, @RequestParam("body") String body) {
+		try {			
+			mailService.sendEmail(subject, body);
+			return "sent successfully";
+		} catch (Exception e) {
+			return e.getCause().getMessage();
+		}
 	}
 
 	@Bean
