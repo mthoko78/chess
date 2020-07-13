@@ -38,13 +38,17 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
         if (smsList.size() == 1) {
             sendAsMail(smsList.get(0));
         }
-        String subject = "New Smses";
-        StringBuilder body = new StringBuilder();
+        mailService.sendEmail("New Smses", getBodyText(smsList));
+    }
+
+	public String getBodyText(List<Sms> smsList) {
+		StringBuilder body = new StringBuilder();
         for (Sms sms : smsList) {
             body.append(sms.getFormattedString());
         }
-        mailService.sendEmail(subject, body.toString());
-    }
+        String text = body.toString();
+		return text;
+	}
 
     public void saveAllToRemote(List<Sms> unverified) {
         resource.saveAll(unverified);
