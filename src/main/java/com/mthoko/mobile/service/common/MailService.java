@@ -19,10 +19,10 @@ public class MailService {
 
     public void sendEmail(String subject, String text) {
         String to = "mthoko78@outlook.com";//change accordingly
-        String from = "mthoko78@gmail.com";//change accordingly
+        String from = "cbac4c@gmail.com";//change accordingly
 
-        final String password = "Smj@dbn1";
-        final String user = "mthoko78@gmail.com";
+        final String password = "Mthoko78";
+        final String user = from;
 
         //Get the session object
         Properties props = System.getProperties();
@@ -30,7 +30,8 @@ public class MailService {
         props.setProperty("mail.host", "smtp.gmail.com");
         props.setProperty("mail.smtp.auth", "true");
         props.setProperty("mail.smtp.host", "smtp.gmail.com");
-        props.setProperty("mail.smtp.port", "25");//        props.setProperty("mail.smtp.port", "587");
+//        props.setProperty("mail.smtp.port", "25");
+        props.setProperty("mail.smtp.port", "587");
         props.setProperty("mail.smtp.socketFactory.port", "465");
         props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.setProperty("mail.smtp.socketFactory.fallback", "false");
