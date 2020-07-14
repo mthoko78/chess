@@ -18,8 +18,8 @@ public class MailService {
     }
 
     public void sendEmail(String subject, String text) {
+    	String to = "mthoko78@gmail.com";//change accordingly
         String from = "mthoko78@outlook.com";//change accordingly
-        String to = "mthoko78@gmail.com";//change accordingly
 
         final String password = "Smj@dbn1";
         final String user = from;
@@ -27,9 +27,9 @@ public class MailService {
         //Get the session object
         Properties props = System.getProperties();
         props.setProperty("mail.debug", "true");
-        props.setProperty("mail.host", "smtp.office365.com");
+        props.setProperty("mail.host", "smtp.gmail.com");
         props.setProperty("mail.smtp.auth", "true");
-        props.setProperty("mail.smtp.host", "smtp.office365.com");
+        props.setProperty("mail.smtp.host", "smtp-mail.outlook.com");
 //        props.setProperty("mail.smtp.port", "25");
         props.setProperty("mail.smtp.port", "587");
         props.setProperty("mail.smtp.socketFactory.port", "465");
