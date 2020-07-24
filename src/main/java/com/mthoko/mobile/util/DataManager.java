@@ -13,6 +13,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.mthoko.mobile.entity.Address;
 import com.mthoko.mobile.exception.ApplicationException;
 
 public class DataManager {
@@ -183,5 +187,67 @@ public class DataManager {
         conn.addRequestProperty("User-Agent",
                 "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
         return conn;
+    }
+
+
+    public static Address retrieveAddress(double latitude, double longitude) {
+        Address address = null;
+        try {
+            String url = getGeoLocUrl(latitude, longitude);
+            String urlData = getURLData(url);
+            address = retrieveAddress(urlData);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApplicationException(e);
+        }
+        return address;
+    }
+
+    public static String getGeoLocUrl(double latitude, double longitude) {
+        final String latLong = (latitude + ", " + longitude);
+        String apiKey = "YVT9TNokVXCI5A7TaC88zcTYEzwLVz5A";
+        String apiUrl = "http://open.mapquestapi.com/geocoding/v1/reverse";
+        return apiUrl + "?key=" + apiKey + "&location=" + latLong + "&includeRoadMetadata=true&includeNearestIntersection=true";
+    }
+
+    public static Address retrieveAddress(String addressString) throws JSONException {
+        JSONObject jsonLocation = getJsonLocation(addressString);
+        String country = null;
+        String state = null;
+        String city = null;
+        String postalCode = null;
+        String street = null;
+
+        if (jsonLocation.has("adminArea1Type")) {
+            country = jsonLocation.getString("adminArea1");
+        }
+        if (jsonLocation.has("adminArea3Type")) {
+            state = jsonLocation.getString("adminArea3");
+        }
+        if (jsonLocation.has("adminArea5Type")) {
+            city = jsonLocation.getString("adminArea5");
+        }
+        if (jsonLocation.has("postalCode")) {
+            postalCode = jsonLocation.getString("postalCode");
+        }
+        if (jsonLocation.has("street")) {
+            street = jsonLocation.getString("street");
+        }
+        Address address = new Address();
+        address.setCountry(country);
+        address.setState(state);
+        address.setCity(city);
+        address.setPostalCode(postalCode);
+        address.setStreet(street);
+        return address;
+    }
+
+    public static JSONObject getJsonLocation(String address) throws JSONException {
+        JSONObject jsonAddress = new JSONObject(address);
+        return jsonAddress
+                .getJSONArray("results")
+                .getJSONObject(0)
+                .getJSONArray("locations")
+                .getJSONObject(0);
     }
 }

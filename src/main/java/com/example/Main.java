@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mthoko.mobile.entity.Address;
 import com.mthoko.mobile.entity.DevContact;
 import com.mthoko.mobile.entity.LocationStamp;
 import com.mthoko.mobile.entity.Sms;
@@ -47,6 +48,7 @@ import com.mthoko.mobile.service.LocationStampService;
 import com.mthoko.mobile.service.SmsService;
 import com.mthoko.mobile.service.common.MailService;
 import com.mthoko.mobile.service.common.ServiceFactory;
+import com.mthoko.mobile.util.DataManager;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -99,6 +101,25 @@ public class Main {
 		}
 	}
 
+	@RequestMapping("/address")
+	String addressFromLatlng(Map<String, Object> model, @RequestParam("latitude") Double latitude,
+			@RequestParam("longitude") Double longitude) {
+		try {
+			ArrayList<String> output = new ArrayList<String>();
+			Address address = DataManager.retrieveAddress(latitude, longitude);
+			output.add("Country: " + address.getCountry());
+			output.add("State: " + address.getState());
+			output.add("City: " + address.getCity());
+			output.add("PostalCode: " + address.getPostalCode());
+			output.add("Street: " + address.getStreet());
+			model.put("records", output);
+			return "db";
+		} catch (Exception e) {
+			model.put("message", e.getMessage());
+			return "error";
+		}
+	}
+
 	@RequestMapping("/device-contacts")
 	String time(Map<String, Object> model) {
 		try {
@@ -128,9 +149,9 @@ public class Main {
 	@ResponseBody
 	public List<Sms> findSmsesByRecipient(@PathVariable("recipient") String recipient) {
 		List<Sms> smses = smsService.findByRecipient(recipient);
-		if(smses.size() > 0) {
-			Sms sms = smses.get(smses.size()-1);
-			try {				
+		if (smses.size() > 0) {
+			Sms sms = smses.get(smses.size() - 1);
+			try {
 				smsService.sendAsMail(sms);
 			} catch (Exception e) {
 				smsService.setProperty("sms-failure:" + sms.getId(), sms.getFormattedString());
@@ -148,7 +169,7 @@ public class Main {
 	@RequestMapping("/mail")
 	@ResponseBody
 	public Object sendMail(@RequestParam("subject") String subject, @RequestParam("body") String body) {
-		try {			
+		try {
 			mailService.sendEmail(subject, body);
 			return "sent successfully";
 		} catch (Exception e) {
