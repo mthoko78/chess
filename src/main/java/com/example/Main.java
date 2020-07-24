@@ -112,6 +112,8 @@ public class Main {
 			output.add("City: " + address.getCity());
 			output.add("PostalCode: " + address.getPostalCode());
 			output.add("Street: " + address.getStreet());
+			String googleLink = String.format("<a href=\"https://www.google.co.za/maps/search/%s,%s\">View In google Map</a>", latitude, longitude);
+			output.add(googleLink);
 			model.put("records", output);
 			return "db";
 		} catch (Exception e) {
