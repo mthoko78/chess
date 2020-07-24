@@ -21,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -107,15 +108,17 @@ public class Main {
 		try {
 			ArrayList<String> output = new ArrayList<String>();
 			Address address = DataManager.retrieveAddress(latitude, longitude);
+			output.add("Time: " + new Date());
 			output.add("Country: " + address.getCountry());
 			output.add("State: " + address.getState());
 			output.add("City: " + address.getCity());
 			output.add("PostalCode: " + address.getPostalCode());
 			output.add("Street: " + address.getStreet());
-			String googleLink = getGoogleMapsLink(latitude, longitude);
+			output.add("Latitude: " + latitude);
+			output.add("Longitude: " + longitude);
 			model.put("records", output);
 			model.put("title", "Location Trace");
-			model.put("link", googleLink);
+			model.put("link", getGoogleMapsLink(latitude, longitude));
 			return "db";
 		} catch (Exception e) {
 			model.put("message", e.getMessage());
