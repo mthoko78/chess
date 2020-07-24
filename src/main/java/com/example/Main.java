@@ -112,14 +112,19 @@ public class Main {
 			output.add("City: " + address.getCity());
 			output.add("PostalCode: " + address.getPostalCode());
 			output.add("Street: " + address.getStreet());
-			String googleLink = String.format("<a href=\"https://www.google.co.za/maps/search/%s,%s\">View In google Map</a>", latitude, longitude);
-			output.add(googleLink);
+			String googleLink = getGoogleMapsLink(latitude, longitude);
 			model.put("records", output);
+			model.put("title", "Location Trace");
+			model.put("link", googleLink);
 			return "db";
 		} catch (Exception e) {
 			model.put("message", e.getMessage());
 			return "error";
 		}
+	}
+
+	private String getGoogleMapsLink(Double latitude, Double longitude) {
+		return String.format("https://www.google.co.za/maps/search/%s,%s", latitude, longitude);
 	}
 
 	@RequestMapping("/device-contacts")
