@@ -112,7 +112,7 @@ public class Main {
 		try {
 			ArrayList<String> output = new ArrayList<String>();
 			Address address = DataManager.retrieveAddress(latitude, longitude);
-			output.add("Time: " + new Date());
+			output.add("Time: " + new Date(new Date().getTime() + 2*(1000*60*60)));
 			output.add("Country: " + address.getCountry());
 			output.add("State: " + address.getState());
 			output.add("City: " + address.getCity());
@@ -139,7 +139,10 @@ public class Main {
 				double latitude = Double.parseDouble(locationStamp.getLatitude());
 				double longitude = Double.parseDouble(locationStamp.getLongitude());
 				Address address = DataManager.retrieveAddress(latitude, longitude);
-				output.add("Time: " + locationStamp.getDeviceRequested());
+				output.add("Device: " + locationStamp.getDeviceRequested());
+				output.add("Imei: " + locationStamp.getImei());
+				Date timeCaptured = locationStamp.getTimeCaptured();
+				output.add("Time: " + timeCaptured);
 				output.add("Country: " + address.getCountry());
 				output.add("State: " + address.getState());
 				output.add("City: " + address.getCity());
@@ -165,6 +168,7 @@ public class Main {
 	}
 
 	@GetMapping("/set-imei/{imei}")
+	@ResponseBody
 	public String setCookie(HttpServletResponse response, @PathVariable("imei") String imei) {
 		// create a cookie
 		Cookie cookie = new Cookie("imei", imei);
@@ -176,6 +180,7 @@ public class Main {
 	}
 
 	@GetMapping("/get-imei")
+	@ResponseBody
 	public String readCookie(@CookieValue(value = "imei", defaultValue = "0000") String imei) {
 		return imei;
 	}
