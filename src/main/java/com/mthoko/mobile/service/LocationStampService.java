@@ -10,4 +10,6 @@ public interface LocationStampService extends BaseService<LocationStamp> {
 
     List<Long> saveToRemote(List<LocationStamp> locationStamps);
 
+	LocationStamp findMostRecentByImei(String imei);
+
 }

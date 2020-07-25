@@ -38,4 +38,12 @@ public class LocationStampServiceProxy extends BaseServiceImpl<LocationStamp> im
         return service.getResource();
     }
 
+	@Override
+	public LocationStamp findMostRecentByImei(String imei) {
+        boolean connection = service.openConnection();
+        LocationStamp locationStamp = service.findMostRecentByImei(imei);
+        service.closeConnectionIf(connection);
+        return locationStamp;
+	}
+
 }

@@ -50,4 +50,10 @@ public class LocationStampServiceImpl extends BaseServiceImpl<LocationStamp> imp
         }
         return filtered;
     }
+
+	@Override
+	public LocationStamp findMostRecentByImei(String imei) {
+		// TODO Auto-generated method stub
+		return locationStampResourceRemote.findMostRecentByImei(imei);
+	}
 }

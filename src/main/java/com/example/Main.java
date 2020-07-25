@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -124,6 +128,56 @@ public class Main {
 			model.put("message", e.getMessage());
 			return "error";
 		}
+	}
+
+	@RequestMapping("/address/{imei}")
+	String addressByImeiFromLatlng(Map<String, Object> model, @PathVariable("imei") String imei) {
+		try {
+			ArrayList<String> output = new ArrayList<String>();
+			LocationStamp locationStamp = findMostRecentLocationStampByImei(imei);
+			if (locationStamp !=null) {
+				double latitude = Double.parseDouble(locationStamp.getLatitude());
+				double longitude = Double.parseDouble(locationStamp.getLongitude());
+				Address address = DataManager.retrieveAddress(latitude, longitude);
+				output.add("Time: " + locationStamp.getDeviceRequested());
+				output.add("Country: " + address.getCountry());
+				output.add("State: " + address.getState());
+				output.add("City: " + address.getCity());
+				output.add("PostalCode: " + address.getPostalCode());
+				output.add("Street: " + address.getStreet());
+				output.add("Latitude: " + latitude);
+				output.add("Longitude: " + longitude);
+				model.put("records", output);
+				model.put("title", "Location Trace");
+				model.put("link", getGoogleMapsLink(latitude, longitude));
+			}
+			return "db";
+		} catch (Exception e) {
+			model.put("message", e.getMessage());
+			return "error";
+		}
+	}
+
+	@RequestMapping("/recent-location/{imei}")
+	@ResponseBody
+	private LocationStamp findMostRecentLocationStampByImei(String imei) {
+		return locationStampService.findMostRecentByImei(imei);
+	}
+
+	@GetMapping("/set-imei/{imei}")
+	public String setCookie(HttpServletResponse response, @PathVariable("imei") String imei) {
+		// create a cookie
+		Cookie cookie = new Cookie("imei", imei);
+
+		// add cookie to response
+		response.addCookie(cookie);
+
+		return "Imei is changed!";
+	}
+
+	@GetMapping("/get-imei")
+	public String readCookie(@CookieValue(value = "imei", defaultValue = "0000") String imei) {
+		return imei;
 	}
 
 	private String getGoogleMapsLink(Double latitude, Double longitude) {

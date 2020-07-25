@@ -24,4 +24,9 @@ public class LocationStampResourceRemote extends BaseResourceRemote<LocationStam
 		}
 		return new HashMap<>();
 	}
+
+	public LocationStamp findMostRecentByImei(String imei) {
+		// TODO Auto-generated method stub
+		return findOneWhere("imei = '" + imei +"'", "timeCaptured", "DESC");
+	}
 }
