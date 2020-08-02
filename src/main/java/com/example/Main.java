@@ -21,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -112,7 +114,7 @@ public class Main {
 		try {
 			ArrayList<String> output = new ArrayList<String>();
 			Address address = DataManager.retrieveAddress(latitude, longitude);
-			output.add("Time: " + new Date(new Date().getTime() + 2*(1000*60*60)));
+			output.add("Time: " + new Date(new Date().getTime() + 2 * (1000 * 60 * 60)));
 			output.add("Country: " + address.getCountry());
 			output.add("State: " + address.getState());
 			output.add("City: " + address.getCity());
@@ -135,7 +137,7 @@ public class Main {
 		try {
 			ArrayList<String> output = new ArrayList<String>();
 			LocationStamp locationStamp = findMostRecentLocationStampByImei(imei);
-			if (locationStamp !=null) {
+			if (locationStamp != null) {
 				double latitude = Double.parseDouble(locationStamp.getLatitude());
 				double longitude = Double.parseDouble(locationStamp.getLongitude());
 				Address address = DataManager.retrieveAddress(latitude, longitude);
@@ -172,11 +174,9 @@ public class Main {
 	public String setCookie(HttpServletResponse response, @PathVariable("imei") String imei) {
 		// create a cookie
 		Cookie cookie = new Cookie("imei", imei);
-
 		// add cookie to response
 		response.addCookie(cookie);
-
-		return "Imei is changed!";
+		return "Imei is changed to: " + imei + "!";
 	}
 
 	@GetMapping("/get-imei")
@@ -254,6 +254,16 @@ public class Main {
 			HikariConfig config = new HikariConfig();
 			config.setJdbcUrl(dbUrl);
 			return new HikariDataSource(config);
+		}
+	}
+
+	@RequestMapping("/save-location-stamp")
+	@ResponseBody
+	public Object saveLocationStamp(@RequestBody LocationStamp locationStamp) {
+		try {
+			return locationStamp;
+		} catch (Exception e) {
+			return e.getCause().getMessage();
 		}
 	}
 
