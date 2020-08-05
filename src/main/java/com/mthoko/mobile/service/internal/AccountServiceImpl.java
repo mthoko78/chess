@@ -50,7 +50,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
     }
 
     @Override
-    public BaseResourceRemote getResource() {
+    public BaseResourceRemote<Account> getResource() {
         return accountResourceRemote;
     }
 

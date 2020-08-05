@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mthoko.mobile.entity.LocationStamp;
 import com.mthoko.mobile.resource.remote.BaseResourceRemote;
+import com.mthoko.mobile.service.BaseService;
 import com.mthoko.mobile.service.LocationStampService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.service.internal.LocationStampServiceImpl;
@@ -34,7 +35,7 @@ public class LocationStampServiceProxy extends BaseServiceImpl<LocationStamp> im
     }
 
     @Override
-    public BaseResourceRemote getResource() {
+    public BaseResourceRemote<LocationStamp> getResource() {
         return service.getResource();
     }
 

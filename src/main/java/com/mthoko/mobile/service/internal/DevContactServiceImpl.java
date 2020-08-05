@@ -97,7 +97,7 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
     }
 
     @Override
-    public BaseResourceRemote getResource() {
+    public BaseResourceRemote<DevContact> getResource() {
         return resource;
     }
 

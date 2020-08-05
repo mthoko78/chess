@@ -3,6 +3,7 @@ package com.mthoko.mobile.service;
 import java.util.List;
 import java.util.Map;
 
+import com.mthoko.mobile.entity.LocationStamp;
 import com.mthoko.mobile.entity.UniqueEntity;
 import com.mthoko.mobile.resource.remote.BaseResourceRemote;
 
@@ -31,4 +32,6 @@ public interface BaseService<T extends UniqueEntity> {
     void closeConnectionIf(boolean openRemoteConnection);
 
     void endTransactionIf(boolean inTransaction);
+
+	Long save(T entity);
 }

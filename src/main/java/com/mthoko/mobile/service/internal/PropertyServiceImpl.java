@@ -15,7 +15,7 @@ public class PropertyServiceImpl extends BaseServiceImpl<Property> implements Pr
     }
 
     @Override
-    public BaseResourceRemote getResource() {
+    public BaseResourceRemote<Property> getResource() {
         return propertyResourceRemote;
     }
 

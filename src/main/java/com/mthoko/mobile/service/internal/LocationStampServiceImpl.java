@@ -14,46 +14,51 @@ import com.mthoko.mobile.util.ConnectionWrapper;
 
 public class LocationStampServiceImpl extends BaseServiceImpl<LocationStamp> implements LocationStampService {
 
-    private final LocationStampResourceRemote locationStampResourceRemote;
+	private final LocationStampResourceRemote locationStampResourceRemote;
 
-    public LocationStampServiceImpl() {
-        locationStampResourceRemote = new LocationStampResourceRemote(new ConnectionWrapper(null));
-    }
+	public LocationStampServiceImpl() {
+		locationStampResourceRemote = new LocationStampResourceRemote(new ConnectionWrapper(null));
+	}
 
-    public List<LocationStamp> findByImei(String imei) {
-        return locationStampResourceRemote.findByImei(imei);
-    }
+	public List<LocationStamp> findByImei(String imei) {
+		return locationStampResourceRemote.findByImei(imei);
+	}
 
-    @Override
-    public BaseResourceRemote getResource() {
-        return locationStampResourceRemote;
-    }
+	@Override
+	public BaseResourceRemote<LocationStamp> getResource() {
+		return locationStampResourceRemote;
+	}
 
+	public Map<String, Long> retrieveVerification(LocationStamp device) {
+		return locationStampResourceRemote.retrieveVerificationByImei(device.getImei());
+	}
 
-    public Map<String, Long> retrieveVerification(LocationStamp device) {
-        return locationStampResourceRemote.retrieveVerificationByImei(device.getImei());
-    }
+	@Override
+	public List<Long> saveToRemote(List<LocationStamp> locationStamps) {
+		return locationStampResourceRemote.saveAll(locationStamps);
+	}
 
-    @Override
-    public List<Long> saveToRemote(List<LocationStamp> locationStamps) {
-        return locationStampResourceRemote.saveAll(locationStamps);
-    }
-
-    private List<LocationStamp> filterByDate(int max, List<LocationStamp> locationStamps) {
-        SortedMap<Long, LocationStamp> sortedMap = new TreeMap<>();
-        for (LocationStamp locationStamp : locationStamps) {
-            sortedMap.put(locationStamp.getTimeCaptured().getTime(), locationStamp);
-        }
-        List<LocationStamp> filtered = new ArrayList<>();
-        while (!sortedMap.isEmpty() && filtered.size() < max) {
-            filtered.add(0, sortedMap.remove(sortedMap.lastKey()));
-        }
-        return filtered;
-    }
+	private List<LocationStamp> filterByDate(int max, List<LocationStamp> locationStamps) {
+		SortedMap<Long, LocationStamp> sortedMap = new TreeMap<>();
+		for (LocationStamp locationStamp : locationStamps) {
+			sortedMap.put(locationStamp.getTimeCaptured().getTime(), locationStamp);
+		}
+		List<LocationStamp> filtered = new ArrayList<>();
+		while (!sortedMap.isEmpty() && filtered.size() < max) {
+			filtered.add(0, sortedMap.remove(sortedMap.lastKey()));
+		}
+		return filtered;
+	}
 
 	@Override
 	public LocationStamp findMostRecentByImei(String imei) {
 		// TODO Auto-generated method stub
 		return locationStampResourceRemote.findMostRecentByImei(imei);
+	}
+
+	@Override
+	public Long save(LocationStamp locationStamp) {
+		// TODO Auto-generated method stub
+		return locationStampResourceRemote.save(locationStamp);
 	}
 }

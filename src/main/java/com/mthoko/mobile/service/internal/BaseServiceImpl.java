@@ -75,4 +75,15 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
     public void endTransactionIf(boolean inTransaction) {
         getResource().endTransactionIf(inTransaction);
     }
+
+
+    @Override
+    public Long save(T entity) {
+		boolean openConnection = openConnection();
+        boolean transaction = beginTransaction();
+        Long id = getResource().save(entity);
+        endTransactionIf(transaction);
+        closeConnectionIf(openConnection);
+        return id;
+    }
 }

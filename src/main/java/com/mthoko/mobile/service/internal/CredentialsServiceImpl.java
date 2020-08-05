@@ -15,7 +15,7 @@ public class CredentialsServiceImpl extends BaseServiceImpl<Credentials> impleme
     }
 
     @Override
-    public BaseResourceRemote getResource() {
+    public BaseResourceRemote<Credentials> getResource() {
         return credentialsResourceRemote;
     }
 }

@@ -21,7 +21,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -258,21 +257,15 @@ public class Main {
 		}
 	}
 
-	@RequestMapping("/save-location-stamp")
+	@PostMapping("/save-location-stamp")
 	@ResponseBody
-	String saveLocationStamp(@RequestBody LocationStamp locationStamp) {
+	Object saveLocationStamp(@RequestBody LocationStamp locationStamp) {
 		try {
-			return "{\"message\":\"received object: " + locationStamp + "}";
+			locationStampService.save(locationStamp);
+			return locationStamp;
 		} catch (Exception e) {
 			return e.getCause().getMessage();
 		}
-	}
-
-	@PostMapping("/response")
-	@ResponseBody
-	public LoginForm postResponseController(@RequestBody LoginForm loginForm) {
-		loginForm.setDate(new Date());
-		return loginForm;
 	}
 
 }
