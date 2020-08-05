@@ -271,7 +271,7 @@ public class Main {
 	@PostMapping("/response")
 	@ResponseBody
 	public ResponseTransfer postResponseController(@RequestBody LoginForm loginForm) {
-		return new ResponseTransfer("Thanks For Posting!!!\n" + loginForm);
+		return new ResponseTransfer("Thanks For Posting!!!\n" + loginForm, new Date());
 	}
 
 }
