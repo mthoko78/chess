@@ -262,10 +262,16 @@ public class Main {
 	@ResponseBody
 	String saveLocationStamp(@RequestBody LocationStamp locationStamp) {
 		try {
-			return "{\"message\":\"received object: "+locationStamp+"}";
+			return "{\"message\":\"received object: " + locationStamp + "}";
 		} catch (Exception e) {
 			return e.getCause().getMessage();
 		}
+	}
+
+	@PostMapping("/response")
+	@ResponseBody
+	public ResponseTransfer postResponseController(@RequestBody LocationStamp locationStamp ) {
+		return new ResponseTransfer("Thanks For Posting!!!");
 	}
 
 }
