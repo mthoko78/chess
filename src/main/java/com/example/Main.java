@@ -270,7 +270,7 @@ public class Main {
 
 	@PostMapping("/response")
 	@ResponseBody
-	public ResponseTransfer postResponseController(@RequestBody LocationStamp locationStamp ) {
+	public ResponseTransfer postResponseController(@RequestBody String body) {
 		return new ResponseTransfer("Thanks For Posting!!!");
 	}
 
