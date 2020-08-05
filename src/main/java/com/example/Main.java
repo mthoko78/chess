@@ -258,11 +258,11 @@ public class Main {
 		}
 	}
 
-	@PostMapping("/save-location-stamp")
+	@RequestMapping("/save-location-stamp")
 	@ResponseBody
 	public Object saveLocationStamp(@RequestBody LocationStamp locationStamp) {
 		try {
-			return locationStamp;
+			return "{\"message\":\"received object: "+locationStamp+"\"}";
 		} catch (Exception e) {
 			return e.getCause().getMessage();
 		}
