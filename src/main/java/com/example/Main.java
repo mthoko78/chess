@@ -269,11 +269,11 @@ public class Main {
 		return contactService.countByImei(imei);
 	}
 
-	@PostMapping("/save-entities")
+	@PostMapping("/save-location-stamps")
 	@ResponseBody
-	<T extends UniqueEntity> List<Long> saveEntities(@RequestBody List<T> entities) {
+	List<Long> saveEntities(@RequestBody List<LocationStamp> locationStamps) {
 		try {
-			return locationStampService.saveAll(entities);
+			return locationStampService.saveAll(locationStamps);
 		} catch (Exception e) {
 			return null;
 		}
