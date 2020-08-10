@@ -1,9 +1,9 @@
 package com.mthoko.mobile.resource.remote;
 
+import java.util.List;
+
 import com.mthoko.mobile.entity.SimCard;
 import com.mthoko.mobile.util.ConnectionWrapper;
-
-import java.util.List;
 
 public class SimCardResourceRemote extends BaseResourceRemote<SimCard> {
 

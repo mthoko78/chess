@@ -15,7 +15,7 @@ import com.mthoko.mobile.service.internal.BaseServiceImpl;
  *
  * @author Mthoko
  */
-public class FTPServiceImpl extends BaseServiceImpl<FileInfo> implements FTPService {
+public class FTPServiceImpl extends BaseServiceImpl implements FTPService {
 
     private final FTPResourceRemote ftpResourceRemote;
 

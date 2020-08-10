@@ -1,12 +1,10 @@
 package com.mthoko.mobile.service;
 
-import com.mthoko.mobile.entity.FileInfo;
+import java.io.File;
 
 import org.apache.commons.net.ftp.FTPFile;
 
-import java.io.File;
-
-public interface FTPService extends BaseService<FileInfo> {
+public interface FTPService extends BaseService {
 
     FTPFile[] getClientFiles(String dir);
 

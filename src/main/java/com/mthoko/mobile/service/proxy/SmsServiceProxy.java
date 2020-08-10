@@ -8,26 +8,12 @@ import com.mthoko.mobile.service.SmsService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.service.internal.SmsServiceImpl;
 
-public class SmsServiceProxy extends BaseServiceImpl<Sms> implements SmsService {
+public class SmsServiceProxy extends BaseServiceImpl implements SmsService {
 
 	private final SmsServiceImpl service;
 
 	public SmsServiceProxy() {
 		service = new SmsServiceImpl();
-	}
-
-	@Override
-	public BaseResourceRemote<Sms> getResource() {
-		return service.getResource();
-	}
-
-	@Override
-	public void saveAllToRemote(List<Sms> smses) {
-		boolean remoteConnection = service.openConnection();
-		boolean remoteTransaction = service.beginTransaction();
-		getResource().saveAll(smses);
-		service.endTransactionIf(remoteTransaction);
-		service.closeConnectionIf(remoteConnection);
 	}
 
 	@Override
@@ -41,5 +27,10 @@ public class SmsServiceProxy extends BaseServiceImpl<Sms> implements SmsService 
 	@Override
 	public void sendAsMail(Sms sms) {
 		service.sendAsMail(sms);
+	}
+
+	@Override
+	public BaseResourceRemote<Sms> getResource() {
+		return service.getResource();
 	}
 }

@@ -8,31 +8,29 @@ import com.mthoko.mobile.resource.remote.DeviceResourceRemote;
 import com.mthoko.mobile.service.DeviceService;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
-public class DeviceServiceImpl extends BaseServiceImpl<Device> implements DeviceService {
+public class DeviceServiceImpl extends BaseServiceImpl implements DeviceService {
 
+	private final DeviceResourceRemote deviceResourceRemote;
 
-    private final DeviceResourceRemote deviceResourceRemote;
+	public DeviceServiceImpl() {
+		deviceResourceRemote = new DeviceResourceRemote(new ConnectionWrapper(null));
+	}
 
+	@Override
+	public BaseResourceRemote<Device> getResource() {
+		return deviceResourceRemote;
+	}
 
-    public DeviceServiceImpl() {
-        deviceResourceRemote = new DeviceResourceRemote(new ConnectionWrapper(null));
-    }
+	public void saveExternally(long externalMemberId, Device device) {
+		deviceResourceRemote.save(externalMemberId, device);
+	}
 
-    @Override
-    public BaseResourceRemote<Device> getResource() {
-        return deviceResourceRemote;
-    }
+	public Device findRemoteDeviceByImei(String imei) {
+		return deviceResourceRemote.findByImei(imei);
+	}
 
-    public void saveExternally(long externalMemberId, Device device) {
-        deviceResourceRemote.save(externalMemberId, device);
-    }
-
-    public Device findRemoteDeviceByImei(String imei) {
-        return deviceResourceRemote.findByImei(imei);
-    }
-
-    public Map<String, Long> retrieveVerification(Device device) {
-        return deviceResourceRemote.retrieveVerificationByImei(device.getImei());
-    }
+	public Map<String, Long> retrieveVerification(Device device) {
+		return deviceResourceRemote.retrieveVerificationByImei(device.getImei());
+	}
 
 }

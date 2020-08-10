@@ -6,20 +6,18 @@ import com.mthoko.mobile.service.MemberService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.service.internal.MemberServiceImpl;
 
-public class MemberServiceProxy extends BaseServiceImpl<Member> implements MemberService {
+public class MemberServiceProxy extends BaseServiceImpl implements MemberService {
 
-    private final MemberServiceImpl service;
+	private final MemberServiceImpl service;
 
-    public MemberServiceProxy() {
-        service = new MemberServiceImpl();
-    }
+	public MemberServiceProxy() {
+		service = new MemberServiceImpl();
+	}
 
-
-    @Override
-    public BaseResourceRemote<Member> getResource() {
-        return service.getResource();
-    }
-
+	@Override
+	public BaseResourceRemote<Member> getResource() {
+		return service.getResource();
+	}
 
 	@Override
 	public Member findById(Long id) {

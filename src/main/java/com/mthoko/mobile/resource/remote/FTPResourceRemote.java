@@ -11,10 +11,11 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
+import com.mthoko.mobile.entity.FileInfo;
 import com.mthoko.mobile.exception.ApplicationException;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
-public class FTPResourceRemote extends BaseResourceRemote {
+public class FTPResourceRemote extends BaseResourceRemote<FileInfo> {
 
     private static final String RECORDING_DIRECTORY = "";
 	private final String host;
@@ -22,7 +23,7 @@ public class FTPResourceRemote extends BaseResourceRemote {
     private final String username;
     private final String password;
 
-    public FTPResourceRemote(Class entityType, ConnectionWrapper connectionWrapper) {
+	public FTPResourceRemote(Class<FileInfo> entityType, ConnectionWrapper connectionWrapper) {
         super(entityType, connectionWrapper);
         host = getAppProperty("ftp.host");
         port = Integer.parseInt(getAppProperty("ftp.port"));

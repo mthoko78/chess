@@ -12,7 +12,7 @@ import com.mthoko.mobile.resource.remote.LocationStampResourceRemote;
 import com.mthoko.mobile.service.LocationStampService;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
-public class LocationStampServiceImpl extends BaseServiceImpl<LocationStamp> implements LocationStampService {
+public class LocationStampServiceImpl extends BaseServiceImpl implements LocationStampService {
 
 	private final LocationStampResourceRemote locationStampResourceRemote;
 
@@ -33,11 +33,6 @@ public class LocationStampServiceImpl extends BaseServiceImpl<LocationStamp> imp
 		return locationStampResourceRemote.retrieveVerificationByImei(device.getImei());
 	}
 
-	@Override
-	public List<Long> saveToRemote(List<LocationStamp> locationStamps) {
-		return locationStampResourceRemote.saveAll(locationStamps);
-	}
-
 	private List<LocationStamp> filterByDate(int max, List<LocationStamp> locationStamps) {
 		SortedMap<Long, LocationStamp> sortedMap = new TreeMap<>();
 		for (LocationStamp locationStamp : locationStamps) {
@@ -54,11 +49,5 @@ public class LocationStampServiceImpl extends BaseServiceImpl<LocationStamp> imp
 	public LocationStamp findMostRecentByImei(String imei) {
 		// TODO Auto-generated method stub
 		return locationStampResourceRemote.findMostRecentByImei(imei);
-	}
-
-	@Override
-	public Long save(LocationStamp locationStamp) {
-		// TODO Auto-generated method stub
-		return locationStampResourceRemote.save(locationStamp);
 	}
 }

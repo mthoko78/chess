@@ -5,7 +5,7 @@ import com.mthoko.mobile.model.Account;
 import java.util.List;
 import java.util.Set;
 
-public interface AccountService extends BaseService<Account> {
+public interface AccountService extends BaseService {
 
 	Account findExternalAccountByEmail(String email);
 

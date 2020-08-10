@@ -1,23 +1,21 @@
 package com.mthoko.mobile.service;
 
 import java.util.List;
-import java.util.Map;
 
-import com.mthoko.mobile.entity.LocationStamp;
 import com.mthoko.mobile.entity.UniqueEntity;
 import com.mthoko.mobile.resource.remote.BaseResourceRemote;
 
-public interface BaseService<T extends UniqueEntity> {
+public interface BaseService {
 
     String getProperty(String key);
 
     void setProperty(String key, String value);
 
-    void removeVerified(List<T> unverified);
+    <T extends UniqueEntity> void removeVerified(List<T> unverified);
 
     boolean isConnectionAvailable();
 
-    BaseResourceRemote<T> getResource();
+    BaseResourceRemote<?> getResource();
 
     String getAppProperty(String propertyName);
 
@@ -33,5 +31,7 @@ public interface BaseService<T extends UniqueEntity> {
 
     void endTransactionIf(boolean inTransaction);
 
-	Long save(T entity);
+    <T extends UniqueEntity> Long save(T entity);
+
+    <T extends UniqueEntity> List<Long> saveAll(List<T> entities);
 }

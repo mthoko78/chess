@@ -6,17 +6,17 @@ import com.mthoko.mobile.service.CredentialsService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.service.internal.CredentialsServiceImpl;
 
-public class CredentialsServiceProxy extends BaseServiceImpl<Credentials> implements CredentialsService {
+public class CredentialsServiceProxy extends BaseServiceImpl implements CredentialsService {
 
-    private final CredentialsServiceImpl service;
+	private final CredentialsServiceImpl service;
 
-    public CredentialsServiceProxy() {
-        service = new CredentialsServiceImpl();
-    }
+	public CredentialsServiceProxy() {
+		service = new CredentialsServiceImpl();
+	}
 
-    @Override
-    public BaseResourceRemote getResource() {
-        return service.getResource();
-    }
+	@Override
+	public BaseResourceRemote<Credentials> getResource() {
+		return service.getResource();
+	}
 
 }

@@ -48,6 +48,7 @@ import com.mthoko.mobile.entity.Address;
 import com.mthoko.mobile.entity.DevContact;
 import com.mthoko.mobile.entity.LocationStamp;
 import com.mthoko.mobile.entity.Sms;
+import com.mthoko.mobile.entity.UniqueEntity;
 import com.mthoko.mobile.model.Account;
 import com.mthoko.mobile.service.AccountService;
 import com.mthoko.mobile.service.DevContactService;
@@ -189,19 +190,6 @@ public class Main {
 		return String.format("https://www.google.co.za/maps/search/%s,%s", latitude, longitude);
 	}
 
-	@RequestMapping("/device-contacts")
-	String time(Map<String, Object> model) {
-		try {
-			String imei = "869378049683352";
-			List<DevContact> output = findDeviceContactsByImei(imei);
-			model.put("contacts", output);
-			return "device-contacts";
-		} catch (Exception e) {
-			model.put("message", e.getMessage());
-			return "error";
-		}
-	}
-
 	@RequestMapping("/device-contacts/{imei}")
 	@ResponseBody
 	public List<DevContact> findDeviceContactsByImei(@PathVariable("imei") String imei) {
@@ -265,6 +253,29 @@ public class Main {
 			return locationStamp;
 		} catch (Exception e) {
 			return e.getCause().getMessage();
+		}
+	}
+
+	@RequestMapping("/dev-contacts-exclude-ids/{imei}")
+	@ResponseBody
+	public List<DevContact> findDevContactsByImeiWithIdsNotIn(@RequestBody List<Long> ids,
+			@PathVariable("imei") String imei) {
+		return contactService.findByImeiWithIdsNotIn(ids, imei);
+	}
+
+	@RequestMapping("/count-dev-contacts/{imei}")
+	@ResponseBody
+	public Integer countDevContactsByImei(@PathVariable("imei") String imei) {
+		return contactService.countByImei(imei);
+	}
+
+	@PostMapping("/save-entities")
+	@ResponseBody
+	<T extends UniqueEntity> List<Long> saveEntities(@RequestBody List<T> entities) {
+		try {
+			return locationStampService.saveAll(entities);
+		} catch (Exception e) {
+			return null;
 		}
 	}
 

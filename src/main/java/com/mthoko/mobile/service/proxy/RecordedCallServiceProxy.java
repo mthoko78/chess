@@ -6,18 +6,17 @@ import com.mthoko.mobile.service.RecordedCallService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.service.internal.RecordedCallServiceImpl;
 
-public class RecordedCallServiceProxy extends BaseServiceImpl<RecordedCall> implements RecordedCallService {
+public class RecordedCallServiceProxy extends BaseServiceImpl implements RecordedCallService {
 
-    private final RecordedCallServiceImpl service;
+	private final RecordedCallServiceImpl service;
 
-    public RecordedCallServiceProxy() {
-        service = new RecordedCallServiceImpl();
-    }
+	public RecordedCallServiceProxy() {
+		service = new RecordedCallServiceImpl();
+	}
 
-
-    @Override
-    public BaseResourceRemote getResource() {
-        return service.getResource();
-    }
+	@Override
+	public BaseResourceRemote<RecordedCall> getResource() {
+		return service.getResource();
+	}
 
 }

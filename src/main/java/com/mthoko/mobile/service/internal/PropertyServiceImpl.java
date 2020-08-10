@@ -6,17 +6,17 @@ import com.mthoko.mobile.resource.remote.PropertyResourceRemote;
 import com.mthoko.mobile.service.PropertyService;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
-public class PropertyServiceImpl extends BaseServiceImpl<Property> implements PropertyService {
+public class PropertyServiceImpl extends BaseServiceImpl implements PropertyService {
 
-    private final PropertyResourceRemote propertyResourceRemote;
+	private final PropertyResourceRemote propertyResourceRemote;
 
 	public PropertyServiceImpl() {
-        propertyResourceRemote = new PropertyResourceRemote(new ConnectionWrapper(null));
-    }
+		propertyResourceRemote = new PropertyResourceRemote(new ConnectionWrapper(null));
+	}
 
-    @Override
-    public BaseResourceRemote<Property> getResource() {
-        return propertyResourceRemote;
-    }
+	@Override
+	public BaseResourceRemote<Property> getResource() {
+		return propertyResourceRemote;
+	}
 
 }

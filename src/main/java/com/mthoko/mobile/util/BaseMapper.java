@@ -136,7 +136,7 @@ public abstract class BaseMapper {
 
     public static List<Class<? extends UniqueEntity>> getSortedEntities(String entitiesPackage) {
 
-        List<Class<?>> classes;
+		List<Class<?>> classes;
 //            classes = getClasses(entitiesPackage);
             Class<? extends UniqueEntity>[] classes1 = new Class[]{
                     Member.class, Property.class, Credentials.class, SimCard.class, SimContact.class, Device.class,

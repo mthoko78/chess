@@ -6,16 +6,16 @@ import com.mthoko.mobile.resource.remote.CredentialsResourceRemote;
 import com.mthoko.mobile.service.CredentialsService;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
-public class CredentialsServiceImpl extends BaseServiceImpl<Credentials> implements CredentialsService {
+public class CredentialsServiceImpl extends BaseServiceImpl implements CredentialsService {
 
-    private final CredentialsResourceRemote credentialsResourceRemote;
+	private final CredentialsResourceRemote credentialsResourceRemote;
 
-    public CredentialsServiceImpl() {
-        credentialsResourceRemote = new CredentialsResourceRemote(new ConnectionWrapper(null));
-    }
+	public CredentialsServiceImpl() {
+		credentialsResourceRemote = new CredentialsResourceRemote(new ConnectionWrapper(null));
+	}
 
-    @Override
-    public BaseResourceRemote<Credentials> getResource() {
-        return credentialsResourceRemote;
-    }
+	@Override
+	public BaseResourceRemote<Credentials> getResource() {
+		return credentialsResourceRemote;
+	}
 }

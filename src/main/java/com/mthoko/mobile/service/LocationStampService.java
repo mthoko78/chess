@@ -4,11 +4,9 @@ import com.mthoko.mobile.entity.LocationStamp;
 
 import java.util.List;
 
-public interface LocationStampService extends BaseService<LocationStamp> {
+public interface LocationStampService extends BaseService {
 
-    List<LocationStamp> findByImei(String imei);
-
-    List<Long> saveToRemote(List<LocationStamp> locationStamps);
+	List<LocationStamp> findByImei(String imei);
 
 	LocationStamp findMostRecentByImei(String imei);
 

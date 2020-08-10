@@ -6,18 +6,18 @@ import com.mthoko.mobile.resource.remote.MemberResourceRemote;
 import com.mthoko.mobile.service.MemberService;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
-public class MemberServiceImpl extends BaseServiceImpl<Member> implements MemberService {
+public class MemberServiceImpl extends BaseServiceImpl implements MemberService {
 
-    private final MemberResourceRemote resource;
+	private final MemberResourceRemote resource;
 
-    public MemberServiceImpl() {
-        resource = new MemberResourceRemote(new ConnectionWrapper(null));
-    }
+	public MemberServiceImpl() {
+		resource = new MemberResourceRemote(new ConnectionWrapper(null));
+	}
 
-    @Override
-    public BaseResourceRemote<Member> getResource() {
-        return resource;
-    }
+	@Override
+	public BaseResourceRemote<Member> getResource() {
+		return resource;
+	}
 
 	@Override
 	public Member findById(Long id) {

@@ -6,17 +6,17 @@ import com.mthoko.mobile.service.SimContactService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.service.internal.SimContactServiceImpl;
 
-public class SimContactServiceProxy extends BaseServiceImpl<SimContact> implements SimContactService {
+public class SimContactServiceProxy extends BaseServiceImpl implements SimContactService {
 
-    private final SimContactServiceImpl service;
+	private final SimContactServiceImpl service;
 
-    public SimContactServiceProxy() {
-        service = new SimContactServiceImpl();
-    }
+	public SimContactServiceProxy() {
+		service = new SimContactServiceImpl();
+	}
 
-    @Override
-    public BaseResourceRemote getResource() {
-        return service.getResource();
-    }
+	@Override
+	public BaseResourceRemote<SimContact> getResource() {
+		return service.getResource();
+	}
 
 }

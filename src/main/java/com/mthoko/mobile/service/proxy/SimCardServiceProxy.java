@@ -6,17 +6,16 @@ import com.mthoko.mobile.service.SimCardService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.service.internal.SimCardServiceImpl;
 
-public class SimCardServiceProxy extends BaseServiceImpl<SimCard> implements SimCardService {
+public class SimCardServiceProxy extends BaseServiceImpl implements SimCardService {
 
-    private final SimCardServiceImpl service;
+	private final SimCardServiceImpl service;
 
-    public SimCardServiceProxy() {
-        service = new SimCardServiceImpl();
-    }
+	public SimCardServiceProxy() {
+		service = new SimCardServiceImpl();
+	}
 
 	@Override
-	public BaseResourceRemote getResource() {
-		// TODO Auto-generated method stub
+	public BaseResourceRemote<SimCard> getResource() {
 		return service.getResource();
 	}
 

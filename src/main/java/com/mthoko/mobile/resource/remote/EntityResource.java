@@ -90,8 +90,8 @@ public abstract class EntityResource<T extends UniqueEntity> {
 		}
 	}
 
-	public <T extends UniqueEntity, V extends UniqueEntity> List<T> findWhereJoining(Class<V> parentEntityClass,
-			Class<T> childClass, String whereClause, String... order) {
+	public <K extends UniqueEntity, V extends UniqueEntity> List<K> findWhereJoining(Class<V> parentEntityClass,
+			Class<K> childClass, String whereClause, String... order) {
 		String childColumns = columnsSelectClause(true);
 		String from = joinClause(parentEntityClass, childClass);
 		return selectFromWhere(childClass, childColumns, from, whereClause, order);
@@ -181,7 +181,7 @@ public abstract class EntityResource<T extends UniqueEntity> {
 		}
 	}
 
-	public List<Long> saveAll(List<T> entities) {
+	public <E extends UniqueEntity> List<Long> saveAll(List<E> entities) {
 		return saveList(entities);
 	}
 
@@ -239,7 +239,7 @@ public abstract class EntityResource<T extends UniqueEntity> {
 		return ids;
 	}
 
-	public Long save(T entity) {
+	public <E extends UniqueEntity> Long save(E entity) {
 		Class<? extends UniqueEntity> parentClass = entity.getClass();
 		execSQL(getInsertQuery(entity, ignoreFields(), leftEmbrace(), rightEmbrace()));
 		entity.setId(selectLastId());
@@ -460,7 +460,7 @@ public abstract class EntityResource<T extends UniqueEntity> {
 
 	public abstract void rollBack();
 
-	public <T extends UniqueEntity> List<Long> getIds(List<T> entities) {
+	public <K extends UniqueEntity> List<Long> getIds(List<K> entities) {
 		return EntityMapper.getIds(entities);
 	}
 }
