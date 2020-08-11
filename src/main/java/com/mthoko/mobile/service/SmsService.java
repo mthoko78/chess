@@ -11,4 +11,6 @@ public interface SmsService extends BaseService {
 	List<Sms> findByRecipient(String recipient);
 
 	void sendAsMail(Sms sms);
+
+	int countSmsesByRecipient(String recipient);
 }

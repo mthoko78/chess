@@ -45,17 +45,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mthoko.mobile.entity.Address;
+import com.mthoko.mobile.entity.Credentials;
 import com.mthoko.mobile.entity.DevContact;
+import com.mthoko.mobile.entity.Device;
 import com.mthoko.mobile.entity.LocationStamp;
+import com.mthoko.mobile.entity.Member;
+import com.mthoko.mobile.entity.SimContact;
 import com.mthoko.mobile.entity.Sms;
-import com.mthoko.mobile.entity.UniqueEntity;
 import com.mthoko.mobile.model.Account;
 import com.mthoko.mobile.service.AccountService;
+import com.mthoko.mobile.service.CredentialsService;
 import com.mthoko.mobile.service.DevContactService;
+import com.mthoko.mobile.service.DeviceService;
 import com.mthoko.mobile.service.LocationStampService;
+import com.mthoko.mobile.service.MemberService;
+import com.mthoko.mobile.service.SimContactService;
 import com.mthoko.mobile.service.SmsService;
 import com.mthoko.mobile.service.common.MailService;
 import com.mthoko.mobile.service.common.ServiceFactory;
+import com.mthoko.mobile.service.proxy.AddressServiceProxy;
 import com.mthoko.mobile.util.DataManager;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -70,15 +78,27 @@ public class Main {
 	@Autowired
 	private DataSource dataSource;
 
+	private final AddressServiceProxy addressService = ServiceFactory.getAddressService();
+	
 	private final AccountService accountService = ServiceFactory.getAccountService();
 
 	private final DevContactService contactService = ServiceFactory.getContactService();
+	
+	private final SimContactService simContactService = ServiceFactory.getSimContactService();
 
 	private final SmsService smsService = ServiceFactory.getSmsService();
 
 	private final LocationStampService locationStampService = ServiceFactory.getLocationStampService();
+	
+	private final DeviceService deviceService = ServiceFactory.getDeviceService();
 
 	private final MailService mailService = ServiceFactory.getMailService();
+	
+	private final MemberService memberService = ServiceFactory.getMemberService();
+
+	private final CredentialsService credentialsService = ServiceFactory.getCredentialsService();
+	
+	private final DevContactService devContactService = ServiceFactory.getContactService();
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Main.class, args);
@@ -245,17 +265,6 @@ public class Main {
 		}
 	}
 
-	@PostMapping("/save-location-stamp")
-	@ResponseBody
-	Object saveLocationStamp(@RequestBody LocationStamp locationStamp) {
-		try {
-			locationStampService.save(locationStamp);
-			return locationStamp;
-		} catch (Exception e) {
-			return e.getCause().getMessage();
-		}
-	}
-
 	@RequestMapping("/dev-contacts-exclude-ids/{imei}")
 	@ResponseBody
 	public List<DevContact> findDevContactsByImeiWithIdsNotIn(@RequestBody List<Long> ids,
@@ -268,15 +277,124 @@ public class Main {
 	public Integer countDevContactsByImei(@PathVariable("imei") String imei) {
 		return contactService.countByImei(imei);
 	}
+	
+	@PostMapping("/save-address")
+	@ResponseBody
+	Object saveAddress(@RequestBody Address address) {
+		try {
+			addressService.save(address);
+			return address;
+		} catch (Exception e) {
+			return e.getCause().getMessage();
+		}
+	}
+
+	@PostMapping("/save-addresses")
+	@ResponseBody
+	List<Long> saveAddressList(@RequestBody List<Address> addresses) {
+		try {
+			return addressService.saveAll(addresses);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@PostMapping("/save-credentials")
+	@ResponseBody
+	Object saveCredentials(@RequestBody Credentials credentials) {
+		try {
+			credentialsService.save(credentials);
+			return credentials;
+		} catch (Exception e) {
+			return e.getCause().getMessage();
+		}
+	}
+
+	@PostMapping("/save-credentials-list")
+	@ResponseBody
+	List<Long> saveCredentialsList(@RequestBody List<Credentials> credentials) {
+		try {
+			return credentialsService.saveAll(credentials);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@PostMapping("/save-devContact")
+	@ResponseBody
+	Object saveDevContact(@RequestBody DevContact devContact) {
+		try {
+			devContactService.save(devContact);
+			return devContact;
+		} catch (Exception e) {
+			return e.getCause().getMessage();
+		}
+	}
+
+	@PostMapping("/save-devContact-list")
+	@ResponseBody
+	List<Long> saveDevContactList(@RequestBody List<DevContact> devContact) {
+		try {
+			return devContactService.saveAll(devContact);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@PostMapping("/save-location-stamp")
+	@ResponseBody
+	Object saveLocationStamp(@RequestBody LocationStamp locationStamp) {
+		try {
+			locationStampService.save(locationStamp);
+			return locationStamp;
+		} catch (Exception e) {
+			return e.getCause().getMessage();
+		}
+	}
 
 	@PostMapping("/save-location-stamps")
 	@ResponseBody
-	List<Long> saveEntities(@RequestBody List<LocationStamp> locationStamps) {
+	List<Long> saveLocationStampList(@RequestBody List<LocationStamp> locationStamps) {
 		try {
 			return locationStampService.saveAll(locationStamps);
 		} catch (Exception e) {
 			return null;
 		}
 	}
+
+	@PostMapping("/save-sim-contacts")
+	@ResponseBody
+	List<Long> saveSimContactList(@RequestBody List<SimContact> simContacts) {
+		try {
+			return simContactService.saveAll(simContacts);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@PostMapping("/save-devices")
+	@ResponseBody
+	List<Long> saveDeviceList(@RequestBody List<Device> devices) {
+		try {
+			return deviceService.saveAll(devices);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@PostMapping("/save-member")
+	@ResponseBody
+	List<Long> saveMemberList(@RequestBody List<Member> members) {
+		try {
+			return memberService.saveAll(members);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+    @GetMapping("count-smses-by-recipient/{recipient}")
+    int countSmsesByRecipient(@PathVariable("recipient") String recipient) {
+    	return smsService.countSmsesByRecipient(recipient);
+    }
 
 }

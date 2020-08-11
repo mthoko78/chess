@@ -12,6 +12,7 @@ import com.mthoko.mobile.service.SimCardService;
 import com.mthoko.mobile.service.SimContactService;
 import com.mthoko.mobile.service.SmsService;
 import com.mthoko.mobile.service.proxy.AccountServiceProxy;
+import com.mthoko.mobile.service.proxy.AddressServiceProxy;
 import com.mthoko.mobile.service.proxy.CredentialsServiceProxy;
 import com.mthoko.mobile.service.proxy.DevContactServiceProxy;
 import com.mthoko.mobile.service.proxy.DeviceServiceProxy;
@@ -71,5 +72,9 @@ public class ServiceFactory {
 
 	public static MailService getMailService() {
 		return new MailService();
+	}
+
+	public static AddressServiceProxy getAddressService() {
+		return new AddressServiceProxy();
 	}
 }

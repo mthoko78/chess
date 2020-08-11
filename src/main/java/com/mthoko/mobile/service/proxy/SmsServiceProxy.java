@@ -33,4 +33,12 @@ public class SmsServiceProxy extends BaseServiceImpl implements SmsService {
 	public BaseResourceRemote<Sms> getResource() {
 		return service.getResource();
 	}
+
+	@Override
+	public int countSmsesByRecipient(String recipient) {
+		boolean openConnection = service.openConnection();
+		int count = service.countSmsesByRecipient(recipient);
+		service.closeConnectionIf(openConnection);
+		return count;
+	}
 }

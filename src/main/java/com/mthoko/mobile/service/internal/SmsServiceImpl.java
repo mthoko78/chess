@@ -57,4 +57,9 @@ public class SmsServiceImpl extends BaseServiceImpl implements SmsService {
 		return resource;
 	}
 
+	@Override
+	public int countSmsesByRecipient(String recipient) {
+		return resource.countSmsesByRecipient(recipient);
+	}
+
 }
