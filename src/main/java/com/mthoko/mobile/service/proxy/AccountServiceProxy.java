@@ -23,17 +23,17 @@ public class AccountServiceProxy extends BaseServiceImpl implements AccountServi
 	}
 
 	@Override
-	public Account findExternalAccountByEmail(String email) {
+	public Account findByEmail(String email) {
 		boolean openConnection = service.openConnection();
-		Account account = service.findExternalAccountByEmail(email);
+		Account account = service.findByEmail(email);
 		service.closeConnectionIf(openConnection);
 		return account;
 	}
 
 	@Override
-	public Account findRemoteAccountBySimNo(String simNo) {
+	public Account findBySimNo(String simNo) {
 		boolean openConnection = service.openConnection();
-		Account account = service.findRemoteAccountBySimNo(simNo);
+		Account account = service.findBySimNo(simNo);
 		service.closeConnectionIf(openConnection);
 		return account;
 	}
@@ -44,17 +44,17 @@ public class AccountServiceProxy extends BaseServiceImpl implements AccountServi
 	}
 
 	@Override
-	public List<Account> findExternalMatchingAccounts(Account account) {
+	public List<Account> findMatchingAccounts(Account account) {
 		boolean openConnection = service.openConnection();
-		List<Account> accounts = service.findExternalMatchingAccounts(account);
+		List<Account> accounts = service.findMatchingAccounts(account);
 		service.closeConnectionIf(openConnection);
 		return accounts;
 	}
 
 	@Override
-	public void registerExternally(Account accountToRegister) {
+	public void register(Account accountToRegister) {
 		boolean connection = service.openConnection();
-		service.registerExternally(accountToRegister);
+		service.register(accountToRegister);
 		service.closeConnectionIf(connection);
 	}
 

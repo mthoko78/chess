@@ -59,9 +59,9 @@ public class DevContactServiceProxy extends BaseServiceImpl implements DevContac
 	}
 
 	@Override
-	public List<DevContact> findByImeiWithIdsNotIn(List<Long> remoteIds, String imei) {
+	public List<DevContact> findByImeiExcludingIds(List<Long> remoteIds, String imei) {
 		boolean openConnection = service.openConnection();
-		List<DevContact> deviceContacts = service.findByImeiWithIdsNotIn(remoteIds, imei);
+		List<DevContact> deviceContacts = service.findByImeiExcludingIds(remoteIds, imei);
 		service.closeConnectionIf(openConnection);
 		return deviceContacts;
 	}

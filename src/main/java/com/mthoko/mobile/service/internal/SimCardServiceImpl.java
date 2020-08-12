@@ -19,4 +19,9 @@ public class SimCardServiceImpl extends BaseServiceImpl implements SimCardServic
 		return simCardResourceRemote;
 	}
 
+	@Override
+	public SimCard findBySimNo(String simNo) {
+		return simCardResourceRemote.findBySimNo(simNo);
+	}
+
 }

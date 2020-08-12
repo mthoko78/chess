@@ -7,14 +7,14 @@ import java.util.Set;
 
 public interface AccountService extends BaseService {
 
-	Account findExternalAccountByEmail(String email);
+	Account findByEmail(String email);
 
-    Account findRemoteAccountBySimNo(String simNo);
+    Account findBySimNo(String simNo);
 
-    void loadMatchingEntries(Account accountForRegistration, Account account, Set<String> duplicateEntries);
+    void loadMatchingEntries(Account targetAccount, Account account, Set<String> duplicateEntries);
 
-    List<Account> findExternalMatchingAccounts(Account accountToRegister);
+    List<Account> findMatchingAccounts(Account account);
 
-    void registerExternally(Account accountToRegister);
+    void register(Account account);
 
 }

@@ -150,7 +150,7 @@ public class DevContactServiceImpl extends BaseServiceImpl implements DevContact
 	}
 
 	@Override
-	public List<DevContact> findByImeiWithIdsNotIn(List<Long> ids, String imei) {
+	public List<DevContact> findByImeiExcludingIds(List<Long> ids, String imei) {
 		return resource.findByImeiWithIdsNotIn(ids, imei);
 	}
 

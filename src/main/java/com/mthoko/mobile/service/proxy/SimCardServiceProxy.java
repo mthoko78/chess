@@ -19,4 +19,12 @@ public class SimCardServiceProxy extends BaseServiceImpl implements SimCardServi
 		return service.getResource();
 	}
 
+	@Override
+	public SimCard findBySimNo(String simNo) {
+		boolean openConnection = service.openConnection();
+		SimCard simCard = service.findBySimNo(simNo);
+		service.closeConnectionIf(openConnection);
+		return simCard;
+	}
+
 }

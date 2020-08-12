@@ -20,12 +20,12 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		accountResourceRemote = new AccountResourceRemote(new ConnectionWrapper(null));
 	}
 
-	public void registerExternally(Account account) { // this method must be called within AsyncClass since it makes
+	public void register(Account account) { // this method must be called within AsyncClass since it makes
 														// async http requests
 		accountResourceRemote.register(account);
 	}
 
-	public List<Account> findExternalMatchingAccounts(Account targetAccount) {
+	public List<Account> findMatchingAccounts(Account targetAccount) {
 		List<Account> matchingAccounts = accountResourceRemote.findMatchingAccounts(targetAccount);
 		return matchingAccounts;
 	}
@@ -45,7 +45,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		}
 	}
 
-	public Account findRemoteAccountBySimNo(String simNo) {
+	public Account findBySimNo(String simNo) {
 		Account account = accountResourceRemote.findBySimNo(simNo);
 		return account;
 	}
@@ -85,7 +85,7 @@ public class AccountServiceImpl extends BaseServiceImpl implements AccountServic
 		throw new ApplicationException(errorCode);
 	}
 
-	public Account findExternalAccountByEmail(String email) {
+	public Account findByEmail(String email) {
 		Account account = accountResourceRemote.findByEmail(email);
 		return account;
 	}

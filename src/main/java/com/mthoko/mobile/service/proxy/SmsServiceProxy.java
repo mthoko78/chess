@@ -35,10 +35,18 @@ public class SmsServiceProxy extends BaseServiceImpl implements SmsService {
 	}
 
 	@Override
-	public int countSmsesByRecipient(String recipient) {
+	public int countByRecipient(String recipient) {
 		boolean openConnection = service.openConnection();
-		int count = service.countSmsesByRecipient(recipient);
+		int count = service.countByRecipient(recipient);
 		service.closeConnectionIf(openConnection);
 		return count;
+	}
+
+	@Override
+	public List<Sms> findByRecipientExcludingIds(List<Long> ids, String recipient) {
+		boolean openConnection = service.openConnection();
+		List<Sms> smses = service.findByRecipientExcludingIds(ids, recipient);
+		service.closeConnectionIf(openConnection);
+		return smses;
 	}
 }

@@ -22,7 +22,7 @@ public interface DevContactService extends BaseService {
 
 	List<DevContact> findByImei(String imei);
 
-	List<DevContact> findByImeiWithIdsNotIn(List<Long> remoteIds, String imei);
+	List<DevContact> findByImeiExcludingIds(List<Long> remoteIds, String imei);
 
 	int countByImei(String imei);
 
