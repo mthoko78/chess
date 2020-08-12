@@ -7,8 +7,8 @@ import com.mthoko.mobile.entity.SimCard;
 import com.mthoko.mobile.exception.ApplicationException;
 import com.mthoko.mobile.exception.ErrorCode;
 import com.mthoko.mobile.model.Account;
-import com.mthoko.mobile.resource.remote.AccountResourceRemote;
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
+import com.mthoko.mobile.resource.AccountResourceRemote;
+import com.mthoko.mobile.resource.BaseResourceRemote;
 import com.mthoko.mobile.service.AccountService;
 import com.mthoko.mobile.util.ConnectionWrapper;
 

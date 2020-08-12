@@ -1,4 +1,4 @@
-package com.mthoko.mobile.resource.remote;
+package com.mthoko.mobile.resource;
 
 import com.mthoko.mobile.entity.SimCard;
 import com.mthoko.mobile.entity.SimContact;
@@ -14,7 +14,7 @@ public class SimContactResourceRemote extends BaseResourceRemote<SimContact> {
 		super(SimContact.class, connectionWrapper);
 	}
 
-	public int countSimContactsBySimNo(String simNo) {
+	public int countBySimNo(String simNo) {
 		Class<SimCard> parentEntity = SimCard.class;
 		String whereClause = String.format("%s.simNo = '%s'", parentEntity.getSimpleName(), simNo);
 		return countWhereJoining(parentEntity, getEntityClass(), whereClause);
@@ -31,7 +31,7 @@ public class SimContactResourceRemote extends BaseResourceRemote<SimContact> {
 		return findWhereJoining(parentEntityClass, getEntityClass(), whereClause);
 	}
 
-	public List<SimContact> findBySimNoWithIdsNotIn(List<Long> ids, String simNo) {
+	public List<SimContact> findBySimNoExcludingIds(List<Long> ids, String simNo) {
 		if (ids.isEmpty()) {
 			return findBySimNo(simNo);
 		}

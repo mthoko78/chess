@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,16 +41,28 @@ public class SmsController extends BaseController<Sms> {
 		return smses;
 	}
 
-	@GetMapping("/count-by-recipient/{recipient}")
-	@ResponseBody
-	public int countByRecipient(@PathVariable("recipient") String recipient) {
-		return service.countByRecipient(recipient);
-	}
-
 	@GetMapping("/excluding-ids/recipient/{recipient}")
 	@ResponseBody
 	public List<Sms> findByRecipientExcludingIds(@RequestBody List<Long> ids,
 			@PathVariable("recipient") String recipient) {
 		return service.findByRecipientExcludingIds(ids, recipient);
+	}
+	
+	@GetMapping("/count-by-recipient/{recipient}")
+	@ResponseBody
+	public int countByRecipient(@PathVariable("recipient") String recipient) {
+		return service.countByRecipient(recipient);
+	}
+	
+	@PostMapping(SAVE)
+	@ResponseBody
+	public Long save(@RequestBody Sms sms) {
+		return super.save(sms);
+	}
+	
+	@PostMapping(SAVE_ALL)
+	@ResponseBody
+	public List<Long> saveAll(@RequestBody List<Sms> smses) {
+		return super.saveAll(smses);
 	}
 }

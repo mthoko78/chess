@@ -1,8 +1,8 @@
 package com.mthoko.mobile.service.internal;
 
 import com.mthoko.mobile.entity.Property;
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
-import com.mthoko.mobile.resource.remote.PropertyResourceRemote;
+import com.mthoko.mobile.resource.BaseResourceRemote;
+import com.mthoko.mobile.resource.PropertyResourceRemote;
 import com.mthoko.mobile.service.PropertyService;
 import com.mthoko.mobile.util.ConnectionWrapper;
 

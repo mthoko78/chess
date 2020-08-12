@@ -3,7 +3,7 @@ package com.mthoko.mobile.service.proxy;
 import java.util.List;
 
 import com.mthoko.mobile.entity.Sms;
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
+import com.mthoko.mobile.resource.BaseResourceRemote;
 import com.mthoko.mobile.service.SmsService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.service.internal.SmsServiceImpl;

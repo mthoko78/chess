@@ -7,8 +7,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.mthoko.mobile.entity.LocationStamp;
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
-import com.mthoko.mobile.resource.remote.LocationStampResourceRemote;
+import com.mthoko.mobile.resource.BaseResourceRemote;
+import com.mthoko.mobile.resource.LocationStampResourceRemote;
 import com.mthoko.mobile.service.LocationStampService;
 import com.mthoko.mobile.util.ConnectionWrapper;
 

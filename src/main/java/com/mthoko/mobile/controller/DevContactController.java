@@ -25,6 +25,12 @@ public class DevContactController extends BaseController<DevContact> {
 		return service;
 	}
 
+	@RequestMapping("/{imei}")
+	@ResponseBody
+	public List<DevContact> findByImei(@PathVariable("imei") String imei) {
+		return service.findByImei(imei);
+	}
+
 	@RequestMapping("/exclude-ids/{imei}")
 	@ResponseBody
 	public List<DevContact> findByImeiExcludingIds(@RequestBody List<Long> ids,
@@ -32,7 +38,7 @@ public class DevContactController extends BaseController<DevContact> {
 		return service.findByImeiExcludingIds(ids, imei);
 	}
 
-	@RequestMapping("/count-by-imei/{imei}")
+	@RequestMapping("/count/imei/{imei}")
 	@ResponseBody
 	public Integer countByImei(@PathVariable("imei") String imei) {
 		return service.countByImei(imei);

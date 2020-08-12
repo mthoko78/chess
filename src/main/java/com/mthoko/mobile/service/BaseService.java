@@ -3,7 +3,7 @@ package com.mthoko.mobile.service;
 import java.util.List;
 
 import com.mthoko.mobile.entity.UniqueEntity;
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
+import com.mthoko.mobile.resource.BaseResourceRemote;
 
 public interface BaseService {
 
@@ -27,7 +27,7 @@ public interface BaseService {
 
     void endTransaction();
 
-    void closeConnectionIf(boolean openRemoteConnection);
+    void closeConnectionIf(boolean openConnection);
 
     void endTransactionIf(boolean inTransaction);
 

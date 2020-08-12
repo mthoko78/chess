@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import com.mthoko.mobile.entity.RecordedCall;
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
-import com.mthoko.mobile.resource.remote.RecordedCallResourceRemote;
+import com.mthoko.mobile.resource.BaseResourceRemote;
+import com.mthoko.mobile.resource.RecordedCallResourceRemote;
 import com.mthoko.mobile.service.RecordedCallService;
 import com.mthoko.mobile.util.ConnectionWrapper;
 

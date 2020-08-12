@@ -1,4 +1,4 @@
-package com.mthoko.mobile.resource.remote;
+package com.mthoko.mobile.resource;
 
 import com.mthoko.mobile.entity.Property;
 import com.mthoko.mobile.util.ConnectionWrapper;

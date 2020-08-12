@@ -1,4 +1,4 @@
-package com.mthoko.mobile.resource.remote;
+package com.mthoko.mobile.resource;
 
 import java.util.List;
 import java.util.Map;

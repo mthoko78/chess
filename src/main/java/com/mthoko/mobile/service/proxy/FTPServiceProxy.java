@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.apache.commons.net.ftp.FTPFile;
 
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
+import com.mthoko.mobile.resource.BaseResourceRemote;
 import com.mthoko.mobile.service.FTPService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.util.FTPServiceImpl;

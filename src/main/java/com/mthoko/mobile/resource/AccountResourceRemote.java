@@ -1,4 +1,4 @@
-package com.mthoko.mobile.resource.remote;
+package com.mthoko.mobile.resource;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -7,7 +7,7 @@ import java.util.Map;
 import com.mthoko.mobile.entity.DevContact;
 import com.mthoko.mobile.entity.DevContactValue;
 import com.mthoko.mobile.entity.SimContact;
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
+import com.mthoko.mobile.resource.BaseResourceRemote;
 import com.mthoko.mobile.service.DevContactService;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;
 import com.mthoko.mobile.service.internal.DevContactServiceImpl;

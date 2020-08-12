@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.mthoko.mobile.model.Account;
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
+import com.mthoko.mobile.resource.BaseResourceRemote;
 import com.mthoko.mobile.service.AccountService;
 import com.mthoko.mobile.service.internal.AccountServiceImpl;
 import com.mthoko.mobile.service.internal.BaseServiceImpl;

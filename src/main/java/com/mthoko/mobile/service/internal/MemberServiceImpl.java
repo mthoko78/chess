@@ -1,8 +1,8 @@
 package com.mthoko.mobile.service.internal;
 
 import com.mthoko.mobile.entity.Member;
-import com.mthoko.mobile.resource.remote.BaseResourceRemote;
-import com.mthoko.mobile.resource.remote.MemberResourceRemote;
+import com.mthoko.mobile.resource.BaseResourceRemote;
+import com.mthoko.mobile.resource.MemberResourceRemote;
 import com.mthoko.mobile.service.MemberService;
 import com.mthoko.mobile.util.ConnectionWrapper;
 
@@ -22,6 +22,11 @@ public class MemberServiceImpl extends BaseServiceImpl implements MemberService 
 	@Override
 	public Member findById(Long id) {
 		return resource.findById(id);
+	}
+
+	@Override
+	public Member findByEmail(String email) {
+		return resource.findByEmail(email);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.mthoko.mobile.resource.remote;
+package com.mthoko.mobile.resource;
 
 import static com.mthoko.mobile.util.EntityMapper.getDateFromTimeStamp;
 import static com.mthoko.mobile.util.EntityMapper.getTimeStampFromDate;
