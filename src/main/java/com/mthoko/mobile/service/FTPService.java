@@ -4,15 +4,17 @@ import java.io.File;
 
 import org.apache.commons.net.ftp.FTPFile;
 
-public interface FTPService extends BaseService {
+import com.mthoko.mobile.entity.FileInfo;
 
-    FTPFile[] getClientFiles(String dir);
+public interface FTPService extends BaseService<FileInfo> {
 
-    String uploadFile(File file);
+	FTPFile[] getClientFiles(String dir);
 
-    String uploadFile(File file, String serverDir);
+	String uploadFile(File file);
 
-    FTPFile[] getClientFiles();
+	String uploadFile(File file, String serverDir);
 
-    String getCallsRemoteDirectory();
+	FTPFile[] getClientFiles();
+
+	String getCallsRemoteDirectory();
 }

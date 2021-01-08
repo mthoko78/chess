@@ -1,52 +1,48 @@
 package com.mthoko.mobile.controller;
 
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.mthoko.mobile.entity.LocationStamp;
 import com.mthoko.mobile.service.BaseService;
 import com.mthoko.mobile.service.LocationStampService;
-import com.mthoko.mobile.service.common.ServiceFactory;
 
-@Controller
+@RestController
 @RequestMapping("location-stamp")
 public class LocationStampController extends BaseController<LocationStamp> {
 
-	private final LocationStampService service = ServiceFactory.getLocationStampService();
+	@Autowired
+	private LocationStampService service;
 
 	@Override
-	public BaseService getService() {
+	public BaseService<LocationStamp> getService() {
 		return service;
 	}
 
-	@RequestMapping("/{imei}")
-	@ResponseBody
+	@RequestMapping("{imei}")
 	public List<LocationStamp> findByImei(@PathVariable("imei") String imei) {
 		return service.findByImei(imei);
 	}
 
-	@RequestMapping("/recent/{imei}")
-	@ResponseBody
+	@RequestMapping("recent/{imei}")
 	public LocationStamp findMostRecentByImei(@PathVariable("imei") String imei) {
 		return service.findMostRecentByImei(imei);
 	}
 
-	@PostMapping(SAVE)
-	@ResponseBody
-	public Long save(@RequestBody LocationStamp locationStamp) {
-		return super.save(locationStamp);
+	@GetMapping("count/imei/{imei}")
+	public Integer countByImei(@PathVariable("imei") String imei) {
+		return service.countByImei(imei);
 	}
 
-	@PostMapping(SAVE_ALL)
-	@ResponseBody
-	public List<Long> saveAll(@RequestBody List<LocationStamp> locationStamps) {
-		return super.saveAll(locationStamps);
+	@GetMapping("verification/id/{id}")
+	public Map<String, Long> retrieveVerification(@PathVariable("id") Long id) {
+		return service.extractVerification(service.findById(id));
 	}
 
 }

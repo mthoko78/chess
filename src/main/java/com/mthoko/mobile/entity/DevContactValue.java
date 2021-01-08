@@ -1,83 +1,57 @@
 package com.mthoko.mobile.entity;
 
-import com.mthoko.mobile.annotations.Entity;
-import com.mthoko.mobile.annotations.ForeignKey;
-import com.mthoko.mobile.annotations.PrimaryKey;
+import javax.persistence.Entity;
 
 @Entity
 public class DevContactValue extends UniqueEntity {
-    @PrimaryKey
-    private Long id;
-    @ForeignKey(referencedEntity = DevContact.class)
-    private Long devContactId;
-    private Long verificationId;
-    private Integer source;
-    private String value;
 
-    public DevContactValue() {
-    }
+	private Integer source;
 
-    public DevContactValue(Long devContactId, Integer source, String value) {
-        this.devContactId = devContactId;
-        this.source = source;
-        this.value = value;
-    }
+	private String value;
 
-    public Long getId() {
-        return id;
-    }
+	private Long devContactId;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public DevContactValue() {
+	}
 
-    public Long getDevContactId() {
-        return devContactId;
-    }
+	public DevContactValue(Integer source, String value) {
+		this.source = source;
+		this.value = value;
+	}
 
-    public void setDevContactId(Long devContactId) {
-        this.devContactId = devContactId;
-    }
+	public Integer getSource() {
+		return source;
+	}
 
-    public Integer getSource() {
-        return source;
-    }
+	public void setSource(Integer source) {
+		this.source = source;
+	}
 
-    public void setSource(Integer source) {
-        this.source = source;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    public String getValue() {
-        return value;
-    }
+	public void setValue(String value) {
+		this.value = value;
+	}
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	public Long getDevContactId() {
+		return devContactId;
+	}
 
-    @Override
-    public Long getVerificationId() {
-        return verificationId;
-    }
+	public void setDevContactId(Long contact) {
+		this.devContactId = contact;
+	}
 
-    @Override
-    public void setVerificationId(Long verificationId) {
-        this.verificationId = verificationId;
-    }
+	@Override
+	public String getUniqueIdentifier() {
+		return source + "|" + value;
+	}
 
-    @Override
-    public String getUniqueIdentifier() {
-        return source + "|" + value;
-    }
+	@Override
+	public String toString() {
+		return "DevContactValue [id=" + getId() + ", source=" + source + ", value=" + value + ", contact="
+				+ devContactId + "]";
+	}
 
-    @Override
-    public String toString() {
-        return "DevContactValue{" +
-                "id=" + id +
-                ", devContactId=" + devContactId +
-                ", verificationId=" + verificationId +
-                ", source=" + source +
-                ", value='" + value + '\'' +
-                '}';
-    }
 }

@@ -1,37 +1,53 @@
 package com.mthoko.mobile.service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import com.mthoko.mobile.entity.Property;
 import com.mthoko.mobile.entity.UniqueEntity;
-import com.mthoko.mobile.resource.BaseResourceRemote;
 
-public interface BaseService {
+@Transactional
+public interface BaseService<T extends UniqueEntity> {
 
-    String getProperty(String key);
+	String getProperty(String key);
 
-    void setProperty(String key, String value);
+	Property setProperty(String key, String value);
 
-    <T extends UniqueEntity> void removeVerified(List<T> unverified);
+	void removeVerified(List<T> unverified);
 
-    boolean isConnectionAvailable();
+	String getAppProperty(String propertyName);
 
-    BaseResourceRemote<?> getResource();
+	T save(T entity);
 
-    String getAppProperty(String propertyName);
+	List<T> saveAll(List<T> entities);
 
-    boolean openConnection();
+	Map<String, Long> extractVerification(UniqueEntity entity);
 
-    void closeConnection();
+	List<T> deleteAll(List<T> entities);
 
-    boolean beginTransaction();
+	T delete(T entity);
 
-    void endTransaction();
+	List<T> retrieveAll();
 
-    void closeConnectionIf(boolean openConnection);
+	Long countById(Long id);
 
-    void endTransactionIf(boolean inTransaction);
+	void deleteById(Long id);
 
-    <T extends UniqueEntity> Long save(T entity);
+	void deleteByIdsIn(List<Long> ids);
 
-    <T extends UniqueEntity> List<Long> saveAll(List<T> entities);
+	T update(T entity);
+
+	List<T> updateAll(List<T> entities);
+
+	String unsetProperty(String key);
+
+	T findById(Long id);
+
+	T setDateBeforeSave(T entity, Date date);
+
+	List<T> setDateBeforeSave(List<T> entities, Date date);
+
 }

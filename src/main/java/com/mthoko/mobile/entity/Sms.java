@@ -1,160 +1,134 @@
 package com.mthoko.mobile.entity;
 
-import com.mthoko.mobile.annotations.Entity;
-import com.mthoko.mobile.annotations.PrimaryKey;
-
 import java.util.Date;
 
-/**
- * Created by Mthoko on 24 Sep 2018.
- */
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
 public class Sms extends UniqueEntity {
-    @PrimaryKey
-    private Long id;
-    private Long verificationId;
-    private String sender;
-    private String recipient;
-    private String body;
-    private Date date;
-    private Date dateSent;
-    private String location;
-    private boolean sent;
-    private boolean isRead;
-    private boolean delivered;
-    private boolean deliveryReportRequested;
 
-    public String getSender() {
-        return sender;
-    }
+	private String sender;
 
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
+	private String recipient;
 
-    public String getBody() {
-        return body;
-    }
+	@Column(length = 1024)
+	private byte[] body;
 
-    public void setBody(String body) {
-        this.body = body;
-    }
+	private Date date;
 
-    public Date getDate() {
-        return date;
-    }
+	private Date dateSent;
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+	private String location;
 
-    public Date getDateSent() {
-        return dateSent;
-    }
+	private boolean sent;
 
-    public void setDateSent(Date dateSent) {
-        this.dateSent = dateSent;
-    }
+	private boolean isRead;
 
-    public String getLocation() {
-        return location;
-    }
+	private boolean delivered;
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+	private boolean deliveryReportRequested;
 
-    public String getRecipient() {
-        return recipient;
-    }
+	public String getSender() {
+		return sender;
+	}
 
-    public void setRecipient(String recipient) {
-        this.recipient = recipient;
-    }
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
 
-    public boolean isSent() {
-        return sent;
-    }
+	public String getBody() {
+		return byteArrayToString(body);
+	}
 
-    public void setSent(boolean sent) {
-        this.sent = sent;
-    }
+	public void setBody(String body) {
+		this.body = stringToByteArray(body);
+	}
 
-    public boolean isRead() {
-        return isRead;
-    }
+	public Date getDate() {
+		return date;
+	}
 
-    public void setRead(boolean read) {
-        this.isRead = read;
-    }
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public boolean isDelivered() {
-        return delivered;
-    }
+	public Date getDateSent() {
+		return dateSent;
+	}
 
-    public void setDelivered(boolean delivered) {
-        this.delivered = delivered;
-    }
+	public void setDateSent(Date dateSent) {
+		this.dateSent = dateSent;
+	}
 
-    public boolean isDeliveryReportRequested() {
-        return deliveryReportRequested;
-    }
+	public String getLocation() {
+		return location;
+	}
 
-    public void setDeliveryReportRequested(boolean deliveryReportRequested) {
-        this.deliveryReportRequested = deliveryReportRequested;
-    }
+	public void setLocation(String location) {
+		this.location = location;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	public String getRecipient() {
+		return recipient;
+	}
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setRecipient(String recipient) {
+		this.recipient = recipient;
+	}
 
-    @Override
-    public Long getVerificationId() {
-        return verificationId;
-    }
+	public boolean isSent() {
+		return sent;
+	}
 
-    @Override
-    public void setVerificationId(Long verificationId) {
-        this.verificationId = verificationId;
-    }
+	public void setSent(boolean sent) {
+		this.sent = sent;
+	}
 
-    @Override
-    public String getUniqueIdentifier() {
-        return sender + "|" + recipient + "|" + dateSent.getTime();
-    }
+	public boolean isRead() {
+		return isRead;
+	}
 
-    @Override
-    public String toString() {
-        return "Sms{" +
-                "id=" + id +
-                ", verificationId=" + verificationId +
-                ", sender='" + sender + '\'' +
-                ", recipient='" + recipient + '\'' +
-                ", body='" + body + '\'' +
-                ", date='" + date + '\'' +
-                ", dateSent='" + dateSent + '\'' +
-                ", location='" + location + '\'' +
-                ", sent=" + sent +
-                ", isRead=" + isRead +
-                ", delivered=" + delivered +
-                ", deliveryReportRequested=" + deliveryReportRequested +
-                '}';
-    }
+	public void setRead(boolean read) {
+		this.isRead = read;
+	}
 
-    public String getFormattedString() {
-        StringBuilder body = new StringBuilder();
-        body.append(String.format("From: %s\n", this.getSender()));
-        body.append(String.format("To: %s\n", this.getRecipient()));
-        body.append(String.format("Date received: %s\n", this.getDate()));
-        body.append(String.format("Date sent: %s\n", this.getDateSent()));
-        body.append(this.getBody() + "\n\n");
-        return body.toString();
-    }
+	public boolean isDelivered() {
+		return delivered;
+	}
+
+	public void setDelivered(boolean delivered) {
+		this.delivered = delivered;
+	}
+
+	public boolean isDeliveryReportRequested() {
+		return deliveryReportRequested;
+	}
+
+	public void setDeliveryReportRequested(boolean deliveryReportRequested) {
+		this.deliveryReportRequested = deliveryReportRequested;
+	}
+
+	@Override
+	public String getUniqueIdentifier() {
+		return sender + "|" + recipient + "|" + (dateSent == null ? null : dateSent.getTime());
+	}
+
+	public String getFormattedString() {
+		StringBuilder body = new StringBuilder();
+		body.append(String.format("From: %s\n", this.getSender()));
+		body.append(String.format("To: %s\n", this.getRecipient()));
+		body.append(String.format("Date received: %s\n", this.getDate()));
+		body.append(String.format("Date sent: %s\n", this.getDateSent()));
+		body.append(this.getBody() + "\n\n");
+		return body.toString();
+	}
+
+	@Override
+	public String toString() {
+		return "Sms [id=" + getId() + ", sender=" + sender + ", recipient=" + recipient + ", body=" + getBody() + ", date="
+				+ date + ", dateSent=" + dateSent + ", location=" + location + ", sent=" + sent + ", isRead=" + isRead
+				+ ", delivered=" + delivered + ", deliveryReportRequested=" + deliveryReportRequested + "]";
+	}
+
 }

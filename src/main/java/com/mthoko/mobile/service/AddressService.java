@@ -1,5 +1,7 @@
 package com.mthoko.mobile.service;
 
-public interface AddressService extends BaseService {
+import com.mthoko.mobile.entity.Address;
+
+public interface AddressService extends BaseService<Address> {
 
 }

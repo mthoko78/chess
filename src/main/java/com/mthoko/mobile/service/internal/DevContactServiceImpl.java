@@ -4,16 +4,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 
 import com.mthoko.mobile.entity.DevContact;
 import com.mthoko.mobile.entity.DevContactValue;
+import com.mthoko.mobile.entity.Device;
 import com.mthoko.mobile.entity.SimContact;
-import com.mthoko.mobile.resource.BaseResourceRemote;
-import com.mthoko.mobile.resource.DevContactResourceRemote;
+import com.mthoko.mobile.repo.DevContactRepo;
+import com.mthoko.mobile.repo.DevContactValueRepo;
+import com.mthoko.mobile.repo.DeviceRepo;
 import com.mthoko.mobile.service.DevContactService;
-import com.mthoko.mobile.util.ConnectionWrapper;
 
-public class DevContactServiceImpl extends BaseServiceImpl implements DevContactService {
+@Service
+public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implements DevContactService {
 
 	public static final int TYPE_DEFAULT = 0;
 	public static final int TYPE_HOME = 1;
@@ -63,25 +70,27 @@ public class DevContactServiceImpl extends BaseServiceImpl implements DevContact
 		STRING_TYPE[TYPE_MMS] = "MMS";
 	}
 
-	private final DevContactResourceRemote resource;
+	private final DevContactRepo devContactRepo;
 
-	public DevContactServiceImpl() {
-		resource = new DevContactResourceRemote(new ConnectionWrapper(null));
+	private final DevContactValueRepo devContactValueRepo;
+	
+	private final DeviceRepo deviceRepo;
+
+	@Autowired
+	public DevContactServiceImpl(DevContactRepo resource, DevContactValueRepo valueResource, DeviceRepo deviceRepo) {
+		super();
+		this.devContactRepo = resource;
+		this.devContactValueRepo = valueResource;
+		this.deviceRepo = deviceRepo;
 	}
 
 	@Override
-	public void sortByNameAsc(ArrayList<DevContact> devContacts) {
-		for (int i = 0; i < devContacts.size(); i++) {
-			int indexOfMin = i;
-			for (int j = i + 1; j < devContacts.size(); j++)
-				if (devContacts.get(j).getName().compareTo(devContacts.get(indexOfMin).getName()) < 0)
-					indexOfMin = j;
-			if (indexOfMin != i) {
-				// need to swap max with i
-				DevContact temp = devContacts.set(i, devContacts.get(indexOfMin));
-				devContacts.set(indexOfMin, temp);
-			}
-		}
+	public List<DevContact> sortByNameAsc(List<DevContact> devContacts) {
+		devContacts.sort((devContact, devContact2) -> {			
+			int result = devContact.getName().compareTo(devContact2.getName());
+			return result < 0 ? -1 : result > 0 ? 1: 0;
+		});
+		return devContacts;
 	}
 
 	@Override
@@ -90,15 +99,10 @@ public class DevContactServiceImpl extends BaseServiceImpl implements DevContact
 		for (SimContact simContact : simContacts) {
 			DevContact devContact = new DevContact();
 			devContact.setName(simContact.getName());
-			devContact.getValues().add(new DevContactValue(null, TYPE_MOBILE, simContact.getPhone()));
+			devContact.getValues().add(new DevContactValue(TYPE_MOBILE, simContact.getPhone()));
 			devContacts.add(devContact);
 		}
 		return devContacts;
-	}
-
-	@Override
-	public BaseResourceRemote<DevContact> getResource() {
-		return resource;
 	}
 
 	private Map<DevContactValue, List<DevContact>> filterDuplicates(List<DevContact> contacts) {
@@ -136,9 +140,9 @@ public class DevContactServiceImpl extends BaseServiceImpl implements DevContact
 	}
 
 	@Override
-	public List<DevContactValue> extractContactValues(List<DevContact> unverified) {
+	public List<DevContactValue> extractContactValues(List<DevContact> contacts) {
 		List<DevContactValue> values = new ArrayList<>();
-		for (DevContact contact : unverified) {
+		for (DevContact contact : contacts) {
 			values.addAll(contact.getValues());
 		}
 		return values;
@@ -146,17 +150,142 @@ public class DevContactServiceImpl extends BaseServiceImpl implements DevContact
 
 	@Override
 	public List<DevContact> findByImei(String imei) {
-		return resource.findByImei(imei);
+		Device device = deviceRepo.findByImei(imei);
+		if (device != null) {
+			return devContactRepo.findByDevId(device.getId());
+		}
+		return new ArrayList<>();
 	}
 
 	@Override
-	public List<DevContact> findByImeiExcludingIds(List<Long> ids, String imei) {
-		return resource.findByImeiWithIdsNotIn(ids, imei);
+	public List<DevContact> findByImeiExcludingIds(String imei, List<Long> ids) {
+		Device device = deviceRepo.findByImei(imei);
+		if (device != null) {
+			return devContactRepo.findByDevIdAndIdNotIn(device.getId(), ids);
+		}
+		return new ArrayList<>();
 	}
 
 	@Override
 	public int countByImei(String imei) {
-		return resource.countByImei(imei);
+		return devContactRepo.countByImei(imei);
+	}
+
+	@Override
+	public List<DevContact> findByImeiWithEmptyValues(String imei) {
+		return findByImei(imei).stream().filter(contact -> contact.getValues().isEmpty())
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<DevContact> deleteWithEmptyValues(String imei) {
+		List<DevContact> deletedContacts = findByImeiWithEmptyValues(imei);
+		deleteAll(deletedContacts);
+		return deletedContacts;
+	}
+
+	@Override
+	public List<DevContact> findRedundantByImei(String imei) {
+		List<DevContact> contacts = findByImei(imei);
+		return extractRedundantContacts(contacts);
+	}
+
+	@Override
+	public List<DevContact> optimizeByImei(String imei, boolean delete) {
+		List<DevContact> contacts = findByImei(imei);
+		List<DevContact> optimized = optimize(contacts);
+		if (delete) {
+			removeAll(contacts, optimized);
+			devContactRepo.deleteAll(contacts);
+			devContactValueRepo.deleteAll(extractRedundantValues(contacts));
+		}
+		return optimized;
+	}
+
+	public List<DevContact> optimize(List<DevContact> contacts) {
+		List<DevContactValue> redundantValues = extractRedundantValues(contacts);
+		for (DevContact contact : contacts) {
+			removeAll(contact.getValues(), redundantValues);
+		}
+		removeAll(contacts, extractContactsWithEmptyValues(contacts));
+		return contacts;
+	}
+
+	@Override
+	public List<DevContactValue> findRedundantValuesByImei(String imei) {
+		return extractRedundantValues(findByImei(imei));
+	}
+
+	private List<DevContactValue> extractRedundantValues(List<DevContact> contacts) {
+		List<String> uniqueIds = new ArrayList<>();
+		List<DevContactValue> redundantValues = new ArrayList<>();
+		for (DevContactValue devContactValue : extractValuesOrderedByIdDesc(contacts)) {
+			String uniqueIdentifier = devContactValue.getUniqueIdentifier().replaceAll("\\s+", "");
+			if (!uniqueIds.contains(uniqueIdentifier)) {
+				uniqueIds.add(uniqueIdentifier);
+			} else {
+				redundantValues.add(devContactValue);
+			}
+		}
+		return redundantValues;
+	}
+
+	private List<DevContactValue> extractValuesOrderedByIdDesc(List<DevContact> contacts) {
+		List<DevContactValue> duplicateContactValues = new ArrayList<>();
+		for (DevContact devContact : contacts) {
+			for (DevContactValue devContactValue : devContact.getValues()) {
+				duplicateContactValues.add(devContactValue);
+			}
+		}
+		duplicateContactValues.sort(new ContactComparator());
+		return duplicateContactValues;
+	}
+
+	private List<DevContact> extractRedundantContacts(List<DevContact> contacts) {
+		List<String> uniqueIds = new ArrayList<>();
+		List<DevContact> duplicateContacts = new ArrayList<>();
+		for (DevContact devContact : contacts) {
+			if (!uniqueIds.contains(devContact.getUniqueIdentifier())) {
+				uniqueIds.add(devContact.getUniqueIdentifier());
+			} else {
+				duplicateContacts.add(devContact);
+			}
+		}
+		return duplicateContacts;
+	}
+
+	@Override
+	public List<DevContactValue> deleteRedundantValuesByImei(String imei) {
+		List<DevContactValue> redundant = findRedundantValuesByImei(imei);
+		devContactValueRepo.deleteAll(redundant);
+		return redundant;
+	}
+
+	private List<DevContact> extractContactsWithEmptyValues(List<DevContact> contacts) {
+		List<DevContact> contactsWithoutValues = new ArrayList<>();
+		int size = contacts.size() - 1;
+		for (int i = size; i >= 0; i--) {
+			if (contacts.get(i).getValues().size() == 0) {
+				contactsWithoutValues.add(contacts.get(i));
+			}
+		}
+		return contactsWithoutValues;
+	}
+
+	@Override
+	public List<DevContact> saveAll(List<DevContact> entities) {
+		devContactValueRepo.saveAll(extractContactValues(entities));
+		return super.saveAll(entities);
+	}
+
+	@Override
+	public JpaRepository<DevContact, Long> getRepo() {
+		return devContactRepo;
+	}
+
+	@Override
+	public void deleteByDevIdIn(List<Long> deviceIds) {
+		devContactRepo.deleteByDevIdIn(deviceIds);
 	}
 
 }

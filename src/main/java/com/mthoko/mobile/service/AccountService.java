@@ -1,20 +1,22 @@
 package com.mthoko.mobile.service;
 
-import com.mthoko.mobile.model.Account;
-
 import java.util.List;
 import java.util.Set;
 
-public interface AccountService extends BaseService {
+import com.mthoko.mobile.entity.Account;
+
+public interface AccountService extends BaseService<Account> {
 
 	Account findByEmail(String email);
 
-    Account findBySimNo(String simNo);
+	Account findBySimNo(String simNo);
 
-    void loadMatchingEntries(Account targetAccount, Account account, Set<String> duplicateEntries);
+	Account findByPhone(String phone);
 
-    List<Account> findMatchingAccounts(Account account);
+	void loadMatchingEntries(Account targetAccount, Account account, Set<String> duplicateEntries);
 
-    void register(Account account);
+	List<Account> findMatchingAccounts(Account account);
+
+	Account register(Account account);
 
 }

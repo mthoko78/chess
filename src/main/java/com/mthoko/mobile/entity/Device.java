@@ -1,97 +1,61 @@
 package com.mthoko.mobile.entity;
 
-import com.mthoko.mobile.annotations.Constraints;
-import com.mthoko.mobile.annotations.Entity;
-import com.mthoko.mobile.annotations.ForeignKey;
-import com.mthoko.mobile.annotations.PrimaryKey;
-
 import java.util.Date;
 
-/**
- * Created by Mthoko on 12 Nov 2018.
- */
+import javax.persistence.Entity;
 
 @Entity
 public class Device extends UniqueEntity {
-    @PrimaryKey
-    private Long id;
-    @ForeignKey(referencedEntity = Member.class)
-    private Long memberId;
-    private Long verificationId;
-    private String imei;
-    private String name;
-    @Constraints(defaultValue = "CURRENT_DATE")
-    private Date dateRegistered;
 
-    public Device() {
-    }
+	private Long memberId;
 
-    public String getImei() {
-        return imei;
-    }
+	private String imei;
 
-    public void setImei(String imei) {
-        this.imei = imei;
-    }
+	private String name;
 
-    public Long getMemberId() {
-        return memberId;
-    }
+	private Date dateRegistered;
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
+	public String getImei() {
+		return imei;
+	}
 
-    public Date getDateRegistered() {
-        return dateRegistered;
-    }
+	public void setImei(String imei) {
+		this.imei = imei;
+	}
 
-    public void setDateRegistered(Date dateRegistered) {
-        this.dateRegistered = dateRegistered;
-    }
+	public Long getMemberId() {
+		return memberId;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Date getDateRegistered() {
+		return dateRegistered;
+	}
 
-    @Override
-    public Long getVerificationId() {
-        return verificationId;
-    }
+	public void setDateRegistered(Date dateRegistered) {
+		this.dateRegistered = dateRegistered;
+	}
 
-    @Override
-    public void setVerificationId(Long verificationId) {
-        this.verificationId = verificationId;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    @Override
-    public String getUniqueIdentifier() {
-        return imei;
-    }
+	public String getName() {
+		return name;
+	}
 
-    @Override
-    public String toString() {
-        return "Device{" +
-                "id=" + id +
-                ", memberId=" + memberId +
-                ", verificationId=" + verificationId +
-                ", imei='" + imei + '\'' +
-                ", name='" + name + '\'' +
-                ", dateRegistered='" + dateRegistered + '\'' +
-                '}';
-    }
+	@Override
+	public String getUniqueIdentifier() {
+		return imei;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	@Override
+	public String toString() {
+		return "Device [id=" + getId() + ", memberId=" + memberId + ", imei=" + imei + ", name=" + name + ", dateRegistered="
+				+ dateRegistered + "]";
+	}
 
-    public String getName() {
-        return name;
-    }
 }

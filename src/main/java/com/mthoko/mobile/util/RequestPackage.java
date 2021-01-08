@@ -1,11 +1,11 @@
 package com.mthoko.mobile.util;
 
-import com.mthoko.mobile.exception.ApplicationException;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.mthoko.mobile.exception.ApplicationException;
 
 /**
  * Created by Mthoko on 29 Sep 2018.

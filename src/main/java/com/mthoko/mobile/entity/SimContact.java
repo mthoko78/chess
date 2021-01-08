@@ -1,93 +1,62 @@
 package com.mthoko.mobile.entity;
 
-import com.mthoko.mobile.annotations.Entity;
-import com.mthoko.mobile.annotations.ForeignKey;
-import com.mthoko.mobile.annotations.PrimaryKey;
-
-/**
- * Created by Mthoko on 05 May 2018.
- */
+import javax.persistence.Entity;
 
 @Entity
 public class SimContact extends UniqueEntity {
-    @PrimaryKey
-    private Long id;
-    @ForeignKey(referencedEntity = SimCard.class)
-    private Long simCardId;
-    private Long verificationId;
-    private String name;
-    private String phone;
+	
+	private Long simCardId;
 
-    public SimContact() {
-    }
+	private byte[] name;
 
-    public SimContact(String name, String phone) {
-        setName(name);
-        setPhone(phone);
-    }
-    public SimContact(Long simCardId, String name, String phone) {
-        setSimCardId(simCardId);
-        setName(name);
-        setPhone(phone);
-    }
+	private String phone;
 
-    public String getName() {
-        return name;
-    }
+	public SimContact() {
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public SimContact(String name, String phone) {
+		setName(name);
+		setPhone(phone);
+	}
 
-    public String getPhone() {
-        return phone;
-    }
+	public SimContact(Long simCardId, String name, String phone) {
+		setSimCardId(simCardId);
+		setName(name);
+		setPhone(phone);
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	public String getName() {
+		return byteArrayToString(name);
+	}
 
-    public Long getSimCardId() {
-        return simCardId;
-    }
+	public void setName(String name) {
+		this.name = stringToByteArray(name);
+	}
 
-    public void setSimCardId(Long simCardId) {
-        this.simCardId = simCardId;
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getSimCardId() {
+		return simCardId;
+	}
 
-    @Override
-    public Long getVerificationId() {
-        return verificationId;
-    }
+	public void setSimCardId(Long simCardId) {
+		this.simCardId = simCardId;
+	}
 
-    @Override
-    public void setVerificationId(Long verificationId) {
-        this.verificationId = verificationId;
-    }
+	@Override
+	public String getUniqueIdentifier() {
+		return phone;
+	}
 
-    @Override
-    public String getUniqueIdentifier() {
-        return phone;
-    }
+	@Override
+	public String toString() {
+		return "SimContact [id=" + getId() + ", simCardId=" + simCardId + ", name=" + getName() + ", phone=" + phone + "]";
+	}
 
-    @Override
-    public String toString() {
-        return "SimContact{" +
-                "id=" + id +
-                ", simCardId=" + simCardId +
-                ", verificationId=" + verificationId +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
-    }
 }

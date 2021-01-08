@@ -1,22 +1,27 @@
 package com.mthoko.mobile.service.internal;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+
 import com.mthoko.mobile.entity.Property;
-import com.mthoko.mobile.resource.BaseResourceRemote;
-import com.mthoko.mobile.resource.PropertyResourceRemote;
+import com.mthoko.mobile.repo.PropertyRepo;
 import com.mthoko.mobile.service.PropertyService;
-import com.mthoko.mobile.util.ConnectionWrapper;
 
-public class PropertyServiceImpl extends BaseServiceImpl implements PropertyService {
+@Service
+public class PropertyServiceImpl extends BaseServiceImpl<Property> implements PropertyService {
 
-	private final PropertyResourceRemote propertyResourceRemote;
+	@Autowired
+	private PropertyRepo propertyRepo;
 
-	public PropertyServiceImpl() {
-		propertyResourceRemote = new PropertyResourceRemote(new ConnectionWrapper(null));
+	@Override
+	public JpaRepository<Property, Long> getRepo() {
+		return propertyRepo;
 	}
 
 	@Override
-	public BaseResourceRemote<Property> getResource() {
-		return propertyResourceRemote;
+	public Property findByKey(String key) {
+		return propertyRepo.findByPropertyKey(key);
 	}
 
 }

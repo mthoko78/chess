@@ -1,22 +1,22 @@
 package com.mthoko.mobile.service.internal;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+
 import com.mthoko.mobile.entity.Address;
-import com.mthoko.mobile.resource.AddressResource;
-import com.mthoko.mobile.resource.BaseResourceRemote;
-import com.mthoko.mobile.service.BaseService;
-import com.mthoko.mobile.util.ConnectionWrapper;
+import com.mthoko.mobile.repo.AddressRepo;
+import com.mthoko.mobile.service.AddressService;
 
-public class AddressServiceImpl extends BaseServiceImpl implements BaseService {
+@Service
+public class AddressServiceImpl extends BaseServiceImpl<Address> implements AddressService {
 
-	private final BaseResourceRemote<Address> resource;
+	@Autowired
+	private AddressRepo addressRepo;
 
-	public AddressServiceImpl() {
-		resource = new AddressResource(new ConnectionWrapper(null));
-	}
-	
 	@Override
-	public BaseResourceRemote<Address> getResource() {
-		return resource;
+	public JpaRepository<Address, Long> getRepo() {
+		return addressRepo;
 	}
 
 }

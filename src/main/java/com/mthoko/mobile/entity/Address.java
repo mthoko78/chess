@@ -1,111 +1,69 @@
 package com.mthoko.mobile.entity;
 
-import com.mthoko.mobile.annotations.Constraints;
-import com.mthoko.mobile.annotations.Entity;
-import com.mthoko.mobile.annotations.PrimaryKey;
-
-/**
- * Created by Mthoko on 02 Oct 2018.
- */
+import javax.persistence.Entity;
 
 @Entity
 public class Address extends UniqueEntity {
-    @PrimaryKey
-    private Long id;
-    private String country;
-    private String state;
-    private String city;
-    private String postalCode;
-    private String street;
-    @Constraints(nullable = true)
-    private Long verificationId;
 
-    public Address() {
-    }
+	private String country;
 
-    public boolean isValid() {
-        return getId() != null;
-    }
+	private String state;
 
-    public boolean isVerified() {
-        return getVerificationId() != null;
-    }
+	private String city;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	private String postalCode;
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
+	private String street;
 
-    @Override
-    public Long getVerificationId() {
-        return verificationId;
-    }
+	@Override
+	public String getUniqueIdentifier() {
+		return String.valueOf(state);
+	}
 
-    @Override
-    public void setVerificationId(Long verificationId) {
-        this.verificationId = verificationId;
-    }
+	public String getCountry() {
+		return country;
+	}
 
-    @Override
-    public String getUniqueIdentifier() {
-        return String.valueOf(state);
-    }
+	public void setCountry(String country) {
+		this.country = country;
+	}
 
-    public String getCountry() {
-        return country;
-    }
+	public String getState() {
+		return state;
+	}
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+	public void setState(String state) {
+		this.state = state;
+	}
 
-    public String getState() {
-        return state;
-    }
+	public String getCity() {
+		return city;
+	}
 
-    public void setState(String state) {
-        this.state = state;
-    }
+	public void setCity(String city) {
+		this.city = city;
+	}
 
-    public String getCity() {
-        return city;
-    }
+	public String getPostalCode() {
+		return postalCode;
+	}
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
 
-    public String getPostalCode() {
-        return postalCode;
-    }
+	public String getStreet() {
+		return street;
+	}
 
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
+	public void setStreet(String street) {
+		this.street = street;
+	}
 
-    public String getStreet() {
-        return street;
-    }
+	@Override
+	public String toString() {
+		return "Address [id=" + getId() + ", country=" + country + ", state=" + state + ", city=" + city
+				+ ", postalCode=" + postalCode + ", street=" + street + "]";
+	}
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    @Override
-    public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", country='" + country + '\'' +
-                ", state='" + state + '\'' +
-                ", city='" + city + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                ", street='" + street + '\'' +
-                ", verificationId=" + verificationId +
-                '}';
-    }
 }

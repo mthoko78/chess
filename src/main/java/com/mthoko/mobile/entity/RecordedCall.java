@@ -1,144 +1,118 @@
 package com.mthoko.mobile.entity;
 
-import com.mthoko.mobile.annotations.Entity;
-import com.mthoko.mobile.annotations.ForeignKey;
-import com.mthoko.mobile.annotations.PrimaryKey;
-
 import java.util.Date;
 
-/**
- * Created by Mthoko on 02 Jun 2018.
- */
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Entity
 public class RecordedCall extends UniqueEntity {
-    @PrimaryKey
-    private Long id;
-    private Long verificationId;
-    private String category;
-    private String caller;
-    private String receiverImei;
-    private String receiverSimNo;
-    private String contactName;
-    private Date timestamp;
-    private int duration;
-    @ForeignKey(referencedEntity = FileInfo.class)
-    private Long fileInfoId;
 
-    public RecordedCall() {
-    }
+	private String category;
 
-    public RecordedCall(Long id, String category, String caller, String contactName, Date timestamp, int duration, Long fileInfoId) {
-        this.id = id;
-        this.category = category;
-        this.caller = caller;
-        this.contactName = contactName;
-        this.timestamp = timestamp;
-        this.duration = duration;
-        this.fileInfoId = fileInfoId;
-    }
+	private String caller;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	private String receiverImei;
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
+	private String receiverSimNo;
 
-    @Override
-    public Long getVerificationId() {
-        return verificationId;
-    }
+	private byte[] contactName;
 
-    @Override
-    public void setVerificationId(Long verificationId) {
-        this.verificationId = verificationId;
-    }
+	private Date timestamp;
 
-    @Override
-    public String getUniqueIdentifier() {
-        return caller + "|" + timestamp.getTime();
-    }
+	private int duration;
 
-    public String getCategory() {
-        return category;
-    }
+	@OneToOne
+	private FileInfo fileInfo;
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+	public RecordedCall() {
+	}
 
-    public String getCaller() {
-        return caller;
-    }
+	@Override
+	public String getUniqueIdentifier() {
+		return receiverImei + "|" + getFileInfo().getUniqueIdentifier();
+	}
 
-    public void setCaller(String caller) {
-        this.caller = caller;
-    }
+	public String getCategory() {
+		return category;
+	}
 
-    public String getReceiverSimNo() {
-        return receiverSimNo;
-    }
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
-    public void setReceiverSimNo(String receiverSimNo) {
-        this.receiverSimNo = receiverSimNo;
-    }
+	public String getCaller() {
+		return caller;
+	}
 
-    public String getContactName() {
-        return contactName;
-    }
+	public void setCaller(String caller) {
+		this.caller = caller;
+	}
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
+	public String getReceiverSimNo() {
+		return receiverSimNo;
+	}
 
-    public Date getTimestamp() {
-        return timestamp;
-    }
+	public void setReceiverSimNo(String receiverSimNo) {
+		this.receiverSimNo = receiverSimNo;
+	}
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
+	public String getContactName() {
+		return byteArrayToString(contactName);
+	}
 
-    public int getDuration() {
-        return duration;
-    }
+	public void setContactName(String contactName) {
+		this.contactName = stringToByteArray(contactName);
+	}
 
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
+	public Date getTimestamp() {
+		return timestamp;
+	}
 
-    public Long getFileInfoId() {
-        return fileInfoId;
-    }
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
 
-    public void setFileInfoId(Long fileInfoId) {
-        this.fileInfoId = fileInfoId;
-    }
+	public int getDuration() {
+		return duration;
+	}
 
-    public String getReceiverImei() {
-        return receiverImei;
-    }
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
 
-    public void setReceiverImei(String receiverImei) {
-        this.receiverImei = receiverImei;
-    }
+	public Long getFileInfoId() {
+		return fileInfo == null ? null : fileInfo.getId();
+	}
 
-    @Override
-    public String toString() {
-        return "RecordedCall{" +
-                "id=" + id +
-                ", verificationId=" + verificationId +
-                ", category='" + category + '\'' +
-                ", caller='" + caller + '\'' +
-                ", receiver='" + receiverSimNo + '\'' +
-                ", contactName='" + contactName + '\'' +
-                ", timestamp=" + timestamp +
-                ", duration=" + duration +
-                ", fileInfoId=" + fileInfoId +
-                '}';
-    }
+	public void setFileInfoId(Long fileInfoId) {
+		if (fileInfo != null) {
+			fileInfo.setId(fileInfoId);
+		}
+	}
+
+	public String getReceiverImei() {
+		return receiverImei;
+	}
+
+	public void setReceiverImei(String receiverImei) {
+		this.receiverImei = receiverImei;
+	}
+
+	@Override
+	public String toString() {
+		return "RecordedCall [id=" + getId() + ", category=" + category + ", caller=" + caller + ", receiverImei="
+				+ receiverImei + ", receiverSimNo=" + receiverSimNo + ", contactName=" + getContactName() + ", timestamp="
+				+ timestamp + ", duration=" + duration + ", fileInfoId=" + getFileInfoId() + "]";
+	}
+
+	public FileInfo getFileInfo() {
+		return fileInfo;
+	}
+
+	public void setFileInfo(FileInfo fileInfo) {
+		this.fileInfo = fileInfo;
+		setFileInfoId(fileInfo == null ? null : fileInfo.getId());
+	}
+
 }

@@ -1,92 +1,75 @@
 package com.mthoko.mobile.entity;
 
-import com.mthoko.mobile.annotations.PrimaryKey;
-
 import java.util.Date;
 
+import javax.persistence.Entity;
+
+@Entity
 public class FileInfo extends UniqueEntity {
 
-    @PrimaryKey
-    private Long id;
+	private String ownerImei;
 
-    private Long verificationId;
+	private String fileName;
 
-    private String ownerImei;
+	private String localDirectory;
 
-    private String fileName;
+	private String remoteDirectory;
 
-    private String localDirectory;
+	private Date dateCreated;
 
-    private String remoteDirectory;
+	public String getOwnerImei() {
+		return ownerImei;
+	}
 
-    private Date dateCreated;
+	public void setOwnerImei(String ownerImei) {
+		this.ownerImei = ownerImei;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	public Date getDateCreated() {
+		return dateCreated;
+	}
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
 
-    @Override
-    public Long getVerificationId() {
-        return verificationId;
-    }
+	@Override
+	public String getUniqueIdentifier() {
+		return absolutePath();
+	}
 
-    @Override
-    public void setVerificationId(Long verificationId) {
-        this.verificationId = verificationId;
-    }
+	public String getFileName() {
+		return fileName;
+	}
 
-    public String getOwnerImei() {
-        return ownerImei;
-    }
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 
-    public void setOwnerImei(String ownerImei) {
-        this.ownerImei = ownerImei;
-    }
+	public String getLocalDirectory() {
+		return localDirectory;
+	}
 
-    public Date getDateCreated() {
-        return dateCreated;
-    }
+	public void setLocalDirectory(String localDirectory) {
+		this.localDirectory = localDirectory;
+	}
 
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
+	public String getRemoteDirectory() {
+		return remoteDirectory;
+	}
 
-    @Override
-    public String getUniqueIdentifier() {
-        return localDirectory +"|"+fileName;
-    }
+	public void setRemoteDirectory(String remoteDirectory) {
+		this.remoteDirectory = remoteDirectory;
+	}
 
-    public String getFileName() {
-        return fileName;
-    }
+	public String absolutePath() {
+		return getLocalDirectory() + "/" + getFileName();
+	}
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+	@Override
+	public String toString() {
+		return "FileInfo [id=" + getId() + ", ownerImei=" + ownerImei + ", fileName=" + fileName + ", localDirectory="
+				+ localDirectory + ", remoteDirectory=" + remoteDirectory + ", dateCreated=" + dateCreated + "]";
+	}
 
-    public String getLocalDirectory() {
-        return localDirectory;
-    }
-
-    public void setLocalDirectory(String localDirectory) {
-        this.localDirectory = localDirectory;
-    }
-
-    public String getRemoteDirectory() {
-        return remoteDirectory;
-    }
-
-    public void setRemoteDirectory(String remoteDirectory) {
-        this.remoteDirectory = remoteDirectory;
-    }
-
-    public String absolutePath() {
-        return getLocalDirectory() + "/" + getFileName();
-    }
 }

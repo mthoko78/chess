@@ -79,6 +79,7 @@ public class DataManager {
 		return data.toString().trim();
 	}
 
+	@SuppressWarnings("unused")
 	private static boolean writeDataToFile(String filename, String data, boolean overwriteExistingFile) {
 		File path = new File(filename);
 		if (overwriteExistingFile && path.exists())

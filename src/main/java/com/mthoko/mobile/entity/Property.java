@@ -1,67 +1,46 @@
 package com.mthoko.mobile.entity;
 
-import com.mthoko.mobile.annotations.Entity;
-import com.mthoko.mobile.annotations.PrimaryKey;
+import javax.persistence.Entity;
 
 @Entity
 public class Property extends UniqueEntity {
 
-    @PrimaryKey
-    private Long id;
+	private String propertyKey;
 
-    private Long verificationId;
+	private String propertyValue;
 
-    private String key;
+	public Property(String key, String value) {
+		this.propertyKey = key;
+		this.propertyValue = value;
+	}
 
-    private String value;
+	public Property() {
+	}
 
-    public String getKey() {
-        return key;
-    }
+	public String getPropertyKey() {
+		return propertyKey;
+	}
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+	public void setPropertyKey(String key) {
+		this.propertyKey = key;
+	}
 
-    public String getValue() {
-        return value;
-    }
+	public String getPropertyValue() {
+		return propertyValue;
+	}
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	public void setPropertyValue(String value) {
+		this.propertyValue = value;
+	}
 
-    @Override
-    public Long getId() {
-        return id;
-    }
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@Override
+	public String getUniqueIdentifier() {
+		return propertyKey;
+	}
 
-    @Override
-    public Long getVerificationId() {
-        return verificationId;
-    }
+	@Override
+	public String toString() {
+		return "Property [id=" + getId() + ", key=" + propertyKey + ", value=" + propertyValue + "]";
+	}
 
-    @Override
-    public void setVerificationId(Long verificationId) {
-        this.verificationId = verificationId;
-    }
-
-    @Override
-    public String getUniqueIdentifier() {
-        return key;
-    }
-
-    @Override
-    public String toString() {
-        return "Property{" +
-                "id=" + id +
-                ", verificationId=" + verificationId +
-                ", key='" + key + '\'' +
-                ", value='" + value + '\'' +
-                '}';
-    }
 }

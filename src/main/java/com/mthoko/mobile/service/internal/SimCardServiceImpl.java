@@ -1,27 +1,34 @@
 package com.mthoko.mobile.service.internal;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+
 import com.mthoko.mobile.entity.SimCard;
-import com.mthoko.mobile.resource.BaseResourceRemote;
-import com.mthoko.mobile.resource.SimCardResourceRemote;
+import com.mthoko.mobile.repo.SimCardRepo;
 import com.mthoko.mobile.service.SimCardService;
-import com.mthoko.mobile.util.ConnectionWrapper;
 
-public class SimCardServiceImpl extends BaseServiceImpl implements SimCardService {
+@Service
+public class SimCardServiceImpl extends BaseServiceImpl<SimCard> implements SimCardService {
 
-	private final SimCardResourceRemote simCardResourceRemote;
-
-	public SimCardServiceImpl() {
-		simCardResourceRemote = new SimCardResourceRemote(new ConnectionWrapper(null));
-	}
+	@Autowired
+	private SimCardRepo simCardRepo;
 
 	@Override
-	public BaseResourceRemote<SimCard> getResource() {
-		return simCardResourceRemote;
+	public JpaRepository<SimCard, Long> getRepo() {
+		return simCardRepo;
 	}
 
 	@Override
 	public SimCard findBySimNo(String simNo) {
-		return simCardResourceRemote.findBySimNo(simNo);
+		return simCardRepo.findBySimNo(simNo);
+	}
+
+	@Override
+	public List<SimCard> findByMemberId(Long id) {
+		return simCardRepo.findByMemberId(id);
 	}
 
 }

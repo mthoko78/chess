@@ -1,4 +1,10 @@
 package com.mthoko.mobile.service;
 
-public interface PropertyService extends BaseService {
+import com.mthoko.mobile.entity.Property;
+
+public interface PropertyService extends BaseService<Property> {
+
+	Property findByKey(String key);
+
+	String unsetProperty(String key);
 }
