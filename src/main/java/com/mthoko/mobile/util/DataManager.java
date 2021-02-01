@@ -16,7 +16,7 @@ import java.nio.file.Path;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.mthoko.mobile.entity.Address;
+import com.mthoko.mobile.address.Address;
 import com.mthoko.mobile.exception.ApplicationException;
 
 public class DataManager {

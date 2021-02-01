@@ -17,13 +17,13 @@ public interface EntityOperations<T> {
 	String DELETE_BY_ID = "delete/id/{id}";
 	String COUNT_BY_ID = "count/id/{id}";
 	String RETRIEVE_ALL = "retrieve-all";
-	String FIND_BY_ID = "id/{id}";
+	String FIND_BY_ID = "{id}";
 	String SAVE = "save";
 	String SAVE_ALL = "save-all";
 	String DELETE_ALL = "delete-all";
 	String DELETE = "delete";
 
-	@GetMapping({RETRIEVE_ALL, "", "/"})
+	@GetMapping({ RETRIEVE_ALL, "", "/" })
 	List<T> retrieveAll();
 
 	@GetMapping(COUNT_BY_ID)

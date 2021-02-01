@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import com.mthoko.mobile.entity.UniqueEntity;
-import com.mthoko.mobile.service.BaseService;
+import com.mthoko.mobile.common.BaseService;
+import com.mthoko.mobile.common.UniqueEntity;
 
 @CrossOrigin(origins = {"http://localhost:3000", "https://printing-services.herokuapp.com", "https://mthoko.herokuapp.com"})
 public abstract class BaseController<T extends UniqueEntity> implements EntityOperations<T> {

@@ -2,24 +2,18 @@ package com.mthoko.mobile.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.mthoko.mobile.entity.Address;
-import com.mthoko.mobile.entity.DevContact;
-import com.mthoko.mobile.entity.LocationStamp;
-import com.mthoko.mobile.entity.SimContact;
-import com.mthoko.mobile.service.DevContactService;
-import com.mthoko.mobile.service.LocationStampService;
-import com.mthoko.mobile.service.SimContactService;
+import com.mthoko.mobile.address.Address;
+import com.mthoko.mobile.location.LocationStamp;
+import com.mthoko.mobile.location.LocationStampService;
 import com.mthoko.mobile.util.DataManager;
 
 @Controller
@@ -27,12 +21,6 @@ public class HomeController {
 
 	@Autowired
 	private LocationStampService service;
-
-	@Autowired
-	DevContactService devContactService;
-
-	@Autowired
-	private SimContactService simContactService;
 
 	@RequestMapping("address/{imei}")
 	public String addressByImeiFromLatlng(Map<String, Object> model, @PathVariable("imei") String imei) {
@@ -109,20 +97,6 @@ public class HomeController {
 	@ResponseBody
 	public String getAppProperty(@PathVariable("name") String name) {
 		return service.getAppProperty(name);
-	}
-
-	@GetMapping("device-contacts/imei/{imei}")
-	public String deviceContacts(@PathVariable("imei") String imei, Map<String, Object> model) {
-		List<DevContact> devContacts = devContactService.findByImei(imei);
-		model.put("contacts", devContacts);
-		return "device-contacts";
-	}
-
-	@GetMapping("sim-contacts/simNo/{simNo}")
-	public String simContacts(@PathVariable("simNo") String simNo, Map<String, Object> model) {
-		List<SimContact> devContacts = simContactService.findBySimNo(simNo);
-		model.put("contacts", devContacts);
-		return "sim-contacts";
 	}
 
 }
