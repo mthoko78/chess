@@ -34,4 +34,8 @@ public interface QuestionService extends BaseService<Question> {
 			Map<Integer, List<ChoiceSpan>> savedChoices);
 
 	List<Question> findByType(Integer type);
+
+	long countByCategoryId(Long categoryId);
+
+	long countByCategoryName(String categoryName);
 }

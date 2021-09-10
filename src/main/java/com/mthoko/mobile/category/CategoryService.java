@@ -12,4 +12,6 @@ public interface CategoryService extends BaseService<Category> {
 	Optional<Category> findByName(String name);
 
 	List<Category> getCategories();
+
+    List<String> retrieveAllNames();
 }

@@ -10,6 +10,4 @@ public interface MemberRepo extends JpaRepository<Member, Long> {
 
 	Member findByEmail(String email);
 
-	int countById(Long id);
-
 }

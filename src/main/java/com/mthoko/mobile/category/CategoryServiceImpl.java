@@ -37,6 +37,11 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category> implements Ca
 	}
 
 	@Override
+	public List<String> retrieveAllNames() {
+		return categoryRepo.retrieveAllNames();
+	}
+
+	@Override
 	public List<Category> populateCategoryTable() {
 		List<Category> categories = getCategories();
 		List<Category> savedCategories = retrieveAll();

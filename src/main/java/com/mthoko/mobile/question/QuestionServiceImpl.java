@@ -268,4 +268,14 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
 	public List<Question> findByType(Integer type) {
 		return questionRepo.findByType(type);
 	}
+
+	@Override
+	public long countByCategoryId(Long categoryId) {
+		return questionRepo.countByCategory_Id(categoryId);
+	}
+
+	@Override
+	public long countByCategoryName(String categoryName) {
+		return questionRepo.countByCategory_Name(categoryName);
+	}
 };
