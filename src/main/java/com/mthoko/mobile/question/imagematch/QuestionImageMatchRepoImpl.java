@@ -16,6 +16,8 @@ import com.mthoko.mobile.question.image.QuestionImage;
 
 public class QuestionImageMatchRepoImpl {
 
+	public static final String IMAGES_TEST_QUESTIONS_PATH = "./images/test/questions";
+
 	public ArrayList<QuestionImageMatch> findMatchesByQuestionId(Long questionId, int type) {
 		ArrayList<QuestionImageMatch> matches = new ArrayList<QuestionImageMatch>();
 		if (type == Question.MATCHING) {
@@ -24,11 +26,10 @@ public class QuestionImageMatchRepoImpl {
 	}
 
 	public Map<Integer, List<QuestionImageMatch>> getQuestionMatches() {
-		String path = "./images/test/questions";
 		Set<Integer> large = largeImages();
 		Set<Integer> unsquared = unsquaredImages();
 		Map<Integer, List<QuestionImageMatch>> matches = new LinkedHashMap<>();
-		for (String filename : filesList(path)) {
+		for (String filename : filesList(IMAGES_TEST_QUESTIONS_PATH)) {
 			if (filename.startsWith("q_")) {
 				String substring = filename.substring(2, filename.indexOf("."));
 				if (substring.contains("_")) {
