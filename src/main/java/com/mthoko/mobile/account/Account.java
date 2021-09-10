@@ -3,6 +3,8 @@ package com.mthoko.mobile.account;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
+import com.mthoko.mobile.account.credentials.Credentials;
+import com.mthoko.mobile.account.member.Member;
 import com.mthoko.mobile.common.UniqueEntity;
 
 @Entity

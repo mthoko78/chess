@@ -32,8 +32,6 @@ public interface BaseService<T extends UniqueEntity> {
 
 	List<T> retrieveAll();
 
-	Long countById(Long id);
-
 	void deleteById(Long id);
 
 	void deleteByIdsIn(List<Long> ids);

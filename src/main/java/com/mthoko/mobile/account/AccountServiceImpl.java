@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mthoko.mobile.account.credentials.Credentials;
+import com.mthoko.mobile.account.credentials.CredentialsService;
+import com.mthoko.mobile.account.member.Member;
+import com.mthoko.mobile.account.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;

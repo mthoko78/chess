@@ -1,4 +1,4 @@
-package com.mthoko.mobile.account;
+package com.mthoko.mobile.account.credentials;
 
 import javax.persistence.Entity;
 

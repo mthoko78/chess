@@ -1,4 +1,4 @@
-package com.mthoko.mobile.account;
+package com.mthoko.mobile.account.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

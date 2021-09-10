@@ -26,9 +26,6 @@ public interface EntityOperations<T> {
 	@GetMapping({ RETRIEVE_ALL, "", "/" })
 	List<T> retrieveAll();
 
-	@GetMapping(COUNT_BY_ID)
-	Long countById(@PathVariable("id") Long id);
-
 	@DeleteMapping(DELETE_BY_ID)
 	void deleteById(@PathVariable("id") Long id);
 
