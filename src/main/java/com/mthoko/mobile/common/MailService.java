@@ -1,11 +1,11 @@
 package com.mthoko.mobile.common;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import com.mthoko.mobile.domain.mail.MailRepository;
+import com.mthoko.mobile.domain.mail.SimpleMail;
+import com.mthoko.mobile.exception.ApplicationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -13,14 +13,12 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
-
-import com.mthoko.mobile.exception.ApplicationException;
-import com.mthoko.mobile.mail.MailRepository;
-import com.mthoko.mobile.mail.SimpleMail;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 @Service
 public class MailService extends BaseServiceImpl<SimpleMail> {

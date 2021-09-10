@@ -1,13 +1,12 @@
 package com.mthoko.mobile.common;
 
+import com.mthoko.mobile.domain.property.Property;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Service;
-
-import com.mthoko.mobile.property.Property;
 
 @Service
 public interface BaseService<T extends UniqueEntity> {

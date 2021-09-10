@@ -1,8 +1,8 @@
 package com.mthoko.mobile.common;
 
+import com.mthoko.mobile.domain.property.Property;
+import com.mthoko.mobile.domain.property.PropertyRepo;
 import com.mthoko.mobile.exception.ApplicationException;
-import com.mthoko.mobile.property.Property;
-import com.mthoko.mobile.property.PropertyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 

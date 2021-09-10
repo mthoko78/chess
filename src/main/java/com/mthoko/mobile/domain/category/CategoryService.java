@@ -1,0 +1,17 @@
+package com.mthoko.mobile.domain.category;
+
+import com.mthoko.mobile.common.BaseService;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface CategoryService extends BaseService<Category> {
+
+	List<Category> populateCategoryTable();
+
+	Optional<Category> findByName(String name);
+
+	List<Category> getCategories();
+
+    List<String> retrieveAllNames();
+}
