@@ -177,7 +177,6 @@ public class LearnersController extends BaseController<Question> {
     }
 
     @GetMapping(value = "image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
-    @ResponseBody
     public byte[] getImage(@PathVariable("id") Long imageId) throws IOException {
         QuestionImage image = imageService.findById(imageId);
         String path = image.getPath();
