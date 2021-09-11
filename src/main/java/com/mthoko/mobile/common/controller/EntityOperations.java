@@ -8,37 +8,31 @@ import java.util.Optional;
 
 public interface EntityOperations<T> {
 
-    String UPDATE_ALL = "update-all";
-    String UPDATE = "update";
-    String DELETE_BY_IDS = "delete/ids";
-    String DELETE_BY_ID = "delete/id/{id}";
-    String COUNT_BY_ID = "count/id/{id}";
-    String RETRIEVE_ALL = "retrieve-all";
-    String FIND_BY_ID = "id/{id}";
-    String SAVE = "save";
     String SAVE_ALL = "save-all";
+    String UPDATE_ALL = "update-all";
     String DELETE_ALL = "delete-all";
-    String DELETE = "delete";
+    String DELETE_BY_IDS = "delete/ids";
+    String BY_ID = "{id}";
 
-    @GetMapping({RETRIEVE_ALL, "", "/"})
+    @GetMapping
     List<T> retrieveAll();
 
-    @DeleteMapping(DELETE_BY_ID)
+    @DeleteMapping(BY_ID)
     ResponseEntity<Object> deleteById(@PathVariable("id") Long id);
 
     @DeleteMapping(DELETE_BY_IDS)
     void deleteByIdsIn(@RequestBody List<Long> ids);
 
-    @PutMapping(UPDATE)
+    @PutMapping
     Object update(@RequestBody T entity);
 
     @PutMapping(UPDATE_ALL)
     Object updateAll(@RequestBody List<T> entities);
 
-    @GetMapping(FIND_BY_ID)
+    @GetMapping(BY_ID)
     Optional<T> findById(@PathVariable("id") Long id);
 
-    @PostMapping(SAVE)
+    @PostMapping
     T save(@RequestBody T entity);
 
     @PostMapping(SAVE_ALL)
@@ -47,7 +41,7 @@ public interface EntityOperations<T> {
     @DeleteMapping(DELETE_ALL)
     Object deleteAll(@RequestBody List<T> entities);
 
-    @DeleteMapping(DELETE)
+    @DeleteMapping
     Object delete(@RequestBody T entity);
 
 }
