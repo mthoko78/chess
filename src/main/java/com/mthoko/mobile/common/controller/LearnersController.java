@@ -24,16 +24,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.mthoko.mobile.domain.question.imagematch.QuestionImageMatchRepoImpl.IMAGES_TEST_QUESTIONS_PATH;
 
 @RestController
 @RequestMapping("learners")
 public class LearnersController extends BaseController<Question> {
 
+    public static final String QUESTIONS_IMAGES_PATH = "src/main/resources/images/test/questions";
     private final CategoryService categoryService;
 
     private final QuestionService questionService;
@@ -181,15 +182,7 @@ public class LearnersController extends BaseController<Question> {
 
     @GetMapping(value = "image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getImage(@PathVariable("id") Long imageId) throws IOException {
-        Optional<QuestionImage> optionalQuestionImage = imageService.findById(imageId);
-        if (optionalQuestionImage.isPresent()) {
-            QuestionImage image = optionalQuestionImage.get();
-            String path = image.getPath();
-            String relativePath = IMAGES_TEST_QUESTIONS_PATH + "/" + path;
-            InputStream in = getClass().getClassLoader().getResourceAsStream(relativePath);
-            return IOUtils.toByteArray(in);
-        }
-        return null;
+        return imageService.getImageAsBytes(imageId);
     }
 
 }

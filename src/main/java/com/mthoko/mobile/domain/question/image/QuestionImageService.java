@@ -4,6 +4,7 @@ import com.mthoko.mobile.common.service.BaseService;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.question.Question;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +19,5 @@ public interface QuestionImageService extends BaseService<QuestionImage> {
 	void allocateImagesToQuestions(Category category, List<Question> questions,
 			Map<Integer, QuestionImage> savedQuestionImages);
 
+	byte[] getImageAsBytes(Long imageId) throws IOException;
 }
