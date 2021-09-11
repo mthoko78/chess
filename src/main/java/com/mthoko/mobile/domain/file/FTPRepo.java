@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.file;
 
-import com.mthoko.mobile.common.BaseResourceRemote;
+import com.mthoko.mobile.common.repo.BaseResourceRemote;
 import com.mthoko.mobile.exception.ApplicationException;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;

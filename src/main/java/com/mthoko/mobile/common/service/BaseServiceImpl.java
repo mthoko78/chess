@@ -1,5 +1,6 @@
-package com.mthoko.mobile.common;
+package com.mthoko.mobile.common.service;
 
+import com.mthoko.mobile.common.entity.UniqueEntity;
 import com.mthoko.mobile.domain.property.Property;
 import com.mthoko.mobile.domain.property.PropertyRepo;
 import com.mthoko.mobile.exception.ApplicationException;
@@ -10,9 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import static com.mthoko.mobile.common.BaseResourceRemote.APPLICATION_PROPERTIES;
+import static com.mthoko.mobile.common.repo.BaseResourceRemote.APPLICATION_PROPERTIES;
 
-;
 
 public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseService<T> {
 
@@ -24,16 +24,15 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
 
     @Override
     public String getProperty(String key) {
-        Property property = propertyResource.findByPropertyKey(key);
-        return property == null ? null : property.getPropertyValue();
+        Optional<Property> optionalProperty = propertyResource.findByPropertyKey(key);
+        return optionalProperty.isPresent() ? optionalProperty.get().getPropertyValue() : null;
     }
 
     @Override
     public Property setProperty(String key, String value) {
-        Property property = propertyResource.findByPropertyKey(key);
-        if (property == null) {
-            property = new Property(key, value);
-        } else {
+        Optional<Property> optionalProperty = propertyResource.findByPropertyKey(key);
+        Property property = new Property(key, value);
+        if (optionalProperty.isPresent()) {
             property.setPropertyValue(value);
         }
         return propertyResource.save(property);
@@ -41,10 +40,10 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
 
     @Override
     public String unsetProperty(String key) {
-        Property property = propertyResource.findByPropertyKey(key);
-        if (property != null) {
-            propertyResource.delete(property);
-            return property.getPropertyValue();
+        Optional<Property> optionalProperty = propertyResource.findByPropertyKey(key);
+        if (optionalProperty.isPresent()) {
+            propertyResource.deleteById(optionalProperty.get().getId());
+            return optionalProperty.get().getPropertyValue();
         }
         return null;
     }
@@ -80,47 +79,49 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
     }
 
     @Override
-    public T setDateBeforeSave(T entity, Date date) {
-        if (entity.isValid() && entity.getLastModified() == null) {
-            entity.setLastModified(date);
-        }
-        if (!entity.isValid() && entity.getDateCreated() == null) {
+    public <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
+        if (entity != null && entity.getDateCreated() == null) {
             entity.setDateCreated(date);
         }
         return entity;
     }
 
     @Override
-    public List<T> setDateBeforeSave(List<T> entities, Date date) {
-        for (T entity : entities) {
-            setDateBeforeSave(entity, date);
+    public <V extends UniqueEntity> List<V> setDateBeforeSave(List<V> entities, Date date) {
+        if (entities != null) {
+            for (V entity : entities) {
+                setDateBeforeSave(entity, date);
+            }
         }
         return entities;
     }
 
     @Override
     public List<T> saveAll(List<T> entities) {
-        Date date = new Date();
-        for (T entity : entities) {
-            setDateBeforeSave(entity, date);
+        if (entities != null) {
+            setDateBeforeSave(entities, new Date());
+            return getRepo().saveAll(entities);
         }
-        return getRepo().saveAll(entities);
+        return new ArrayList<>();
     }
 
     @Override
-    public Map<String, Long> extractVerification(UniqueEntity entity) {
+    public Map<String, Long> extractVerification(T entity) {
         Map<String, Long> verification = new HashMap<>();
         UniqueEntity.putVerification(entity, verification);
         return verification;
     }
 
     @Override
-    public T findById(Long id) {
-        Optional<T> optional = getRepo().findById(id);
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-        return null;
+    public Map<String, Long> extractVerification(List<T> entities) {
+        Map<String, Long> verification = new HashMap<>();
+        entities.forEach((entity) -> UniqueEntity.putVerification(entity, verification));
+        return verification;
+    }
+
+    @Override
+    public Optional<T> findById(Long id) {
+        return getRepo().findById(id);
     }
 
     @Override
@@ -160,6 +161,19 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
         return saveAll(entities);
     }
 
+    @Override
+    public <V extends UniqueEntity> V setDateBeforeUpdate(V entity, Date date) {
+        return entity;
+    }
+
+    @Override
+    public <V extends UniqueEntity> List<V> setDateBeforeUpdate(List<V> entities, Date date) {
+        for (V entity : entities) {
+            setDateBeforeUpdate(entity, date);
+        }
+        return entities;
+    }
+
     public <E extends UniqueEntity> void removeAll(List<E> entities, List<E> toRemove) {
         List<E> entitiesToRemove = new ArrayList<>();
         for (E entity : entities) {
@@ -170,6 +184,22 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
             }
         }
         entities.removeAll(entitiesToRemove);
+    }
+
+    @Override
+    public <E extends UniqueEntity> List<E> extractDuplicates(List<E> entities) {
+        List<E> distinct = new ArrayList<>();
+        List<E> duplicates = new ArrayList<>();
+
+        entities.forEach((c) -> {
+            if (!distinct.contains(c)) {
+                distinct.add(c);
+            } else {
+                duplicates.add(c);
+            }
+        });
+
+        return duplicates;
     }
 
     @Override

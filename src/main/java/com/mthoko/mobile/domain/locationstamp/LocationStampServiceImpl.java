@@ -1,11 +1,12 @@
-package com.mthoko.mobile.domain.location;
+package com.mthoko.mobile.domain.locationstamp;
 
-import com.mthoko.mobile.common.BaseServiceImpl;
+import com.mthoko.mobile.common.service.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LocationStampServiceImpl extends BaseServiceImpl<LocationStamp> implements LocationStampService {
@@ -23,7 +24,7 @@ public class LocationStampServiceImpl extends BaseServiceImpl<LocationStamp> imp
 	}
 
 	@Override
-	public LocationStamp findMostRecentByImei(String imei) {
+	public Optional<LocationStamp> findMostRecentByImei(String imei) {
 		return locationStampRepo.findByImeiOrderByTimeCapturedDesc(imei);
 	}
 

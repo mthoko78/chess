@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.question.image;
 
-import com.mthoko.mobile.common.BaseService;
+import com.mthoko.mobile.common.service.BaseService;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.question.Question;
 

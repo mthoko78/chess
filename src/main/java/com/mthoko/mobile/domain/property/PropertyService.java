@@ -1,10 +1,12 @@
 package com.mthoko.mobile.domain.property;
 
-import com.mthoko.mobile.common.BaseService;
+import com.mthoko.mobile.common.service.BaseService;
+
+import java.util.Optional;
 
 public interface PropertyService extends BaseService<Property> {
 
-	Property findByKey(String key);
+	Optional<Property> findByKey(String key);
 
 	String unsetProperty(String key);
 }

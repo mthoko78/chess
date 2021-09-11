@@ -1,6 +1,6 @@
 package com.mthoko.mobile.common.controller;
 
-import com.mthoko.mobile.common.BaseService;
+import com.mthoko.mobile.common.service.BaseService;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.category.CategoryService;
 import com.mthoko.mobile.domain.choice.Choice;
@@ -181,11 +181,15 @@ public class LearnersController extends BaseController<Question> {
 
     @GetMapping(value = "image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getImage(@PathVariable("id") Long imageId) throws IOException {
-        QuestionImage image = imageService.findById(imageId);
-        String path = image.getPath();
-        String relativePath = IMAGES_TEST_QUESTIONS_PATH + "/" + path;
-        InputStream in = getClass().getClassLoader().getResourceAsStream(relativePath);
-        return IOUtils.toByteArray(in);
+        Optional<QuestionImage> optionalQuestionImage = imageService.findById(imageId);
+        if (optionalQuestionImage.isPresent()) {
+            QuestionImage image = optionalQuestionImage.get();
+            String path = image.getPath();
+            String relativePath = IMAGES_TEST_QUESTIONS_PATH + "/" + path;
+            InputStream in = getClass().getClassLoader().getResourceAsStream(relativePath);
+            return IOUtils.toByteArray(in);
+        }
+        return null;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.choice;
 
-import com.mthoko.mobile.common.BaseServiceImpl;
+import com.mthoko.mobile.common.service.BaseServiceImpl;
 import com.mthoko.mobile.domain.category.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;

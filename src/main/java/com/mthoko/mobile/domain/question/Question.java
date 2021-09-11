@@ -1,7 +1,7 @@
 package com.mthoko.mobile.domain.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mthoko.mobile.common.UniqueEntity;
+import com.mthoko.mobile.common.entity.UniqueEntity;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.choice.Choice;
 import com.mthoko.mobile.domain.choice.span.ChoiceSpan;

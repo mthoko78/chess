@@ -1,9 +1,13 @@
 package com.mthoko.mobile.domain.account.member;
 
-import com.mthoko.mobile.common.BaseServiceImpl;
+import com.mthoko.mobile.common.service.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class MemberServiceImpl extends BaseServiceImpl<Member> implements MemberService {
@@ -17,13 +21,18 @@ public class MemberServiceImpl extends BaseServiceImpl<Member> implements Member
 	}
 
 	@Override
-	public Member findByEmail(String email) {
+	public Optional<Member> findByEmail(String email) {
 		return memberRepo.findByEmail(email);
 	}
 
 	@Override
-	public Member findByPhone(String phone) {
+	public Optional<Member> findByPhone(String phone) {
 		return memberRepo.findByPhone(phone);
+	}
+
+	@Override
+	public List<Member> findByPhoneIn(Set<String> phones) {
+		return memberRepo.findByPhoneIn(phones);
 	}
 
 }

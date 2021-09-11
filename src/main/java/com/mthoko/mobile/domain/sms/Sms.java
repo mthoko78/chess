@@ -1,6 +1,7 @@
 package com.mthoko.mobile.domain.sms;
 
-import com.mthoko.mobile.common.UniqueEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mthoko.mobile.common.entity.UniqueEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,127 +10,167 @@ import java.util.Date;
 @Entity
 public class Sms extends UniqueEntity {
 
-	private String sender;
+    private String sender;
 
-	private String recipient;
+    private String recipient;
 
-	@Column(length = 1024)
-	private byte[] body;
+    private String recipientImei;
 
-	private Date date;
+    @Column(length = 1024)
+    private byte[] body;
 
-	private Date dateSent;
+    private Date date;
 
-	private String location;
+    private Date dateSent;
 
-	private boolean sent;
+    private String location;
 
-	private boolean isRead;
+    private boolean sent;
 
-	private boolean delivered;
+    private boolean isRead;
 
-	private boolean deliveryReportRequested;
+    private boolean delivered;
 
-	public String getSender() {
-		return sender;
-	}
+    private boolean deliveryReportRequested;
 
-	public void setSender(String sender) {
-		this.sender = sender;
-	}
+    private boolean mailed;
 
-	public String getBody() {
-		return byteArrayToString(body);
-	}
+    private String messageId;
 
-	public void setBody(String body) {
-		this.body = stringToByteArray(body);
-	}
+    public String getSender() {
+        return sender;
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public String getBody() {
+        return byteArrayToString(body);
+    }
 
-	public Date getDateSent() {
-		return dateSent;
-	}
+    public void setBody(String body) {
+        this.body = stringToByteArray(body);
+    }
 
-	public void setDateSent(Date dateSent) {
-		this.dateSent = dateSent;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public String getLocation() {
-		return location;
-	}
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
+    public Date getDateSent() {
+        return dateSent;
+    }
 
-	public String getRecipient() {
-		return recipient;
-	}
+    public void setDateSent(Date dateSent) {
+        this.dateSent = dateSent;
+    }
 
-	public void setRecipient(String recipient) {
-		this.recipient = recipient;
-	}
+    public String getLocation() {
+        return location;
+    }
 
-	public boolean isSent() {
-		return sent;
-	}
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-	public void setSent(boolean sent) {
-		this.sent = sent;
-	}
+    public String getRecipient() {
+        return recipient;
+    }
 
-	public boolean isRead() {
-		return isRead;
-	}
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
 
-	public void setRead(boolean read) {
-		this.isRead = read;
-	}
+    public boolean isSent() {
+        return sent;
+    }
 
-	public boolean isDelivered() {
-		return delivered;
-	}
+    public void setSent(boolean sent) {
+        this.sent = sent;
+    }
 
-	public void setDelivered(boolean delivered) {
-		this.delivered = delivered;
-	}
+    public boolean isRead() {
+        return isRead;
+    }
 
-	public boolean isDeliveryReportRequested() {
-		return deliveryReportRequested;
-	}
+    public void setRead(boolean read) {
+        this.isRead = read;
+    }
 
-	public void setDeliveryReportRequested(boolean deliveryReportRequested) {
-		this.deliveryReportRequested = deliveryReportRequested;
-	}
+    public boolean isDelivered() {
+        return delivered;
+    }
 
-	@Override
-	public String getUniqueIdentifier() {
-		return sender + "|" + recipient + "|" + (dateSent == null ? null : dateSent.getTime());
-	}
+    public void setDelivered(boolean delivered) {
+        this.delivered = delivered;
+    }
 
-	public String getFormattedString() {
-		StringBuilder body = new StringBuilder();
-		body.append(String.format("From: %s\n", this.getSender()));
-		body.append(String.format("To: %s\n", this.getRecipient()));
-		body.append(String.format("Date received: %s\n", this.getDate()));
-		body.append(String.format("Date sent: %s\n", this.getDateSent()));
-		body.append(this.getBody() + "\n\n");
-		return body.toString();
-	}
+    public boolean isDeliveryReportRequested() {
+        return deliveryReportRequested;
+    }
 
-	@Override
-	public String toString() {
-		return "Sms [id=" + getId() + ", sender=" + sender + ", recipient=" + recipient + ", body=" + getBody() + ", date="
-				+ date + ", dateSent=" + dateSent + ", location=" + location + ", sent=" + sent + ", isRead=" + isRead
-				+ ", delivered=" + delivered + ", deliveryReportRequested=" + deliveryReportRequested + "]";
-	}
+    public void setDeliveryReportRequested(boolean deliveryReportRequested) {
+        this.deliveryReportRequested = deliveryReportRequested;
+    }
 
+    public boolean isMailed() {
+        return mailed;
+    }
+
+    public void setMailed(boolean mailed) {
+        this.mailed = mailed;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public String getRecipientImei() {
+        return recipientImei;
+    }
+
+    public void setRecipientImei(String recipientImei) {
+        this.recipientImei = recipientImei;
+    }
+
+    @Override
+    public String getUniqueIdentifier() {
+        return sender + "|" + recipient + "|" + (dateSent == null ? null : dateSent.getTime());
+    }
+
+    @JsonIgnore
+    public String getFormattedString() {
+        StringBuilder body = new StringBuilder();
+        body.append(String.format("From: %s\n", this.getSender()));
+        body.append(String.format("To: %s\n", this.getRecipient()));
+        body.append(String.format("Date received: %s\n", this.getDate()));
+        body.append(String.format("Date sent: %s\n\n", this.getDateSent()));
+        body.append(this.getBody());
+        return body.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Sms{" +
+                "sender='" + sender + '\'' +
+                ", recipient='" + recipient + '\'' +
+                ", body=" + byteArrayToString(body) +
+                ", date=" + date +
+                ", dateSent=" + dateSent +
+                ", location='" + location + '\'' +
+                ", sent=" + sent +
+                ", isRead=" + isRead +
+                ", delivered=" + delivered +
+                ", deliveryReportRequested=" + deliveryReportRequested +
+                ", messageId='" + messageId + '\'' +
+                '}';
+    }
 }

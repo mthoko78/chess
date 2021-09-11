@@ -1,7 +1,6 @@
-package com.mthoko.mobile.common;
+package com.mthoko.mobile.domain.mail;
 
-import com.mthoko.mobile.domain.mail.MailRepository;
-import com.mthoko.mobile.domain.mail.SimpleMail;
+import com.mthoko.mobile.common.service.BaseServiceImpl;
 import com.mthoko.mobile.exception.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,9 +14,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Properties;
 
 @Service
@@ -25,7 +22,7 @@ public class MailService extends BaseServiceImpl<SimpleMail> {
 
 	private static final String TO = "mthoko78@outlook.com";
 
-	private static final Long SUCCESS = 0l;
+	public static final int SUCCESS = 1;
 
 	public static final String MAIL_PROPERTIES = "mail.properties";
 
@@ -34,17 +31,17 @@ public class MailService extends BaseServiceImpl<SimpleMail> {
 	private static final String MAIL_PASSWORD = "mail.password";
 
 	private final MailRepository mailRepository;
-	
+
 	@Autowired
 	public MailService(MailRepository mailRepository) {
 		this.mailRepository = mailRepository;
 	}
 
-	public List<Long> sendEmail(String subject, String text) {
+	public int sendEmail(String subject, String text) {
 		return sendMail(TO, subject, text);
 	}
 
-	public List<Long> sendMail(String to, String subject, String text) {
+	public int sendMail(String to, String subject, String text) {
 		try {
 			Properties mailProperties = getMailProperties();
 			MimeMessage message = new MimeMessage(getMailSession(mailProperties));
@@ -53,7 +50,7 @@ public class MailService extends BaseServiceImpl<SimpleMail> {
 			message.setSubject(subject);
 			message.setText(text);
 			Transport.send(message);
-			return Arrays.asList(SUCCESS);
+			return SUCCESS;
 		} catch (Exception e) {
 			throw new ApplicationException(e);
 		}

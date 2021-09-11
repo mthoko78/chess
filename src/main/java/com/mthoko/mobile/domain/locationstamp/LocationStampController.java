@@ -1,15 +1,17 @@
-package com.mthoko.mobile.domain.location;
+package com.mthoko.mobile.domain.locationstamp;
 
-import com.mthoko.mobile.common.BaseService;
 import com.mthoko.mobile.common.controller.BaseController;
+import com.mthoko.mobile.common.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("location-stamp")
@@ -29,18 +31,13 @@ public class LocationStampController extends BaseController<LocationStamp> {
 	}
 
 	@RequestMapping("recent/{imei}")
-	public LocationStamp findMostRecentByImei(@PathVariable("imei") String imei) {
+	public Optional<LocationStamp> findMostRecentByImei(@PathVariable("imei") String imei) {
 		return service.findMostRecentByImei(imei);
 	}
 
 	@GetMapping("count/imei/{imei}")
 	public Integer countByImei(@PathVariable("imei") String imei) {
 		return service.countByImei(imei);
-	}
-
-	@GetMapping("verification/id/{id}")
-	public Map<String, Long> retrieveVerification(@PathVariable("id") Long id) {
-		return service.extractVerification(service.findById(id));
 	}
 
 }

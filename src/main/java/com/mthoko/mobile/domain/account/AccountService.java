@@ -1,20 +1,34 @@
 package com.mthoko.mobile.domain.account;
 
-import com.mthoko.mobile.common.BaseService;
+import com.mthoko.mobile.common.service.BaseService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface AccountService extends BaseService<Account> {
 
-	Account findByEmail(String email);
+    Account findByMemberId(Long memberId);
 
-	Account findByPhone(String phone);
+    Optional<Account> findByEmail(String email);
 
-	void loadMatchingEntries(Account targetAccount, Account account, Set<String> duplicateEntries);
+    Optional<Account> findByPhone(String phone);
 
-	List<Account> findMatchingAccounts(Account account);
+    void loadMatchingEntries(Account targetAccount, Account account, Set<String> duplicateEntries);
 
-	Account register(Account account);
+    List<Account> findMatchingAccounts(Account account);
 
+    Account register(Account account);
+
+    Optional<Account> findByImei(String imei);
+
+    Optional<PhoneVerification> findPhoneVerificationByPhoneNumber(String phoneNumber);
+
+    PhoneVerification savePhoneVerification(PhoneVerification verification);
+
+    String generateVerificationCode();
+
+    PhoneVerification generateAndSavePhoneVerification(String phoneNumber);
+
+    Optional<PhoneVerification> findPhoneVerificationByCode(String verificationCode);
 }

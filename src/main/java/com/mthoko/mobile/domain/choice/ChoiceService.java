@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.choice;
 
-import com.mthoko.mobile.common.BaseService;
+import com.mthoko.mobile.common.service.BaseService;
 import com.mthoko.mobile.domain.category.Category;
 
 import java.util.List;

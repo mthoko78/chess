@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.question;
 
-import com.mthoko.mobile.common.BaseService;
+import com.mthoko.mobile.common.service.BaseService;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.choice.Choice;
 import com.mthoko.mobile.domain.choice.span.ChoiceSpan;
@@ -15,8 +15,6 @@ public interface QuestionService extends BaseService<Question> {
 	QuestionImage findByQuestionId(Long id);
 
 	Question findByQuestionNumberAndCategory(int questionNum, String category);
-
-	Question findById(Long id);
 
 	List<Question> populateQuestionTable(Category category);
 

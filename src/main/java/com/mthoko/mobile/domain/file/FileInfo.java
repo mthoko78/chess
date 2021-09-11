@@ -1,6 +1,7 @@
 package com.mthoko.mobile.domain.file;
 
-import com.mthoko.mobile.common.UniqueEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mthoko.mobile.common.entity.UniqueEntity;
 
 import javax.persistence.Entity;
 import java.util.Date;
@@ -63,6 +64,7 @@ public class FileInfo extends UniqueEntity {
 		this.remoteDirectory = remoteDirectory;
 	}
 
+	@JsonIgnore
 	public String absolutePath() {
 		return getLocalDirectory() + "/" + getFileName();
 	}

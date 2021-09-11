@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.question.imagematch;
 
-import com.mthoko.mobile.common.UniqueEntity;
+import com.mthoko.mobile.common.entity.UniqueEntity;
 import com.mthoko.mobile.domain.question.image.QuestionImage;
 
 import javax.persistence.Entity;

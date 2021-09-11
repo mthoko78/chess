@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.choice.span;
 
-import com.mthoko.mobile.common.BaseServiceImpl;
+import com.mthoko.mobile.common.service.BaseServiceImpl;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.choice.ChoiceRepoImpl;
 import com.mthoko.mobile.domain.question.Question;

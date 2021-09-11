@@ -4,18 +4,24 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SmsResourceRepo extends JpaRepository<Sms, Long> {
 
-	public int countByRecipient(String recipient);
+    int countByRecipient(String recipient);
 
-	public List<Sms> findByRecipientAndIdNotIn(String recipient, List<Long> ids);
+    List<Sms> findByRecipientAndIdNotIn(String recipient, List<Long> ids);
 
-	public List<Sms> findByRecipient(String recipient);
+    List<Sms> findByRecipient(String recipient);
 
-	public Object deleteByRecipient(String recipient);
+    Object deleteByRecipient(String recipient);
 
-	public Object deleteByRecipientIn(List<String> phones);
+    Object deleteByRecipientIn(List<String> phones);
 
+    Optional<Sms> findByMessageId(String messageId);
+
+    int countByRecipientImei(String recipientImei);
+
+    List<Sms> findByRecipientImei(String recipientImei);
 }

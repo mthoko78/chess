@@ -1,8 +1,10 @@
 package com.mthoko.mobile.common.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EntityOperations<T> {
 
@@ -10,8 +12,9 @@ public interface EntityOperations<T> {
     String UPDATE = "update";
     String DELETE_BY_IDS = "delete/ids";
     String DELETE_BY_ID = "delete/id/{id}";
+    String COUNT_BY_ID = "count/id/{id}";
     String RETRIEVE_ALL = "retrieve-all";
-    String FIND_BY_ID = "{id}";
+    String FIND_BY_ID = "id/{id}";
     String SAVE = "save";
     String SAVE_ALL = "save-all";
     String DELETE_ALL = "delete-all";
@@ -21,7 +24,7 @@ public interface EntityOperations<T> {
     List<T> retrieveAll();
 
     @DeleteMapping(DELETE_BY_ID)
-    void deleteById(@PathVariable("id") Long id);
+    ResponseEntity<Object> deleteById(@PathVariable("id") Long id);
 
     @DeleteMapping(DELETE_BY_IDS)
     void deleteByIdsIn(@RequestBody List<Long> ids);
@@ -33,7 +36,7 @@ public interface EntityOperations<T> {
     Object updateAll(@RequestBody List<T> entities);
 
     @GetMapping(FIND_BY_ID)
-    T findById(@PathVariable("id") Long id);
+    Optional<T> findById(@PathVariable("id") Long id);
 
     @PostMapping(SAVE)
     T save(@RequestBody T entity);

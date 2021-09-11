@@ -1,8 +1,7 @@
 package com.mthoko.mobile.domain.mail;
 
-import com.mthoko.mobile.common.BaseService;
-import com.mthoko.mobile.common.MailService;
 import com.mthoko.mobile.common.controller.BaseController;
+import com.mthoko.mobile.common.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

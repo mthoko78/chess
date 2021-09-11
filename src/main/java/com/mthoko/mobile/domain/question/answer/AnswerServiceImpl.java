@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.question.answer;
 
-import com.mthoko.mobile.common.BaseServiceImpl;
+import com.mthoko.mobile.common.service.BaseServiceImpl;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.choice.Choice;
 import com.mthoko.mobile.domain.question.Question;

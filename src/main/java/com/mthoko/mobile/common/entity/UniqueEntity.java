@@ -1,12 +1,17 @@
-package com.mthoko.mobile.common;
+package com.mthoko.mobile.common.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @MappedSuperclass
 public abstract class UniqueEntity implements Comparable<UniqueEntity> {
@@ -27,7 +32,6 @@ public abstract class UniqueEntity implements Comparable<UniqueEntity> {
         this.id = id;
     }
 
-    @JsonIgnore
     public Date getDateCreated() {
         return dateCreated;
     }
@@ -36,7 +40,6 @@ public abstract class UniqueEntity implements Comparable<UniqueEntity> {
         this.dateCreated = dateCreated;
     }
 
-    @JsonIgnore
     public Date getLastModified() {
         return lastModified;
     }
@@ -103,6 +106,7 @@ public abstract class UniqueEntity implements Comparable<UniqueEntity> {
         return getUniqueIdentifier().compareTo(that.getUniqueIdentifier());
     }
 
+    @JsonIgnore
     public <T extends UniqueEntity> String getUniqueIdentifierByList(List<T> entities) {
         Set<String> sortedIdentifiers = new TreeSet<>();
         for (T entity : entities) {

@@ -1,10 +1,13 @@
 package com.mthoko.mobile.common.controller;
 
-import com.mthoko.mobile.common.BaseService;
-import com.mthoko.mobile.common.UniqueEntity;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import java.util.List;
+import com.mthoko.mobile.common.entity.UniqueEntity;
+import com.mthoko.mobile.common.service.BaseService;
 
 @CrossOrigin(origins = {"http://localhost:3000", "https://printing-services.herokuapp.com", "https://mthoko.herokuapp.com"})
 public abstract class BaseController<T extends UniqueEntity> implements EntityOperations<T> {
@@ -37,8 +40,9 @@ public abstract class BaseController<T extends UniqueEntity> implements EntityOp
     }
 
     @Override
-    public void deleteById(Long id) {
+    public ResponseEntity<Object> deleteById(Long id) {
         getService().deleteById(id);
+        return null;
     }
 
     @Override
@@ -57,7 +61,7 @@ public abstract class BaseController<T extends UniqueEntity> implements EntityOp
     }
 
     @Override
-    public T findById(Long id) {
+    public Optional<T> findById(Long id) {
         return getService().findById(id);
     }
 

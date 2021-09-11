@@ -1,9 +1,11 @@
 package com.mthoko.mobile.domain.account.credentials;
 
-import com.mthoko.mobile.common.BaseServiceImpl;
+import com.mthoko.mobile.common.service.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CredentialsServiceImpl extends BaseServiceImpl<Credentials> implements CredentialsService {
@@ -17,7 +19,7 @@ public class CredentialsServiceImpl extends BaseServiceImpl<Credentials> impleme
 	}
 
 	@Override
-	public Credentials findByMemberId(Long memberId) {
+	public Optional<Credentials> findByMemberId(Long memberId) {
 		return credentialsRepo.findByMemberId(memberId);
 	}
 }

@@ -1,11 +1,12 @@
 package com.mthoko.mobile.domain.property;
 
-import com.mthoko.mobile.common.BaseService;
 import com.mthoko.mobile.common.controller.BaseController;
+import com.mthoko.mobile.common.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("property")
@@ -20,7 +21,7 @@ public class PropertyController extends BaseController<Property> {
 	}
 
 	@GetMapping("key/{key}")
-	public Property findByKey(@PathVariable("key") String key) {
+	public Optional<Property> findByKey(@PathVariable("key") String key) {
 		return service.findByKey(key);
 	}
 

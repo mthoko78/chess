@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.address;
 
-import com.mthoko.mobile.common.UniqueEntity;
+import com.mthoko.mobile.common.entity.UniqueEntity;
 
 import javax.persistence.Entity;
 

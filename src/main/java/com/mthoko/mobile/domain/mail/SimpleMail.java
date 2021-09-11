@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.mail;
 
-import com.mthoko.mobile.common.UniqueEntity;
+import com.mthoko.mobile.common.entity.UniqueEntity;
 
 import javax.persistence.Entity;
 import java.util.Date;
@@ -15,9 +15,9 @@ public class SimpleMail extends UniqueEntity {
 	private String subject;
 
 	private String body;
-	
+
 	private Date dateSent;
-	
+
 	private Date dateDelivered;
 
 	public String getRecipient() {
@@ -82,7 +82,7 @@ public class SimpleMail extends UniqueEntity {
 
 	@Override
 	public String getUniqueIdentifier() {
-		return null;
+		return sender + "|" + recipient + "|" + dateSent;
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.mthoko.mobile.domain.file;
 
-import com.mthoko.mobile.common.BaseService;
+import com.mthoko.mobile.common.service.BaseService;
 import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.File;
