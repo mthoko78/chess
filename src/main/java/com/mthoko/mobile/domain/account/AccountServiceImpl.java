@@ -136,12 +136,10 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
     @Override
     public List<Account> findMatchingAccounts(Account targetAccount) {
         List<Account> accounts = new ArrayList<>();
-        if (targetAccount.isValid()) {
-            List<Member> members = findMatchingMembersByAccount(targetAccount);
-            if (members.size() > 0) {
-                for (int i = 0; i < members.size(); i++) {
-                    accounts.add(findByMemberId(members.get(i).getId()));
-                }
+        List<Member> members = findMatchingMembersByAccount(targetAccount);
+        if (members.size() > 0) {
+            for (int i = 0; i < members.size(); i++) {
+                accounts.add(findByMemberId(members.get(i).getId()));
             }
         }
         return accounts;

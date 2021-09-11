@@ -1,17 +1,12 @@
 package com.mthoko.mobile.common.entity;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.*;
 
 @MappedSuperclass
 public abstract class UniqueEntity implements Comparable<UniqueEntity> {
@@ -51,14 +46,8 @@ public abstract class UniqueEntity implements Comparable<UniqueEntity> {
     @JsonIgnore
     public abstract String getUniqueIdentifier();
 
-    @JsonIgnore
-    public boolean isValid() {
-        return getId() != null;
-    }
-
-    @JsonIgnore
     public boolean isVerified() {
-        return isValid() && getId() > 0;
+        return id != null && id > 0;
     }
 
     public void putVerification(Map<String, Long> verification) {
@@ -66,7 +55,7 @@ public abstract class UniqueEntity implements Comparable<UniqueEntity> {
     }
 
     public static <T extends UniqueEntity> void putVerification(T entity, Map<String, Long> verification) {
-        if (entity.isValid()) {
+        if (entity.getId() != null && entity.getId() > 0) {
             String uniqueIdentifier = entity.getUniqueIdentifier();
             Long id = entity.getId();
             verification.put(uniqueIdentifier, id);
