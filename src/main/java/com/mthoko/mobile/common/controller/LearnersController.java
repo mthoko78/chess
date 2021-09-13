@@ -15,7 +15,6 @@ import com.mthoko.mobile.domain.question.image.QuestionImage;
 import com.mthoko.mobile.domain.question.image.QuestionImageService;
 import com.mthoko.mobile.domain.question.imagematch.QuestionImageMatch;
 import com.mthoko.mobile.domain.question.imagematch.QuestionImageMatchService;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -101,8 +97,10 @@ public class LearnersController extends BaseController<Question> {
         List<Question> allQuestions = new ArrayList<>();
         for (Category category : categories) {
             List<Question> questions = questionService.populateQuestionTable(category);
+            category.setTotalQuestions(questions.size());
             allQuestions.addAll(questions);
         }
+        categoryService.updateAll(categories);
         return allQuestions;
     }
 

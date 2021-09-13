@@ -13,6 +13,7 @@ public interface EntityOperations<T> {
     String DELETE_ALL = "delete-all";
     String DELETE_BY_IDS = "delete/ids";
     String BY_ID = "{id}";
+    String COUNT = "count";
 
     @GetMapping
     List<T> retrieveAll();
@@ -43,5 +44,8 @@ public interface EntityOperations<T> {
 
     @DeleteMapping
     Object delete(@RequestBody T entity);
+
+    @GetMapping(COUNT)
+    long count();
 
 }

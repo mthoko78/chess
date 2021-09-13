@@ -1,7 +1,7 @@
 package com.mthoko.mobile.domain.question;
 
-import com.mthoko.mobile.common.service.BaseService;
 import com.mthoko.mobile.common.controller.BaseController;
+import com.mthoko.mobile.common.service.BaseService;
 import com.mthoko.mobile.domain.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,11 +57,6 @@ public class QuestionController extends BaseController<Question> {
     @GetMapping("type/{type}")
     public List<Question> findByType(@PathVariable("type") Integer type) {
         return service.findByType(type);
-    }
-
-    @GetMapping("count")
-    public long countAllQuestions() {
-        return service.count();
     }
 
     @GetMapping("count/categoryId/{categoryId}")
