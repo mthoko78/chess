@@ -12,4 +12,5 @@ public interface CategoryRepo extends JpaRepository<Category, Long> {
 
 	@Query("select c.name from Category c")
     List<String> retrieveAllNames();
+
 }

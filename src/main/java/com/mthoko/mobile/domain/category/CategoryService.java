@@ -14,4 +14,6 @@ public interface CategoryService extends BaseService<Category> {
 	List<Category> getCategories();
 
     List<String> retrieveAllNames();
+
+    List<Category> populateCategories();
 }

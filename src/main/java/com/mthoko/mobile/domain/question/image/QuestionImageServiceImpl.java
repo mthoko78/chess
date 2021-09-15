@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import static com.mthoko.mobile.common.controller.LearnersController.QUESTIONS_IMAGES_PATH;
+import static com.mthoko.mobile.common.util.EntityUtil.allocateImagesToQuestions;
 
 @Service
 public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> implements QuestionImageService {
@@ -121,20 +122,6 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
     }
 
     @Override
-    public void allocateImagesToQuestions(Category category, List<Question> questions,
-                                          Map<Integer, QuestionImage> images) {
-        List<Question> filtered = questions.stream().filter(q -> category.equals(q.getCategory()))
-                .collect(Collectors.toList());
-        images.entrySet().forEach(entry -> {
-            Optional<Question> match = filtered.stream().filter(q -> q.getNumber() == entry.getKey()).findFirst();
-            if (match.isPresent()) {
-                match.get().setImage(entry.getValue());
-                print("" + match.get());
-            }
-        });
-    }
-
-    @Override
     public byte[] getImageAsBytes(Long imageId) throws IOException {
         Optional<QuestionImage> optionalQuestionImage = findById(imageId);
         if (optionalQuestionImage.isPresent()) {
@@ -145,5 +132,19 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
             }
         }
         return null;
+    }
+
+    @Override
+    public Map<Category, Map<Integer, QuestionImage>> populateQuestionImages(List<Category> categories, List<Question> questions) {
+        Map<Category, Map<Integer, QuestionImage>> images = new HashMap<>();
+        for (Category category : categories) {
+            if (!images.containsKey(category)) {
+                images.put(category, new HashMap<>());
+            }
+            Map<Integer, QuestionImage> savedQuestionImages = saveQuestionImages(category, questions);
+            images.get(category).putAll(savedQuestionImages);
+            allocateImagesToQuestions(category, questions, savedQuestionImages);
+        }
+        return images;
     }
 }

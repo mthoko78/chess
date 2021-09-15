@@ -56,9 +56,5 @@ public interface BaseService<T extends UniqueEntity> {
 
 	<E extends UniqueEntity> List<E> extractDuplicates(List<E> entities);
 
-	List<String> getFileContents(String path);
-
-	void print(Object string);
-
 	long count();
 }

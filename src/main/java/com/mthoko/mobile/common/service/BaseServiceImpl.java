@@ -203,31 +203,6 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
     }
 
     @Override
-    public List<String> getFileContents(String path) {
-        System.out.println(
-                "\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n" + path + "\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
-        InputStream resource = getClass().getClassLoader().getResourceAsStream(path);
-        byte[] b;
-        try {
-            b = new byte[resource.available()];
-            resource.read(b);
-        } catch (IOException e) {
-            throw new ApplicationException(e);
-        }
-        String contents = new String(b);
-        String[] linesArray = contents.split("\r\n");
-        List<String> lines = Arrays.asList(linesArray);
-        return lines;
-    }
-
-    @Override
-    public void print(Object string) {
-        System.out.println("_________________________________\n\n");
-        System.out.println(string);
-        System.out.println("\n\n_________________________________");
-    }
-
-    @Override
     public long count() {
         return getRepo().count();
     }

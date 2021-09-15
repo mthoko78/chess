@@ -9,11 +9,11 @@ import java.util.Map;
 
 public interface ChoiceSpanService extends BaseService<ChoiceSpan> {
 
-	List<ChoiceSpan> findByQuestionNumberAndCategory(int questionNum, String category);
+    List<ChoiceSpan> findByQuestionNumberAndCategory(int questionNum, String category);
 
-	List<ChoiceSpan> findByCategoryId(Long id);
+    List<ChoiceSpan> findByCategoryId(Long id);
 
-	Map<Integer, List<ChoiceSpan>> saveChoiceSpans(Category category);
+    Map<Integer, List<ChoiceSpan>> saveChoiceSpans(Category category);
 
-	void allocateChoiceSpansToQuestions(List<Question> questions, Map<Integer, List<ChoiceSpan>> choicesMap);
+    Map<Category, Map<Integer, List<ChoiceSpan>>> populateChoiceSpans(List<Category> categories, List<Question> questions);
 }

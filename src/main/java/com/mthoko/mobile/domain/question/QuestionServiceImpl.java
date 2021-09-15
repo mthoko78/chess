@@ -5,22 +5,21 @@ import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.category.CategoryRepo;
 import com.mthoko.mobile.domain.choice.Choice;
 import com.mthoko.mobile.domain.choice.ChoiceRepo;
-import com.mthoko.mobile.domain.choice.span.ChoiceSpan;
 import com.mthoko.mobile.domain.choice.span.ChoiceSpanRepo;
 import com.mthoko.mobile.domain.question.answer.Answer;
 import com.mthoko.mobile.domain.question.answer.AnswerRepo;
 import com.mthoko.mobile.domain.question.image.QuestionImage;
 import com.mthoko.mobile.domain.question.image.QuestionImageRepo;
 import com.mthoko.mobile.domain.question.image.QuestionImageRepoImpl;
-import com.mthoko.mobile.exception.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.mthoko.mobile.common.util.EntityUtil.allocateAnswers;
 
 @Service
 public class QuestionServiceImpl extends BaseServiceImpl<Question> implements QuestionService {
@@ -191,67 +190,9 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         return allocateAnswers(questionRepo.findByCategoryId(id), answerRepo.findByCategoryId(id));
     }
 
-    private List<Question> allocateAnswers(List<Question> questions, List<Answer> answers) {
-        questions.forEach((question) -> {
-            Optional<Answer> first = answers.stream().filter((answer) -> answer.getId() == question.getId())
-                    .findFirst();
-            if (first.isPresent()) {
-                question.setAnswer(first.get());
-            }
-        });
-        return questions;
-    }
-
-    private List<QuestionImage> extractNonNullImages(List<Question> questions) {
-        return questions.stream().map((question) -> question.getImage()).filter((image) -> image != null)
-                .collect(Collectors.toList());
-    }
-
-    private List<Answer> extractNonNullAnswers(List<Question> questions) {
-        return questions.stream().map((question) -> question.getAnswer()).filter((answer) -> answer != null)
-                .collect(Collectors.toList());
-    }
-
     @Override
     public List<Question> findByCategoryName(String category) {
         return questionRepo.findByCategoryName(category);
-    }
-
-    @Override
-    public void allocateChoicesToQuestions(Category category, List<Question> questions,
-                                           Map<Integer, List<Choice>> choicesMap) {
-        List<Question> filtered = filterQuestionsByCategory(category, questions);
-        for (Entry<Integer, List<Choice>> entry : choicesMap.entrySet()) {
-            Integer questionNum = entry.getKey();
-            List<Choice> choices = entry.getValue();
-            Optional<Question> optionalQuestion = filtered.stream()
-                    .filter((question) -> question.getNumber() == questionNum).findFirst();
-            if (!optionalQuestion.isPresent()) {
-                throw new ApplicationException("No corresponding question to answer: " + choices);
-            }
-            optionalQuestion.get().setChoices(choices);
-        }
-    }
-
-    private List<Question> filterQuestionsByCategory(Category category, List<Question> questions) {
-        return questions.stream().filter((question) -> question.getCategory().equals(category))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void allocateChoiceSpansToQuestions(Category category, List<Question> questions,
-                                               Map<Integer, List<ChoiceSpan>> choiceSpanMap) {
-        List<Question> filtered = filterQuestionsByCategory(category, questions);
-        for (Entry<Integer, List<ChoiceSpan>> entry : choiceSpanMap.entrySet()) {
-            Integer questionNum = entry.getKey();
-            List<ChoiceSpan> choiceSpans = entry.getValue();
-            Optional<Question> optionalQuestion = filtered.stream()
-                    .filter((question) -> question.getNumber() == questionNum).findFirst();
-            if (!optionalQuestion.isPresent()) {
-                throw new ApplicationException("No corresponding question to span: " + choiceSpans);
-            }
-            optionalQuestion.get().setChoiceSpans(choiceSpans);
-        }
     }
 
     @Override
@@ -267,5 +208,17 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     @Override
     public long countByCategoryName(String categoryName) {
         return questionRepo.countByCategory_Name(categoryName);
+    }
+
+    @Override
+    public List<Question> populateQuestions(List<Category> categories) {
+        List<Question> allQuestions = new ArrayList<>();
+        for (Category category : categories) {
+            List<Question> questions = populateQuestionTable(category);
+            category.setTotalQuestions(questions.size());
+            allQuestions.addAll(questions);
+        }
+        categoryRepo.saveAll(categories);
+        return allQuestions;
     }
 };

@@ -10,14 +10,13 @@ import java.util.Map;
 
 public interface QuestionImageService extends BaseService<QuestionImage> {
 
-	List<QuestionImage> findByQuestionNumberAndCategory(int questionNum, String category);
+    List<QuestionImage> findByQuestionNumberAndCategory(int questionNum, String category);
 
-	List<QuestionImage> findByCategoryId(Long id);
+    List<QuestionImage> findByCategoryId(Long id);
 
-	Map<Integer, QuestionImage> saveQuestionImages(Category category, List<Question> questions);
+    Map<Integer, QuestionImage> saveQuestionImages(Category category, List<Question> questions);
 
-	void allocateImagesToQuestions(Category category, List<Question> questions,
-			Map<Integer, QuestionImage> savedQuestionImages);
+    byte[] getImageAsBytes(Long imageId) throws IOException;
 
-	byte[] getImageAsBytes(Long imageId) throws IOException;
+    Map<Category, Map<Integer, QuestionImage>> populateQuestionImages(List<Category> categories, List<Question> questions);
 }

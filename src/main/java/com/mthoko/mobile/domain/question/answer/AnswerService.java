@@ -10,14 +10,13 @@ import java.util.Optional;
 
 public interface AnswerService extends BaseService<Answer> {
 
-	Optional<Answer> findByQuestionNumberAndCategory(int questionNum, String category);
+    Optional<Answer> findByQuestionNumberAndCategory(int questionNum, String category);
 
-	List<Answer> findByCategoryId(Long id);
+    List<Answer> findByCategoryId(Long id);
 
-	Map<Integer, Answer> saveAnswers(Category category, List<Question> questions);
+    Map<Integer, Answer> saveAnswers(Category category, List<Question> questions);
 
-	List<Answer> findAnswersByCategoryId(Long id);
+    List<Answer> findAnswersByCategoryId(Long id);
 
-	void allocateAnswersToQuestions(Category category, List<Question> questions,
-			Map<Integer, Answer> answersMap);
+    Map<Category, Map<Integer, Answer>> populateAnswers(List<Category> categories, List<Question> questions);
 }
