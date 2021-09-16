@@ -1,6 +1,5 @@
 package com.mthoko.mobile.domain.question;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mthoko.mobile.common.entity.UniqueEntity;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.choice.Choice;
@@ -21,9 +20,9 @@ import java.util.List;
 @Entity
 public final class Question extends UniqueEntity {
 
-    public static final int ONE_ANSWER = 0;
-    public static final int CHOICE = 1;
-    public static final int MATCHING = 2;
+    public static final int TYPE_ONE_ANSWER = 0;
+    public static final int TYPE_CHOICE = 1;
+    public static final int TYPE_MATCHING = 2;
 
     private int number;
 
@@ -32,7 +31,6 @@ public final class Question extends UniqueEntity {
     private String text;
 
     @OneToOne
-    @JsonIgnore
     private Category category;
 
     @OneToOne
@@ -142,9 +140,9 @@ public final class Question extends UniqueEntity {
         this.answer = answer;
         if (answer != null) {
             if (answer.getSelection().size() == 1) {
-                setType(Question.ONE_ANSWER);
+                setType(Question.TYPE_ONE_ANSWER);
             } else {
-                setType(Question.MATCHING);
+                setType(Question.TYPE_MATCHING);
             }
         }
     }

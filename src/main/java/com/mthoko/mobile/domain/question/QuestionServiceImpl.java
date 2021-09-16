@@ -4,8 +4,6 @@ import com.mthoko.mobile.common.service.BaseServiceImpl;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.category.CategoryRepo;
 import com.mthoko.mobile.domain.choice.Choice;
-import com.mthoko.mobile.domain.choice.ChoiceRepo;
-import com.mthoko.mobile.domain.choice.span.ChoiceSpanRepo;
 import com.mthoko.mobile.domain.question.answer.Answer;
 import com.mthoko.mobile.domain.question.answer.AnswerRepo;
 import com.mthoko.mobile.domain.question.image.QuestionImage;
@@ -26,10 +24,6 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
 
     private final QuestionRepo questionRepo;
 
-    private final ChoiceRepo choiceRepo;
-
-    private final ChoiceSpanRepo choiceSpanRepo;
-
     private final AnswerRepo answerRepo;
 
     private final CategoryRepo categoryRepo;
@@ -43,18 +37,16 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     private final QuestionImageRepoImpl questionImageRepo = new QuestionImageRepoImpl();
 
     @Autowired
-    public QuestionServiceImpl(QuestionRepo questionRepo, ChoiceRepo choiceRepo, ChoiceSpanRepo choiceSpanRepo,
+    public QuestionServiceImpl(QuestionRepo questionRepo,
                                AnswerRepo answerRepo, CategoryRepo categoryRepo, QuestionImageRepo imageRepo) {
         this.questionRepo = questionRepo;
-        this.choiceRepo = choiceRepo;
-        this.choiceSpanRepo = choiceSpanRepo;
         this.answerRepo = answerRepo;
         this.categoryRepo = categoryRepo;
         this.imageRepo = imageRepo;
     }
 
     public QuestionServiceImpl() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null);
     }
 
     @Override
@@ -76,9 +68,9 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     public void setQuestionType(Question question) {
         if (question.getAnswer() != null) {
             if (question.getAnswer().getSelection().size() == 1) {
-                question.setType(Question.ONE_ANSWER);
+                question.setType(Question.TYPE_ONE_ANSWER);
             } else {
-                question.setType(Question.MATCHING);
+                question.setType(Question.TYPE_MATCHING);
             }
         }
     }

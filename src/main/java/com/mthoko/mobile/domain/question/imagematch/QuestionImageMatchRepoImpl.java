@@ -13,7 +13,7 @@ public class QuestionImageMatchRepoImpl {
 
 	public ArrayList<QuestionImageMatch> findMatchesByQuestionId(Long questionId, int type) {
 		ArrayList<QuestionImageMatch> matches = new ArrayList<QuestionImageMatch>();
-		if (type == Question.MATCHING) {
+		if (type == Question.TYPE_MATCHING) {
 		}
 		return matches;
 	}
