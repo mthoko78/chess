@@ -49,6 +49,11 @@ public class QuestionController extends BaseController<Question> {
         return service.findByCategoryName(categoryName);
     }
 
+    @GetMapping("categoryNumber/{categoryNumber}/questionNumber/{questionNumber}")
+    public Question findByCategory(@PathVariable("categoryNumber") Integer categoryNumber, @PathVariable("questionNumber") Integer questionNumber) {
+        return service.findByCategoryNumberAndQuestionNumber(categoryNumber, questionNumber);
+    }
+
     @GetMapping("category/{id}")
     public List<Question> findByCategoryId(@PathVariable("id") Long categoryId) {
         return service.findByCategoryId(categoryId);

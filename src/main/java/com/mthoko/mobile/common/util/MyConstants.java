@@ -7,15 +7,15 @@ package com.mthoko.mobile.common.util;
 public interface MyConstants { // 'public static final' modifiers are prepended by default
 
     /*
-    * NUMERIC CONSTANTS
-    * */
+     * NUMERIC CONSTANTS
+     * */
 
     int CODE_WRITE_EXTERNAL_STORAGE = 1;
     int CODE_RECORD_AUDIO = 2;
     int CODE_READ_PHONE_STATE = 3;
     int CODE_READ_CONTACTS = 4;
     int CODE_WRITE_CONTACTS = 5;
-    int CODE_RECEIVE_BOOT_COMPLETED= 6;
+    int CODE_RECEIVE_BOOT_COMPLETED = 6;
     int CODE_ACCESS_FINE_LOCATION = 7;
     int CODE_ACCESS_COARSE_LOCATION = 8;
     int CODE_INTERNET = 9;
@@ -53,7 +53,7 @@ public interface MyConstants { // 'public static final' modifiers are prepended 
 
     int STATUS_SUCCESS = 37;
     int STATUS_INCORRECT_PASSWORD = 38;
-    //public static final int CODE_WRITE_SMS = 11;
+    //int CODE_WRITE_SMS = 11;
 
 
     int STATUS_SUCCESS_VERIFIED = 39; // registered successfully and verified
@@ -83,7 +83,13 @@ public interface MyConstants { // 'public static final' modifiers are prepended 
      * TEXTUAL CONSTANTS
      * */
 
+    String IMAGES_TEST_QUESTIONS = "./images/test/questions";
+    String ROAD_SIGNS_MARKINGS = "ROAD SIGNS & MARKINGS";
+    String RULES_OF_THE_ROAD = "RULES OF THE ROAD";
+    String HEAVY_MOTOR_VEHICLE_CONTROLS = "HEAVY MOTOR VEHICLE CONTROLS";
+    String LIGHT_MOTOR_VEHICLE_CONTROLS = "LIGHT MOTOR VEHICLE CONTROLS";
+    String QUESTIONS_IMAGES_PATH = "src/main/resources/images/test/questions";
 
-    
+
 
 }

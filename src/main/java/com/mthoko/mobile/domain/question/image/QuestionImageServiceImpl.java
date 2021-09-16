@@ -2,7 +2,6 @@ package com.mthoko.mobile.domain.question.image;
 
 import com.mthoko.mobile.common.service.BaseServiceImpl;
 import com.mthoko.mobile.domain.category.Category;
-import com.mthoko.mobile.domain.category.CategoryServiceImpl;
 import com.mthoko.mobile.domain.question.Question;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,8 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import static com.mthoko.mobile.common.controller.LearnersController.QUESTIONS_IMAGES_PATH;
 import static com.mthoko.mobile.common.util.EntityUtil.allocateImagesToQuestions;
+import static com.mthoko.mobile.common.util.MyConstants.*;
 
 @Service
 public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> implements QuestionImageService {
@@ -71,7 +70,7 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
         questions = filterByCategoryName(questions, categoryName);
         Map<Integer, QuestionImage> images = new HashMap<>();
         switch (categoryName) {
-            case CategoryServiceImpl.ROAD_SIGNS_MARKINGS:
+            case ROAD_SIGNS_MARKINGS:
                 Map<Integer, QuestionImage> choicesMap = imageRepoImpl.getQuestionSignImages();
                 for (Entry<Integer, QuestionImage> entry : choicesMap.entrySet()) {
                     Integer questionNum = entry.getKey();
@@ -79,10 +78,18 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
                     images.put(questionNum, image);
                 }
                 break;
-            case CategoryServiceImpl.RULES_OF_THE_ROAD:
-
+            case RULES_OF_THE_ROAD:
+                Map<Integer, QuestionImage> sketchImages = imageRepoImpl.getQuestionSketchImages();
+                questions
+                        .stream()
+                        .filter(question -> question.getNumber() > 54)
+                        .forEach(question -> {
+                            QuestionImage image = sketchImages.get(question.getNumber());
+                            question.setImage(image);
+                            images.put(question.getNumber(), image);
+                        });
                 break;
-            case CategoryServiceImpl.HEAVY_MOTOR_VEHICLE_CONTROLS:
+            case HEAVY_MOTOR_VEHICLE_CONTROLS:
                 QuestionImage heavyImage = imageRepoImpl.heavyControlsImage();
                 questions.forEach(question -> {
                     if (question.getNumber() >= 6) {
@@ -91,7 +98,7 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
                     }
                 });
                 break;
-            case CategoryServiceImpl.LIGHT_MOTOR_VEHICLE_CONTROLS:
+            case LIGHT_MOTOR_VEHICLE_CONTROLS:
                 QuestionImage lightImage = imageRepoImpl.lightControlsImage();
                 questions.forEach(question -> {
                     question.setImage(lightImage);
@@ -103,12 +110,6 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
                 break;
         }
         return images;
-    }
-
-    private Optional<Question> filterOneByQuestionNum(List<Question> questions, Integer questionNum) {
-        Optional<Question> optionalQuestion = questions.stream()
-                .filter((question) -> question.getNumber() == questionNum).findFirst();
-        return optionalQuestion;
     }
 
     private List<Question> filterByCategoryName(List<Question> questions, String categoryName) {

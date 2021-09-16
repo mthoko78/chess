@@ -2,7 +2,6 @@ package com.mthoko.mobile.domain.question.imagematch;
 
 import com.mthoko.mobile.common.service.BaseServiceImpl;
 import com.mthoko.mobile.domain.category.Category;
-import com.mthoko.mobile.domain.category.CategoryServiceImpl;
 import com.mthoko.mobile.domain.question.Question;
 import com.mthoko.mobile.domain.question.image.QuestionImage;
 import com.mthoko.mobile.domain.question.image.QuestionImageService;
@@ -15,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+
+import static com.mthoko.mobile.common.util.MyConstants.ROAD_SIGNS_MARKINGS;
 
 @Service
 public class QuestionImageMatchServiceImpl extends BaseServiceImpl<QuestionImageMatch>
@@ -43,7 +44,7 @@ public class QuestionImageMatchServiceImpl extends BaseServiceImpl<QuestionImage
         questions = questions.stream().filter((q) -> category.equals(q.getCategory())).collect(Collectors.toList());
         Map<Integer, List<QuestionImageMatch>> images = new HashMap<>();
         switch (category.getName()) {
-            case CategoryServiceImpl.ROAD_SIGNS_MARKINGS:
+            case ROAD_SIGNS_MARKINGS:
                 Map<Integer, List<QuestionImageMatch>> choicesMap = imageMatchRepoImpl.getQuestionMatches();
                 images.putAll(choicesMap);
                 allocateMatchesToQuestions(questions, choicesMap);

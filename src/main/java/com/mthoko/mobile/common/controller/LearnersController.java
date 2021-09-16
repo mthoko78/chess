@@ -24,7 +24,6 @@ import java.util.List;
 @RequestMapping("learners")
 public class LearnersController extends BaseController<Question> {
 
-    public static final String QUESTIONS_IMAGES_PATH = "src/main/resources/images/test/questions";
     private final CategoryService categoryService;
 
     private final QuestionService questionService;

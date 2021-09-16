@@ -30,4 +30,6 @@ public interface QuestionService extends BaseService<Question> {
     long countByCategoryName(String categoryName);
 
     List<Question> populateQuestions(List<Category> categories);
+
+    Question findByCategoryNumberAndQuestionNumber(Integer categoryNumber, Integer questionNumber);
 }

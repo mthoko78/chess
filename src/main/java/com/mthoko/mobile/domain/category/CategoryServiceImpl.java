@@ -9,13 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.mthoko.mobile.common.util.MyConstants.*;
+
 @Service
 public class CategoryServiceImpl extends BaseServiceImpl<Category> implements CategoryService {
-
-    public static final String ROAD_SIGNS_MARKINGS = "ROAD SIGNS & MARKINGS";
-    public static final String RULES_OF_THE_ROAD = "RULES OF THE ROAD";
-    public static final String HEAVY_MOTOR_VEHICLE_CONTROLS = "HEAVY MOTOR VEHICLE CONTROLS";
-    public static final String LIGHT_MOTOR_VEHICLE_CONTROLS = "LIGHT MOTOR VEHICLE CONTROLS";
 
     @Autowired
     private CategoryRepo categoryRepo;

@@ -18,4 +18,6 @@ public interface QuestionRepo extends JpaRepository<Question, Long> {
 	long countByCategory_Id(Long categoryId);
 
 	long countByCategory_Name(String categoryName);
+
+    Question findByCategory_NumberAndNumber(Integer categoryNumber, Integer questionNumber);
 }

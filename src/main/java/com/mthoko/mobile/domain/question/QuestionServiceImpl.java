@@ -213,4 +213,9 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         categoryRepo.saveAll(categories);
         return allQuestions;
     }
+
+    @Override
+    public Question findByCategoryNumberAndQuestionNumber(Integer categoryNumber, Integer questionNumber) {
+        return questionRepo.findByCategory_NumberAndNumber(categoryNumber, questionNumber);
+    }
 };
