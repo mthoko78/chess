@@ -1,21 +1,21 @@
 package com.mthoko.mobile.domain.question.imagematch;
 
 import com.mthoko.mobile.common.service.BaseServiceImpl;
+import com.mthoko.mobile.common.util.EntityUtil;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.question.Question;
 import com.mthoko.mobile.domain.question.image.QuestionImage;
+import com.mthoko.mobile.domain.question.image.QuestionImageRepo;
 import com.mthoko.mobile.domain.question.image.QuestionImageService;
-import com.mthoko.mobile.exception.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import static com.mthoko.mobile.common.util.EntityUtil.distinctCategories;
+import static com.mthoko.mobile.common.util.EntityUtil.filterQuestionsByCategory;
 import static com.mthoko.mobile.common.util.MyConstants.ROAD_SIGNS_MARKINGS;
 
 @Service
@@ -28,10 +28,13 @@ public class QuestionImageMatchServiceImpl extends BaseServiceImpl<QuestionImage
 
     private QuestionImageService questionImageService;
 
+    private final QuestionImageRepo questionImageRepo;
+
     @Autowired
-    public QuestionImageMatchServiceImpl(QuestionImageMatchRepo imageMatchRepo, QuestionImageService imageRepo) {
+    public QuestionImageMatchServiceImpl(QuestionImageMatchRepo imageMatchRepo, QuestionImageService imageRepo, QuestionImageRepo questionImageRepo) {
         this.questionImageMatchRepo = imageMatchRepo;
         this.questionImageService = imageRepo;
+        this.questionImageRepo = questionImageRepo;
     }
 
     @Override
@@ -40,46 +43,35 @@ public class QuestionImageMatchServiceImpl extends BaseServiceImpl<QuestionImage
     }
 
     @Override
-    public Map<Integer, List<QuestionImageMatch>> extractQuestionImageMatches(Category category,
-                                                                              List<Question> questions) {
-        questions = questions.stream().filter((q) -> category.equals(q.getCategory())).collect(Collectors.toList());
-        Map<Integer, List<QuestionImageMatch>> images = new HashMap<>();
-        switch (category.getName()) {
-            case ROAD_SIGNS_MARKINGS:
-                Map<Integer, List<QuestionImageMatch>> choicesMap = imageMatchRepoImpl.getQuestionMatches();
-                images.putAll(choicesMap);
-                allocateMatchesToQuestions(questions, choicesMap);
-        }
-        return images;
-    }
-
-    @Override
-    public void allocateMatchesToQuestions(List<Question> questions,
-                                           Map<Integer, List<QuestionImageMatch>> choicesMap) {
-        for (Entry<Integer, List<QuestionImageMatch>> entry : choicesMap.entrySet()) {
-            Integer questionNum = entry.getKey();
-            List<QuestionImageMatch> matches = entry.getValue();
-            Optional<Question> optional = questions.stream().filter((q) -> q.getNumber() == questionNum).findAny();
-            if (!optional.isPresent()) {
-                throw new ApplicationException("No corresponding question to match");
+    public Map<Category, Map<Integer, List<QuestionImageMatch>>> extractQuestionImageMatches(List<Question> questions) {
+        Map<Category, Map<Integer, List<QuestionImageMatch>>> categoryMapMap = new HashMap<>();
+        for (Category category : EntityUtil.distinctCategories(questions)) {
+            switch (category.getName()) {
+                case ROAD_SIGNS_MARKINGS:
+                    if (!categoryMapMap.containsKey(category)) {
+                        categoryMapMap.put(category, new HashMap<>());
+                    }
+                    Map<Integer, List<QuestionImageMatch>> choicesMap = imageMatchRepoImpl.getQuestionMatches();
+                    categoryMapMap.get(category).putAll(choicesMap);
             }
-            optional.get().setMatches(matches);
         }
+        return categoryMapMap;
     }
 
     @Override
-    @Transactional
-    public Map<Integer, List<QuestionImageMatch>> saveQuestionImageMatches(Category category,
-                                                                           List<Question> questions) {
-        if (findByCategoryId(category.getId()).size() > 0) {
-            return new HashMap<>();
+    public void allocateMatchesToQuestions(List<Question> questions, Map<Category, Map<Integer, List<QuestionImageMatch>>> choicesMap) {
+        for (Map.Entry<Category, Map<Integer, List<QuestionImageMatch>>> entry : choicesMap.entrySet()) {
+            Category category = entry.getKey();
+            Map<Integer, List<QuestionImageMatch>> matches = entry.getValue();
+            List<Question> questionsByCategory = filterQuestionsByCategory(category, questions);
+            for (Question question : questionsByCategory) {
+                if (matches.containsKey(question.getNumber())) {
+                    question.setMatches(matches.get(question.getNumber()));
+                } else {
+                    question.setMatches(new ArrayList<>());
+                }
+            }
         }
-        Map<Integer, List<QuestionImageMatch>> matchesMap = extractQuestionImageMatches(category, questions);
-        List<QuestionImageMatch> matches = extractQuestionImageMatches(matchesMap);
-        List<QuestionImage> questionImages = extractQuestionImages(matchesMap);
-        questionImageService.saveAll(questionImages);
-        saveAll(matches);
-        return matchesMap;
     }
 
     @Override
@@ -88,17 +80,40 @@ public class QuestionImageMatchServiceImpl extends BaseServiceImpl<QuestionImage
     }
 
     @Override
-    public Map<Integer, List<QuestionImageMatch>> populateQuestionImageMatches(List<Question> questions) {
-        Map<Integer, List<QuestionImageMatch>> images = new HashMap<>();
-        for (Category category : distinctCategories(questions)) {
-            Map<Integer, List<QuestionImageMatch>> matches = saveQuestionImageMatches(category,
-                    questions);
-            images.putAll(matches);
-        }
-        return images;
+    public Map<Category, Map<Integer, List<QuestionImageMatch>>> populateQuestionImageMatches(List<Question> questions) {
+        Map<Category, Map<Integer, List<QuestionImageMatch>>> matches = extractQuestionImageMatches(questions);
+        List<QuestionImageMatch> allImageMatches = matchesMapToList(matches);
+        allocateMatchesToQuestions(questions, matches);
+        saveAll(allImageMatches);
+        return matches;
     }
 
-    private List<QuestionImageMatch> extractQuestionImageMatches(Map<Integer, List<QuestionImageMatch>> matchesMap) {
+    @Override
+    @Transactional
+    public List<QuestionImageMatch> saveAll(List<QuestionImageMatch> questionImageMatches) {
+        List<QuestionImage> questionImages = questionImageMatches
+                .stream()
+                .map(questionImageMatch -> questionImageMatch.getQuestionImage())
+                .collect(Collectors.toList());
+        questionImageRepo.saveAll(questionImages);
+        return super.saveAll(questionImageMatches);
+    }
+
+    private List<QuestionImageMatch> matchesMapToList(Map<Category, Map<Integer, List<QuestionImageMatch>>> matches) {
+        List<QuestionImageMatch> allImageMatches = matches.values()
+                .stream()
+                .map(integerListMap -> integerListMap.values()
+                        .stream()
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList()))
+                .reduce((questionImageMatches, questionImageMatches2) -> {
+                    questionImageMatches.addAll(questionImageMatches2);
+                    return questionImageMatches;
+                }).get();
+        return allImageMatches;
+    }
+
+    private List<QuestionImageMatch> questionImageMatchesToList(Map<Integer, List<QuestionImageMatch>> matchesMap) {
         return matchesMap.values().stream().reduce(new ArrayList<>(), (target, elements) -> {
             target.addAll(elements);
             return target;

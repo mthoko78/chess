@@ -9,13 +9,12 @@ import java.util.Map;
 
 public interface QuestionImageMatchService extends BaseService<QuestionImageMatch> {
 
-	Map<Integer, List<QuestionImageMatch>> extractQuestionImageMatches(Category category, List<Question> questions);
+    Map<Category, Map<Integer, List<QuestionImageMatch>>> extractQuestionImageMatches(List<Question> questions);
 
-	void allocateMatchesToQuestions(List<Question> questions, Map<Integer, List<QuestionImageMatch>> choicesMap);
+    void allocateMatchesToQuestions(List<Question> questions,
+                                    Map<Category, Map<Integer, List<QuestionImageMatch>>> choicesMap);
 
-	Map<Integer, List<QuestionImageMatch>> saveQuestionImageMatches(Category category, List<Question> questions);
+    List<QuestionImageMatch> findByCategoryId(Long id);
 
-	List<QuestionImageMatch> findByCategoryId(Long id);
-
-    Map<Integer, List<QuestionImageMatch>> populateQuestionImageMatches(List<Question> questions);
+    Map<Category, Map<Integer, List<QuestionImageMatch>>> populateQuestionImageMatches(List<Question> questions);
 }

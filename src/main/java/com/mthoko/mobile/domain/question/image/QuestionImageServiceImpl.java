@@ -16,8 +16,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import static com.mthoko.mobile.common.util.EntityUtil.allocateImagesToQuestions;
-import static com.mthoko.mobile.common.util.EntityUtil.distinctCategories;
+import static com.mthoko.mobile.common.util.EntityUtil.*;
 import static com.mthoko.mobile.common.util.MyConstants.*;
 
 @Service
@@ -45,16 +44,17 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
 
     @Override
     public Map<Integer, QuestionImage> saveQuestionImages(Category category, List<Question> questions) {
-        questions = questions.stream().filter((question) -> category.equals(question.getCategory()))
+        Map<Integer, QuestionImage> integerQuestionImageMap = extractQuestionImages(category, questions);
+        List<QuestionImage> images = integerQuestionImageMap.values()
+                .stream()
                 .collect(Collectors.toList());
-        Map<Integer, QuestionImage> images = extractQuestionImages(category, questions);
-        imageRepo.saveAll(new ArrayList<>(images.values()));
-        return images;
+        saveAll(images);
+        return integerQuestionImageMap;
     }
 
     private Map<Integer, QuestionImage> extractQuestionImages(Category category, List<Question> questions) {
         String categoryName = category.getName();
-        questions = filterByCategoryName(questions, categoryName);
+        questions = filterQuestionsByCategory(category, questions);
         Map<Integer, QuestionImage> images = new HashMap<>();
         switch (categoryName) {
             case ROAD_SIGNS_MARKINGS:
@@ -121,16 +121,35 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
 
     @Override
     public Map<Category, Map<Integer, QuestionImage>> populateQuestionImages(List<Question> questions) {
+        List<Category> categories = distinctCategories(questions);
+        Map<Category, Map<Integer, QuestionImage>> images = extractAllImages(questions, categories);
+        saveAll(allImagesToList(images));
+        for (Category category : categories) {
+            allocateImagesToQuestions(category, questions, images.get(category));
+        }
+        return images;
+    }
 
+    private Map<Category, Map<Integer, QuestionImage>> extractAllImages(List<Question> questions, List<Category> categories) {
         Map<Category, Map<Integer, QuestionImage>> images = new HashMap<>();
-        for (Category category : distinctCategories(questions)) {
+        for (Category category : categories) {
             if (!images.containsKey(category)) {
                 images.put(category, new HashMap<>());
             }
-            Map<Integer, QuestionImage> savedQuestionImages = saveQuestionImages(category, questions);
-            images.get(category).putAll(savedQuestionImages);
-            allocateImagesToQuestions(category, questions, savedQuestionImages);
+            images.get(category).putAll(extractQuestionImages(category, questions));
         }
         return images;
+    }
+
+    private List<QuestionImage> allImagesToList(Map<Category, Map<Integer, QuestionImage>> images) {
+        List<QuestionImage> allQuestionImages = images.values()
+                .stream()
+                .map(integerQuestionImageMap -> new ArrayList(integerQuestionImageMap.values()))
+                .collect(Collectors.toList())
+                .stream().reduce((questionImages, questionImages2) -> {
+                    questionImages.addAll(questionImages2);
+                    return questionImages;
+                }).get();
+        return allQuestionImages;
     }
 }
