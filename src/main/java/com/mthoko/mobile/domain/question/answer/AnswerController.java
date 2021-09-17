@@ -35,10 +35,4 @@ public class AnswerController extends BaseController<Answer> {
 		return service;
 	}
 
-	@GetMapping("load")
-	public Map<Integer, Answer> loadAnswers(@PathParam("category") String category) {
-		return service.saveAnswers(categoryService.findByName(category).get(),
-				questionService.findByCategoryName(category));
-	}
-
 }

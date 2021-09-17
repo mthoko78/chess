@@ -1,13 +1,8 @@
 package com.mthoko.mobile.domain.question.image;
 
-import com.mthoko.mobile.common.util.ImagesData;
-
 import java.io.File;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.mthoko.mobile.common.util.MyConstants.IMAGES_TEST_QUESTIONS;
 
@@ -52,7 +47,14 @@ public class QuestionImageRepoImpl {
                     int questionNumber = Integer.parseInt(string);
                     Integer[] imageDimensions = sketchNo < 8 ? largeDimensions : extraLarge;
                     QuestionImage image = new QuestionImage(filename, imageDimensions[0], imageDimensions[1]);
-                    questionImages.put(questionNumber, image);
+                    Optional<QuestionImage> first = questionImages.values()
+                            .stream()
+                            .filter(img -> img.getPath().equals(image.getPath())).findFirst();
+                    if (first.isPresent()) {
+                        questionImages.put(questionNumber, first.get());
+                    } else {
+                        questionImages.put(questionNumber, image);
+                    }
                 }
             }
         }
@@ -70,7 +72,7 @@ public class QuestionImageRepoImpl {
     }
 
     public static String[] filesList(String dirName) {
-        URL resource = ImagesData.class.getClassLoader().getResource(dirName);
+        URL resource = QuestionImage.class.getClassLoader().getResource(dirName);
         File dir = new File(resource.getFile());
         String[] filenames = dir.list();
         return filenames;

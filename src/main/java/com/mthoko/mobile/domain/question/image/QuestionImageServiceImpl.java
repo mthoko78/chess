@@ -44,25 +44,11 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
 
     @Override
     public Map<Integer, QuestionImage> saveQuestionImages(Category category, List<Question> questions) {
-        if (imageRepo.count() > 0) {
-            return new HashMap<>();
-        }
         questions = questions.stream().filter((question) -> category.equals(question.getCategory()))
                 .collect(Collectors.toList());
         Map<Integer, QuestionImage> images = extractQuestionImages(category, questions);
         imageRepo.saveAll(new ArrayList<>(images.values()));
         return images;
-    }
-
-    public void allocateQuestionImagesToQuestions(Category category, List<Question> questions,
-                                                  Map<Integer, QuestionImage> images) {
-        questions = questions.stream().filter(question -> category.equals(question.getCategory()))
-                .collect(Collectors.toList());
-        questions.forEach(question -> {
-            if (images.containsKey(question.getNumber())) {
-                question.setImage(images.get(question.getNumber()));
-            }
-        });
     }
 
     private Map<Integer, QuestionImage> extractQuestionImages(Category category, List<Question> questions) {
@@ -105,9 +91,6 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
                     images.put(question.getNumber(), lightImage);
                 });
                 break;
-
-            default:
-                break;
         }
         return images;
     }
@@ -137,6 +120,7 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
 
     @Override
     public Map<Category, Map<Integer, QuestionImage>> populateQuestionImages(List<Category> categories, List<Question> questions) {
+
         Map<Category, Map<Integer, QuestionImage>> images = new HashMap<>();
         for (Category category : categories) {
             if (!images.containsKey(category)) {

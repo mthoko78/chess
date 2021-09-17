@@ -33,7 +33,6 @@ public abstract class BaseResourceRemote {
 
     public void execSQL(String sql) {
         try {
-            System.out.println(">>>>>>\n\t" + sql + "\n<<<<<<");
             getConnection().createStatement().execute(sql);
         } catch (SQLException e) {
             throw new ApplicationException(e);
@@ -44,7 +43,6 @@ public abstract class BaseResourceRemote {
         try {
             Statement statement = getConnection().createStatement();
             for (String string : sql) {
-                System.out.println(">>>>>>\n\t" + string + "\n<<<<<<");
                 statement.execute(string);
             }
         } catch (SQLException e) {
@@ -58,13 +56,11 @@ public abstract class BaseResourceRemote {
         if (countCursor.next()) {
             result = countCursor.getInt(columnName);
         }
-        System.out.println("@@@@@@@@@Result:  " + result);
         return result;
     }
 
     private ResultSet executeQuery(String sql) {
         try {
-            System.out.println(">>>>>>\n\t" + sql + "\n<<<<<<");
             return getConnection().createStatement().executeQuery(sql);
         } catch (SQLException e) {
             throw new ApplicationException(e);

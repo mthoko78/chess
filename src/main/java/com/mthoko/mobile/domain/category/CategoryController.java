@@ -23,11 +23,6 @@ public class CategoryController extends BaseController<Category> {
         return service;
     }
 
-    @GetMapping("load")
-    public List<Category> loadCategories() {
-        return service.populateCategoryTable();
-    }
-
     @GetMapping("name/{name}")
     public Optional<Category> findByName(@PathVariable("name") String name) {
         return service.findByName(name);

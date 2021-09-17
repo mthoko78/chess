@@ -7,11 +7,9 @@ import java.util.Optional;
 
 public interface CategoryService extends BaseService<Category> {
 
-	List<Category> populateCategoryTable();
+    Optional<Category> findByName(String name);
 
-	Optional<Category> findByName(String name);
-
-	List<Category> getCategories();
+    List<Category> getCategories();
 
     List<String> retrieveAllNames();
 

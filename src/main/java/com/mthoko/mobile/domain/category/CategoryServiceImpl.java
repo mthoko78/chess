@@ -49,17 +49,6 @@ public class CategoryServiceImpl extends BaseServiceImpl<Category> implements Ca
     }
 
     @Override
-    public List<Category> populateCategoryTable() {
-        List<Category> categories = getCategories();
-        List<Category> savedCategories = retrieveAll();
-        categories.removeAll(savedCategories);
-        if (!categories.isEmpty()) {
-            saveAll(categories);
-        }
-        return categories;
-    }
-
-    @Override
     public Optional<Category> findByName(String name) {
         return categoryRepo.findByName(name);
     }

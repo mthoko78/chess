@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 
+import static com.mthoko.mobile.common.util.MyConstants.print;
+
 @Component
 public class FTPRepo extends BaseResourceRemote {
 
@@ -52,13 +54,13 @@ public class FTPRepo extends BaseResourceRemote {
 			throws IOException {
 		String remoteFile = serverOutputDirectory + localFile.getName();
 		InputStream inputStream = new FileInputStream(localFile);
-		System.out.println("uploading file: " + remoteFile);
+		print("uploading file: " + remoteFile);
 		boolean done = ftpClient.storeFile(remoteFile, inputStream);
 		inputStream.close();
 		if (done) {
-			System.out.println("info: " + "The file is uploaded successfully.");
+			print("info: " + "The file is uploaded successfully.");
 		} else {
-			System.out.println("info: The file was NOT uploaded successfully.");
+			print("info: The file was NOT uploaded successfully.");
 		}
 	}
 
@@ -71,7 +73,7 @@ public class FTPRepo extends BaseResourceRemote {
 			ftpClient.enterLocalPassiveMode();
 			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 			clientFiles = ftpClient.listFiles(pathName);
-			System.out.println("total client files: " + clientFiles.length);
+			print("total client files: " + clientFiles.length);
 			for (FTPFile file : clientFiles) {
 				if (file.getName().equals(".") || file.getName().equals("..")) {
 					continue;
@@ -80,14 +82,14 @@ public class FTPRepo extends BaseResourceRemote {
 				String newFilename = RECORDING_DIRECTORY + "/" + file.getName();
 				File newFile = new File(newFilename);
 				if (newFile.exists()) {
-					System.out.println("already exists: " + newFilename);
+					print("already exists: " + newFilename);
 					continue;
 				}
-				System.out.println("file: " + remotePath);
+				print("file: " + remotePath);
 				OutputStream outputStream = new FileOutputStream(newFile);
 				boolean fileRetrieved = ftpClient.retrieveFile(remotePath, outputStream);
 				outputStream.close();
-				System.out.println(newFilename + "->retrieved -> " + fileRetrieved);
+				print(newFilename + "->retrieved -> " + fileRetrieved);
 			}
 		} catch (IOException e) {
 			throw new ApplicationException(e);

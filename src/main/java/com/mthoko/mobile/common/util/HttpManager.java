@@ -9,6 +9,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static com.mthoko.mobile.common.util.MyConstants.print;
+
 /**
  * Created by Mthoko on 30 Sep 2018.
  */
@@ -19,7 +21,7 @@ public class HttpManager {
     }
 
     public static String getData(RequestPackage requestPackage) {
-        System.out.println("REQUEST PARAMS: >>>" + requestPackage.getParams() + "<<<");
+        print("REQUEST PARAMS: " + requestPackage.getParams());
         BufferedReader reader = null;
         String uri = requestPackage.getUrl();
         if (requestPackage.getMethod().equals("GET")) {
@@ -54,7 +56,7 @@ public class HttpManager {
             if (uri.contains("monitor.php")) {
                 response = response.substring(sb.indexOf(" ")).trim();
             }
-            System.out.println("RAW RESPONSE: " + response);
+            print("RAW RESPONSE: " + response);
             return response;
         } catch (IOException e) {
             throw new ApplicationException(e);

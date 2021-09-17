@@ -19,22 +19,14 @@ public class QuestionController extends BaseController<Question> {
 
     private final QuestionService service;
 
-    private final CategoryService categoryService;
-
     @Autowired
     public QuestionController(QuestionService service, CategoryService categoryService) {
         this.service = service;
-        this.categoryService = categoryService;
     }
 
     @Override
     public BaseService<Question> getService() {
         return service;
-    }
-
-    @GetMapping("load")
-    public List<Question> loadQuestions(@PathParam("category") String category) {
-        return service.populateQuestionTable(categoryService.findByName(category).get());
     }
 
     @GetMapping("empty-choices")
@@ -47,6 +39,11 @@ public class QuestionController extends BaseController<Question> {
     @GetMapping("categoryName/{categoryName}")
     public List<Question> findByCategory(@PathVariable("categoryName") String categoryName) {
         return service.findByCategoryName(categoryName);
+    }
+
+    @GetMapping("categoryNumber/{categoryNumber}")
+    public List<Question> findByCategoryNumber(@PathVariable("categoryNumber") Integer categoryNumber) {
+        return service.findByCategoryNumber(categoryNumber);
     }
 
     @GetMapping("categoryNumber/{categoryNumber}/questionNumber/{questionNumber}")

@@ -101,8 +101,6 @@ public class EntityUtil {
     }
 
     public static List<String> getFileContents(String path) {
-        System.out.println(
-                "\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n" + path + "\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
         InputStream resource = EntityUtil.class.getClassLoader().getResourceAsStream(path);
         byte[] b;
         try {

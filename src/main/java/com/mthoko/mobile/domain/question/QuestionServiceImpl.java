@@ -7,14 +7,12 @@ import com.mthoko.mobile.domain.choice.Choice;
 import com.mthoko.mobile.domain.question.answer.Answer;
 import com.mthoko.mobile.domain.question.answer.AnswerRepo;
 import com.mthoko.mobile.domain.question.image.QuestionImage;
-import com.mthoko.mobile.domain.question.image.QuestionImageRepo;
 import com.mthoko.mobile.domain.question.image.QuestionImageRepoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.mthoko.mobile.common.util.EntityUtil.allocateAnswers;
@@ -28,35 +26,21 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
 
     private final CategoryRepo categoryRepo;
 
-    private final QuestionImageRepo imageRepo;
-
-//	private final QuestionImageMatchRepoImpl matchRepoImpl = new QuestionImageMatchRepoImpl();
-
     private final QuestionRepoImpl questionRepoImpl = new QuestionRepoImpl();
 
     private final QuestionImageRepoImpl questionImageRepo = new QuestionImageRepoImpl();
 
     @Autowired
     public QuestionServiceImpl(QuestionRepo questionRepo,
-                               AnswerRepo answerRepo, CategoryRepo categoryRepo, QuestionImageRepo imageRepo) {
+                               AnswerRepo answerRepo, CategoryRepo categoryRepo) {
         this.questionRepo = questionRepo;
         this.answerRepo = answerRepo;
         this.categoryRepo = categoryRepo;
-        this.imageRepo = imageRepo;
-    }
-
-    public QuestionServiceImpl() {
-        this(null, null, null, null);
     }
 
     @Override
     public JpaRepository<Question, Long> getRepo() {
         return questionRepo;
-    }
-
-    @Override
-    public QuestionImage findByQuestionId(Long id) {
-        return questionImageRepo.findByQuestionId(id);
     }
 
     @Override
@@ -158,18 +142,9 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
             return existingQuestions;
         }
         String categoryName = category.getName();
-        List<Question> questions = new ArrayList<>(questionRepoImpl.extractQuestions(categoryName).values());
-        for (Question question : questions) {
-            question.setCategory(category);
-        }
-        questions.removeAll(existingQuestions);
-        if (!questions.isEmpty()) {
-            saveAll(questions);
-        }
-        List<Question> collect = questions.stream().filter((q) -> !existingQuestions.contains(q))
-                .collect(Collectors.toList());
-        existingQuestions.addAll(collect);
-        return existingQuestions;
+        Collection<Question> questions = questionRepoImpl.extractQuestions(categoryName).values();
+        questions.stream().forEach(q -> q.setCategory(category));
+        return saveAll(new ArrayList<>(questions));
     }
 
     @Override
@@ -204,18 +179,27 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
 
     @Override
     public List<Question> populateQuestions(List<Category> categories) {
-        List<Question> allQuestions = new ArrayList<>();
-        for (Category category : categories) {
-            List<Question> questions = populateQuestionTable(category);
-            category.setTotalQuestions(questions.size());
-            allQuestions.addAll(questions);
-        }
-        categoryRepo.saveAll(categories);
-        return allQuestions;
+        return
+                categories
+                        .stream()
+                        .map(category -> {
+                            List<Question> questions = populateQuestionTable(category);
+                            category.setTotalQuestions(questions.size());
+                            return questions;
+                        })
+                        .reduce((questions, questions2) -> {
+                            questions.addAll(questions2);
+                            return questions;
+                        }).get();
     }
 
     @Override
     public Question findByCategoryNumberAndQuestionNumber(Integer categoryNumber, Integer questionNumber) {
         return questionRepo.findByCategory_NumberAndNumber(categoryNumber, questionNumber);
+    }
+
+    @Override
+    public List<Question> findByCategoryNumber(Integer categoryNumber) {
+        return questionRepo.findByCategory_Number(categoryNumber);
     }
 };

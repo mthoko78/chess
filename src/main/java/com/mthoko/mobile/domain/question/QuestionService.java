@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface QuestionService extends BaseService<Question> {
 
-    QuestionImage findByQuestionId(Long id);
-
     Question findByQuestionNumberAndCategory(int questionNum, String category);
 
     List<Question> populateQuestionTable(Category category);
@@ -32,4 +30,6 @@ public interface QuestionService extends BaseService<Question> {
     List<Question> populateQuestions(List<Category> categories);
 
     Question findByCategoryNumberAndQuestionNumber(Integer categoryNumber, Integer questionNumber);
+
+    List<Question> findByCategoryNumber(Integer categoryNumber);
 }

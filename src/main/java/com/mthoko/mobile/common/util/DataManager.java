@@ -11,6 +11,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
 
+import static com.mthoko.mobile.common.util.MyConstants.print;
+
 public class DataManager {
 	public static String getFileText(Path path, boolean addLineBreaks) {
 		try {
@@ -91,7 +93,7 @@ public class DataManager {
 		File sourceFile = new File(sourceFileUri);
 
 		if (!sourceFile.isFile()) {
-			System.out.println("Error: Source File not exist :" + fileName);
+			print("Error: Source File not exist :" + fileName);
 			return 0;
 
 		} else {
@@ -121,7 +123,7 @@ public class DataManager {
 
 		if (conn.getResponseCode() == 200) {
 			String msg = "File Upload Completed.\n\n See uploaded file here : \n\n" + fileName;
-			System.out.println("info: " + msg);
+			print("info: " + msg);
 		}
 	}
 

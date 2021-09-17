@@ -2,6 +2,8 @@ package com.mthoko.mobile.common.util;
 
 import java.sql.*;
 
+import static com.mthoko.mobile.common.util.MyConstants.print;
+
 /**
  *
  * @author Mthoko
@@ -19,7 +21,7 @@ public class DatabaseConnection {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName, "root", "");
 			statement = conn.createStatement();
 		} catch (SQLException | ClassNotFoundException exc) {
-			System.out.println("Error: " + exc.toString());
+			print("Error: " + exc.toString());
 		}
 	}
 
