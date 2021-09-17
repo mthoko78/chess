@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.mthoko.mobile.common.util.EntityUtil.allocateChoicesToQuestions;
@@ -43,16 +46,21 @@ public class ChoiceServiceImpl extends BaseServiceImpl<Choice> implements Choice
 
     @Override
     public Map<Integer, List<Choice>> saveChoices(Category category) {
-        if (countByCategoryName(category.getName()) > 0) {
-            return new HashMap<>();
-        }
-        Map<Integer, List<Choice>> choicesMap = choiceRepoImpl.extractChoices(category);
+        Map<Integer, List<Choice>> choices = extractChoices(category);
+        choiceRepo.saveAll(questionChoices(choices));
+        return choices;
+    }
+
+    private Map<Integer, List<Choice>> extractChoices(Category category) {
+        return choiceRepoImpl.extractChoices(category);
+    }
+
+    private List<Choice> questionChoices(Map<Integer, List<Choice>> choicesMap) {
         List<Choice> allChoices = choicesMap.values().stream().reduce(new ArrayList<>(), (target, elements) -> {
             target.addAll(elements);
             return target;
         });
-        choiceRepo.saveAll(allChoices);
-        return choicesMap;
+        return allChoices;
     }
 
     @Override
@@ -62,18 +70,41 @@ public class ChoiceServiceImpl extends BaseServiceImpl<Choice> implements Choice
 
     @Override
     public Map<Category, Map<Integer, List<Choice>>> populateChoices(List<Question> questions) {
+        List<Category> categories = EntityUtil.distinctCategories(questions);
+        Map<Category, Map<Integer, List<Choice>>> choices = extractAllChoicesAsMap(categories);
+        saveAll(choicesMapToList(choices));
+        for (Category category : categories) {
+            allocateChoicesToQuestions(category, filterQuestionsByCategory(questions, category), choices.get(category));
+        }
+        return choices;
+    }
+
+    private List<Choice> choicesMapToList(Map<Category, Map<Integer, List<Choice>>> choices) {
+        List<Choice> allChoices = choices.values()
+                .stream()
+                .map(integerListMap -> questionChoices(integerListMap))
+                .reduce((choices1, choices2) -> {
+                    choices1.addAll(choices2);
+                    return choices1;
+                }).get();
+        return allChoices;
+    }
+
+    private Map<Category, Map<Integer, List<Choice>>> extractAllChoicesAsMap(List<Category> categories) {
         Map<Category, Map<Integer, List<Choice>>> choices = new LinkedHashMap<>();
-        for (Category category : EntityUtil.distinctCategories(questions)) {
-            Map<Integer, List<Choice>> savedChoices = saveChoices(category);
+        for (Category category : categories) {
+            Map<Integer, List<Choice>> choicesByCategory = extractChoices(category);
             if (!choices.containsKey(category)) {
                 choices.put(category, new LinkedHashMap<>());
             }
-            choices.get(category).putAll(savedChoices);
-            List<Question> byCat = questions.stream().filter(question -> question.getCategory().equals(category))
-                    .collect(Collectors.toList());
-            allocateChoicesToQuestions(category, byCat, savedChoices);
+            choices.get(category).putAll(choicesByCategory);
         }
         return choices;
+    }
+
+    private List<Question> filterQuestionsByCategory(List<Question> questions, Category category) {
+        return questions.stream().filter(question -> question.getCategory().equals(category))
+                .collect(Collectors.toList());
     }
 
     @Override

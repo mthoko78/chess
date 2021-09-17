@@ -131,10 +131,6 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         return questionImageRepo.getQuestionSignImages();
     }
 
-    public Map<Integer, Question> extractQuestions(String name) {
-        return questionRepoImpl.extractQuestions(name);
-    }
-
     @Override
     public List<Question> populateQuestionTable(Category category) {
         List<Question> existingQuestions = findByCategoryId(category.getId());
@@ -145,8 +141,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     }
 
     private List<Question> extractQuestions(Category category) {
-        String categoryName = category.getName();
-        Collection<Question> questions = questionRepoImpl.extractQuestions(categoryName).values();
+        Collection<Question> questions = questionRepoImpl.extractQuestions(category).values();
         questions.stream().forEach(q -> q.setCategory(category));
         return new ArrayList<>(questions);
     }
@@ -190,11 +185,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     public List<Question> extractAllQuestions(List<Category> categories) {
         List<Question> allQuestions = categories
                 .stream()
-                .map(category -> {
-                    List<Question> questions = extractQuestions(category);
-                    category.setTotalQuestions(questions.size());
-                    return questions;
-                })
+                .map(category -> extractQuestions(category))
                 .reduce((questions, questions2) -> {
                     questions.addAll(questions2);
                     return questions;

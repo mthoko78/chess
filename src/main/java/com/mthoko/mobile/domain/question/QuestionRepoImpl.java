@@ -1,5 +1,6 @@
 package com.mthoko.mobile.domain.question;
 
+import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.category.CategoryServiceImpl;
 
 import java.util.LinkedHashMap;
@@ -9,8 +10,8 @@ import static com.mthoko.mobile.common.util.EntityUtil.getFileContents;
 
 public class QuestionRepoImpl {
 
-    public Map<Integer, Question> extractQuestions(String category) {
-        String path = "./docs/" + category + ".txt";
+    public Map<Integer, Question> extractQuestions(Category category) {
+        String path = "./docs/" + category.getName() + ".txt";
         int questionNum = 0;
         boolean processQuestions = true;
         Question currentQuestion = null;
@@ -30,7 +31,7 @@ public class QuestionRepoImpl {
                 currentQuestion.setNumber(questionNum);
                 currentQuestion.setText(text);
                 questions.put(questionNum, currentQuestion);
-
+                category.setTotalQuestions(category.getTotalQuestions() + 1);
             }
         }
         return questions;

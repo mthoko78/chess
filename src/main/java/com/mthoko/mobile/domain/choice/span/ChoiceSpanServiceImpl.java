@@ -8,11 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import static com.mthoko.mobile.common.util.EntityUtil.allocateChoiceSpansToQuestions;
-import static com.mthoko.mobile.common.util.EntityUtil.distinctCategories;
+import static com.mthoko.mobile.common.util.EntityUtil.*;
 
 @Service
 public class ChoiceSpanServiceImpl extends BaseServiceImpl<ChoiceSpan> implements ChoiceSpanService {
@@ -38,33 +39,57 @@ public class ChoiceSpanServiceImpl extends BaseServiceImpl<ChoiceSpan> implement
 
     @Override
     public Map<Integer, List<ChoiceSpan>> saveChoiceSpans(Category category) {
-        List<ChoiceSpan> existingChoiceSpans = findByCategoryId(category.getId());
-        if (!existingChoiceSpans.isEmpty()) {
-            return new HashMap<>();
-        }
-        Map<Integer, List<ChoiceSpan>> choicesMap = choiceRepoImpl.extractChoiceSpans(category);
+        Map<Integer, List<ChoiceSpan>> choicesMap = extractChoiceSpans(category);
+        saveAll(choiceSpansMapToList(choicesMap));
+        return choicesMap;
+    }
 
-        List<ChoiceSpan> allSpans = choicesMap.values().stream().reduce(new ArrayList<ChoiceSpan>(),
+    private Map<Integer, List<ChoiceSpan>> extractChoiceSpans(Category category) {
+        return choiceRepoImpl.extractChoiceSpans(category);
+    }
+
+    private List<ChoiceSpan> choiceSpansMapToList(Map<Integer, List<ChoiceSpan>> choicesMap) {
+        List<ChoiceSpan> allSpans = choicesMap.values().stream().reduce(new ArrayList<>(),
                 (target, elements) -> {
                     target.addAll(elements);
                     return target;
                 });
-        saveAll(allSpans);
-        return choicesMap;
+        return allSpans;
     }
 
     @Override
     public Map<Category, Map<Integer, List<ChoiceSpan>>> populateChoiceSpans(List<Question> questions) {
+        List<Category> categories = distinctCategories(questions);
+        Map<Category, Map<Integer, List<ChoiceSpan>>> choiceSpans = allChoiceSpansAsMap(categories);
+        saveAll(allChoiceSpansToList(choiceSpans));
+        allocateToQuestions(questions, categories, choiceSpans);
+        return choiceSpans;
+    }
+
+    private void allocateToQuestions(List<Question> questions, List<Category> categories, Map<Category, Map<Integer, List<ChoiceSpan>>> choiceSpans) {
+        for (Category category : categories) {
+            allocateChoiceSpansToQuestions(filterQuestionsByCategory(category, questions), choiceSpans.get(category));
+        }
+    }
+
+    private List<ChoiceSpan> allChoiceSpansToList(Map<Category, Map<Integer, List<ChoiceSpan>>> choiceSpans) {
+        List<ChoiceSpan> reduce = choiceSpans.values()
+                .stream()
+                .map(integerListMap -> choiceSpansMapToList(integerListMap))
+                .reduce((choiceSpans1, choiceSpans2) -> {
+                    choiceSpans1.addAll(choiceSpans2);
+                    return choiceSpans1;
+                }).get();
+        return reduce;
+    }
+
+    private Map<Category, Map<Integer, List<ChoiceSpan>>> allChoiceSpansAsMap(List<Category> categories) {
         Map<Category, Map<Integer, List<ChoiceSpan>>> choices = new LinkedHashMap<>();
-        for (Category category : distinctCategories(questions)) {
-            Map<Integer, List<ChoiceSpan>> saved = saveChoiceSpans(category);
+        for (Category category : categories) {
             if (!choices.containsKey(category)) {
                 choices.put(category, new LinkedHashMap<>());
             }
-            choices.get(category).putAll(saved);
-            List<Question> byCat = questions.stream().filter(question -> question.getCategory().equals(category))
-                    .collect(Collectors.toList());
-            allocateChoiceSpansToQuestions(byCat, saved);
+            choices.get(category).putAll(extractChoiceSpans(category));
         }
         return choices;
     }

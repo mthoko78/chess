@@ -68,8 +68,9 @@ public class LearnersController extends BaseController<Question> {
 
     @GetMapping("load")
     public List<Question> load() {
-        List<Category> categories = categoryService.populateCategories();
+        List<Category> categories = categoryService.getCategories();
         List<Question> questions = questionService.extractAllQuestions(categories);
+        categoryService.saveAll(categories);
         choiceService.populateChoices(questions);
         choiceSpanService.populateChoiceSpans(questions);
         answerService.populateAnswers(questions);
