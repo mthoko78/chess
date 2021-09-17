@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import static com.mthoko.mobile.common.util.EntityUtil.allocateImagesToQuestions;
+import static com.mthoko.mobile.common.util.EntityUtil.distinctCategories;
 import static com.mthoko.mobile.common.util.MyConstants.*;
 
 @Service
@@ -119,10 +120,10 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
     }
 
     @Override
-    public Map<Category, Map<Integer, QuestionImage>> populateQuestionImages(List<Category> categories, List<Question> questions) {
+    public Map<Category, Map<Integer, QuestionImage>> populateQuestionImages(List<Question> questions) {
 
         Map<Category, Map<Integer, QuestionImage>> images = new HashMap<>();
-        for (Category category : categories) {
+        for (Category category : distinctCategories(questions)) {
             if (!images.containsKey(category)) {
                 images.put(category, new HashMap<>());
             }

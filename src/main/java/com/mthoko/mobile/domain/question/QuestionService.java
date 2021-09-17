@@ -29,6 +29,8 @@ public interface QuestionService extends BaseService<Question> {
 
     List<Question> populateQuestions(List<Category> categories);
 
+    List<Question> extractAllQuestions(List<Category> categories);
+
     Question findByCategoryNumberAndQuestionNumber(Integer categoryNumber, Integer questionNumber);
 
     List<Question> findByCategoryNumber(Integer categoryNumber);

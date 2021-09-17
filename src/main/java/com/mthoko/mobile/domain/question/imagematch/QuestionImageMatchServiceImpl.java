@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import static com.mthoko.mobile.common.util.EntityUtil.distinctCategories;
 import static com.mthoko.mobile.common.util.MyConstants.ROAD_SIGNS_MARKINGS;
 
 @Service
@@ -87,9 +88,9 @@ public class QuestionImageMatchServiceImpl extends BaseServiceImpl<QuestionImage
     }
 
     @Override
-    public Map<Integer, List<QuestionImageMatch>> populateQuestionImageMatches(List<Category> categories, List<Question> questions) {
+    public Map<Integer, List<QuestionImageMatch>> populateQuestionImageMatches(List<Question> questions) {
         Map<Integer, List<QuestionImageMatch>> images = new HashMap<>();
-        for (Category category : categories) {
+        for (Category category : distinctCategories(questions)) {
             Map<Integer, List<QuestionImageMatch>> matches = saveQuestionImageMatches(category,
                     questions);
             images.putAll(matches);

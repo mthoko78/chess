@@ -35,6 +35,14 @@ public class EntityUtil {
                 .collect(Collectors.toList());
     }
 
+    public static List<Category> distinctCategories(List<Question> questions) {
+        return questions
+                .stream()
+                .map(question -> question.getCategory())
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
     public void allocateChoiceSpansToQuestions(Category category, List<Question> questions,
                                                Map<Integer, List<ChoiceSpan>> choiceSpanMap) {
         List<Question> filtered = filterQuestionsByCategory(category, questions);

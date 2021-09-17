@@ -18,5 +18,5 @@ public interface QuestionImageService extends BaseService<QuestionImage> {
 
     byte[] getImageAsBytes(Long imageId) throws IOException;
 
-    Map<Category, Map<Integer, QuestionImage>> populateQuestionImages(List<Category> categories, List<Question> questions);
+    Map<Category, Map<Integer, QuestionImage>> populateQuestionImages(List<Question> questions);
 }

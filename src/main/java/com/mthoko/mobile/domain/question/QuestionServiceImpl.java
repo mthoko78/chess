@@ -141,10 +141,14 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         if (!existingQuestions.isEmpty()) {
             return existingQuestions;
         }
+        return saveAll(extractQuestions(category));
+    }
+
+    private List<Question> extractQuestions(Category category) {
         String categoryName = category.getName();
         Collection<Question> questions = questionRepoImpl.extractQuestions(categoryName).values();
         questions.stream().forEach(q -> q.setCategory(category));
-        return saveAll(new ArrayList<>(questions));
+        return new ArrayList<>(questions);
     }
 
     @Override
@@ -179,18 +183,23 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
 
     @Override
     public List<Question> populateQuestions(List<Category> categories) {
-        return
-                categories
-                        .stream()
-                        .map(category -> {
-                            List<Question> questions = populateQuestionTable(category);
-                            category.setTotalQuestions(questions.size());
-                            return questions;
-                        })
-                        .reduce((questions, questions2) -> {
-                            questions.addAll(questions2);
-                            return questions;
-                        }).get();
+        return saveAll(extractAllQuestions(categories));
+    }
+
+    @Override
+    public List<Question> extractAllQuestions(List<Category> categories) {
+        List<Question> allQuestions = categories
+                .stream()
+                .map(category -> {
+                    List<Question> questions = extractQuestions(category);
+                    category.setTotalQuestions(questions.size());
+                    return questions;
+                })
+                .reduce((questions, questions2) -> {
+                    questions.addAll(questions2);
+                    return questions;
+                }).get();
+        return allQuestions;
     }
 
     @Override

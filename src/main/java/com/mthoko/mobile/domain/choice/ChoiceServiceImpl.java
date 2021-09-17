@@ -1,6 +1,7 @@
 package com.mthoko.mobile.domain.choice;
 
 import com.mthoko.mobile.common.service.BaseServiceImpl;
+import com.mthoko.mobile.common.util.EntityUtil;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.question.Question;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +61,9 @@ public class ChoiceServiceImpl extends BaseServiceImpl<Choice> implements Choice
     }
 
     @Override
-    public Map<Category, Map<Integer, List<Choice>>> populateChoices(List<Category> categories, List<Question> questions) {
+    public Map<Category, Map<Integer, List<Choice>>> populateChoices(List<Question> questions) {
         Map<Category, Map<Integer, List<Choice>>> choices = new LinkedHashMap<>();
-        for (Category category : categories) {
+        for (Category category : EntityUtil.distinctCategories(questions)) {
             Map<Integer, List<Choice>> savedChoices = saveChoices(category);
             if (!choices.containsKey(category)) {
                 choices.put(category, new LinkedHashMap<>());

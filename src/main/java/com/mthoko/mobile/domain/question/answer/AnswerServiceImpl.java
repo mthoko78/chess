@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.mthoko.mobile.common.util.EntityUtil.allocateAnswersToQuestions;
-import static com.mthoko.mobile.common.util.EntityUtil.extractAnswers;
+import static com.mthoko.mobile.common.util.EntityUtil.*;
 
 @Service
 public class AnswerServiceImpl extends BaseServiceImpl<Answer> implements AnswerService {
@@ -45,10 +44,10 @@ public class AnswerServiceImpl extends BaseServiceImpl<Answer> implements Answer
     }
 
     @Override
-    public Map<Category, Map<Integer, Answer>> populateAnswers(List<Category> categories, List<Question> questions) {
+    public Map<Category, Map<Integer, Answer>> populateAnswers(List<Question> questions) {
         Map<Category, Map<Integer, Answer>> answers = new HashMap<>();
         if (count() == 0) {
-            for (Category category : categories) {
+            for (Category category : distinctCategories(questions)) {
                 Map<Integer, Answer> savedAnswers = saveAnswers(category, questions);
                 answers.put(category, savedAnswers);
                 allocateAnswersToQuestions(category, questions, savedAnswers);

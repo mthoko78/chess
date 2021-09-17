@@ -11,7 +11,9 @@ public interface ChoiceService extends BaseService<Choice> {
 
 	List<Choice> findByQuestionNumberAndCategory(int questionNum, String category);
 
-	List<Choice> findByCategoryId(Long id);
+    Map<Category, Map<Integer, List<Choice>>> populateChoices(List<Question> questions);
+
+    List<Choice> findByCategoryId(Long id);
 
 	List<Choice> findByCategoryName(String categoryName);
 
@@ -19,5 +21,4 @@ public interface ChoiceService extends BaseService<Choice> {
 
 	int countByCategoryName(String categoryName);
 
-    Map<Category, Map<Integer, List<Choice>>> populateChoices(List<Category> categories, List<Question> questions);
 }

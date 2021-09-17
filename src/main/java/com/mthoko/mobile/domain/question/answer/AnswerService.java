@@ -18,5 +18,5 @@ public interface AnswerService extends BaseService<Answer> {
 
     List<Answer> findAnswersByCategoryId(Long id);
 
-    Map<Category, Map<Integer, Answer>> populateAnswers(List<Category> categories, List<Question> questions);
+    Map<Category, Map<Integer, Answer>> populateAnswers( List<Question> questions);
 }

@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.mthoko.mobile.common.util.EntityUtil.allocateChoiceSpansToQuestions;
+import static com.mthoko.mobile.common.util.EntityUtil.distinctCategories;
 
 @Service
 public class ChoiceSpanServiceImpl extends BaseServiceImpl<ChoiceSpan> implements ChoiceSpanService {
@@ -53,9 +54,9 @@ public class ChoiceSpanServiceImpl extends BaseServiceImpl<ChoiceSpan> implement
     }
 
     @Override
-    public Map<Category, Map<Integer, List<ChoiceSpan>>> populateChoiceSpans(List<Category> categories, List<Question> questions) {
+    public Map<Category, Map<Integer, List<ChoiceSpan>>> populateChoiceSpans(List<Question> questions) {
         Map<Category, Map<Integer, List<ChoiceSpan>>> choices = new LinkedHashMap<>();
-        for (Category category : categories) {
+        for (Category category : distinctCategories(questions)) {
             Map<Integer, List<ChoiceSpan>> saved = saveChoiceSpans(category);
             if (!choices.containsKey(category)) {
                 choices.put(category, new LinkedHashMap<>());

@@ -17,5 +17,5 @@ public interface QuestionImageMatchService extends BaseService<QuestionImageMatc
 
 	List<QuestionImageMatch> findByCategoryId(Long id);
 
-    Map<Integer, List<QuestionImageMatch>> populateQuestionImageMatches(List<Category> categories, List<Question> questions);
+    Map<Integer, List<QuestionImageMatch>> populateQuestionImageMatches(List<Question> questions);
 }
