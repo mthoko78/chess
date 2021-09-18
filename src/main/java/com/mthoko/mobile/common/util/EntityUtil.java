@@ -7,11 +7,17 @@ import com.mthoko.mobile.domain.question.Question;
 import com.mthoko.mobile.domain.question.answer.Answer;
 import com.mthoko.mobile.domain.question.image.QuestionImage;
 import com.mthoko.mobile.exception.ApplicationException;
+import com.mthoko.mobile.exception.ErrorCode;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.mthoko.mobile.common.util.MyConstants.DOCS;
 
 public class EntityUtil {
 
@@ -109,6 +115,24 @@ public class EntityUtil {
     }
 
     public static List<String> getFileContents(String path) {
+//        return getContentsViaStream(path);
+        return getContentsUsingNIO(path);
+    }
+
+    private static List<String> getContentsUsingNIO(String path) {
+        Path path1 = Paths.get(path);
+        if (!Files.exists(path1)) {
+            throw new ApplicationException(ErrorCode.FILE_NOT_FOUND);
+        }
+        try {
+            return Files.readAllLines(path1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ApplicationException(e, ErrorCode.FAILED_TO_READ_FILE_TEXT);
+        }
+    }
+
+    private static List<String> getContentsViaStream(String path) {
         InputStream resource = EntityUtil.class.getClassLoader().getResourceAsStream(path);
         byte[] b;
         try {
@@ -124,11 +148,10 @@ public class EntityUtil {
     }
 
     public static Map<Integer, Answer> extractAnswers(Category category) {
-        String path = "./docs/" + category.getName() + ".txt";
         int questionNum = 0;
         boolean processAnswers = false;
         Map<Integer, Answer> answers = new LinkedHashMap<>();
-        for (String line : getFileContents(path)) {
+        for (String line : getFileContents(DOCS + category.getName() + ".txt")) {
             if (line.length() == 0)
                 continue;
             if (Character.isDigit(line.charAt(0))) {

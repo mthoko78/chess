@@ -111,7 +111,7 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
         Optional<QuestionImage> optionalQuestionImage = findById(imageId);
         if (optionalQuestionImage.isPresent()) {
             QuestionImage image = optionalQuestionImage.get();
-            Path path = Paths.get(QUESTIONS_IMAGES_PATH + "/" + image.getPath());
+            Path path = Paths.get(QUESTIONS_IMAGES_PATH + image.getPath());
             if (Files.exists(path)) {
                 return IOUtils.toByteArray(Files.newInputStream(path));
             }

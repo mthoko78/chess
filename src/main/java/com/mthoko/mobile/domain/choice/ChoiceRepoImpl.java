@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 import static com.mthoko.mobile.common.util.EntityUtil.getFileContents;
+import static com.mthoko.mobile.common.util.MyConstants.DOCS;
 
 public class ChoiceRepoImpl {
 
     private static CategoryServiceImpl categoryService = new CategoryServiceImpl();
 
     public Map<Integer, List<Choice>> extractChoices(Category category) {
-        String path = "./docs/" + category.getName() + ".txt";
         int questionNum = 0;
         Map<Integer, List<Choice>> choices = new LinkedHashMap<>();
-        for (String line : getFileContents(path)) {
+        for (String line : getFileContents(DOCS + category.getName() + ".txt")) {
             if (line.length() == 0)
                 continue;
             if (Character.isDigit(line.charAt(0))) {
@@ -40,10 +40,9 @@ public class ChoiceRepoImpl {
     }
 
     public Map<Integer, List<ChoiceSpan>> extractChoiceSpans(Category category) {
-        String path = "./docs/" + category.getName() + ".txt";
         int questionNum = 0;
         Map<Integer, List<ChoiceSpan>> choiceSpans = new LinkedHashMap<>();
-        for (String line : getFileContents(path)) {
+        for (String line : getFileContents(DOCS + category.getName() + ".txt")) {
             if (line.length() == 0)
                 continue;
             if (Character.isDigit(line.charAt(0))) {

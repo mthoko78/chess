@@ -73,7 +73,6 @@ public class QuestionImageRepoImpl {
     }
 
     public static List<String> filesList(String dirName) {
-
         try {
             return Files.list(Paths.get(dirName + "/"))
                     .map(path1 -> path1.toFile().getName())

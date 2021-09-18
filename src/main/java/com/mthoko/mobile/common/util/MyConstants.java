@@ -87,7 +87,10 @@ public interface MyConstants { // 'public static final' modifiers are prepended 
     String RULES_OF_THE_ROAD = "RULES OF THE ROAD";
     String HEAVY_MOTOR_VEHICLE_CONTROLS = "HEAVY MOTOR VEHICLE CONTROLS";
     String LIGHT_MOTOR_VEHICLE_CONTROLS = "LIGHT MOTOR VEHICLE CONTROLS";
-    String QUESTIONS_IMAGES_PATH = "src/main/resources/images/test/questions";
+    String RESOURCES_PATH = "src/main/resources/";
+    String QUESTIONS_IMAGES_PATH = RESOURCES_PATH + "images/test/questions/";
+    String DOCS = RESOURCES_PATH + "docs/categories/";
+
 
     static void print(String s) {
         System.out.println("=================================================");
