@@ -13,7 +13,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mthoko.mobile.common.util.EntityUtil.*;
+import static com.mthoko.mobile.common.util.EntityUtil.distinctCategories;
+import static com.mthoko.mobile.common.util.EntityUtil.filterQuestionsByCategory;
 
 @Service
 public class ChoiceSpanServiceImpl extends BaseServiceImpl<ChoiceSpan> implements ChoiceSpanService {
@@ -37,45 +38,43 @@ public class ChoiceSpanServiceImpl extends BaseServiceImpl<ChoiceSpan> implement
         return choiceSpanRepo.findByQuestionNumberAndCategory(questionNum, category);
     }
 
-    @Override
-    public Map<Integer, List<ChoiceSpan>> saveChoiceSpans(Category category) {
-        Map<Integer, List<ChoiceSpan>> choicesMap = extractChoiceSpans(category);
-        saveAll(choiceSpansMapToList(choicesMap));
-        return choicesMap;
-    }
-
     private Map<Integer, List<ChoiceSpan>> extractChoiceSpans(Category category) {
         return choiceRepoImpl.extractChoiceSpans(category);
     }
 
-    private List<ChoiceSpan> choiceSpansMapToList(Map<Integer, List<ChoiceSpan>> choicesMap) {
-        List<ChoiceSpan> allSpans = choicesMap.values().stream().reduce(new ArrayList<>(),
-                (target, elements) -> {
-                    target.addAll(elements);
-                    return target;
-                });
-        return allSpans;
-    }
-
     @Override
     public Map<Category, Map<Integer, List<ChoiceSpan>>> populateChoiceSpans(List<Question> questions) {
-        List<Category> categories = distinctCategories(questions);
-        Map<Category, Map<Integer, List<ChoiceSpan>>> choiceSpans = allChoiceSpansAsMap(categories);
+        Map<Category, Map<Integer, List<ChoiceSpan>>> choiceSpans = allChoiceSpans(distinctCategories(questions));
         saveAll(allChoiceSpansToList(choiceSpans));
-        allocateToQuestions(questions, categories, choiceSpans);
+        allocateChoiceSpansToQuestions(questions, choiceSpans);
         return choiceSpans;
     }
 
-    private void allocateToQuestions(List<Question> questions, List<Category> categories, Map<Category, Map<Integer, List<ChoiceSpan>>> choiceSpans) {
-        for (Category category : categories) {
-            allocateChoiceSpansToQuestions(filterQuestionsByCategory(category, questions), choiceSpans.get(category));
-        }
+
+    private void allocateChoiceSpansToQuestions(List<Question> questions, Map<Category, Map<Integer, List<ChoiceSpan>>> choices) {
+        choices.entrySet().forEach(entry -> {
+            Category category = entry.getKey();
+            Map<Integer, List<ChoiceSpan>> choicesByCategory = entry.getValue();
+            List<Question> questionsByCategory = filterQuestionsByCategory(category, questions);
+            questionsByCategory.forEach(question -> {
+                if (choicesByCategory.containsKey(question.getNumber())) {
+                    question.setChoiceSpans(choicesByCategory.get(question.getNumber()));
+                } else {
+                    question.setChoices(new ArrayList<>());
+                }
+            });
+        });
     }
 
     private List<ChoiceSpan> allChoiceSpansToList(Map<Category, Map<Integer, List<ChoiceSpan>>> choiceSpans) {
         List<ChoiceSpan> reduce = choiceSpans.values()
                 .stream()
-                .map(integerListMap -> choiceSpansMapToList(integerListMap))
+                .map(integerListMap -> integerListMap.values()
+                        .stream()
+                        .reduce(new ArrayList<>(), (target, elements) -> {
+                            target.addAll(elements);
+                            return target;
+                        }))
                 .reduce((choiceSpans1, choiceSpans2) -> {
                     choiceSpans1.addAll(choiceSpans2);
                     return choiceSpans1;
@@ -83,7 +82,7 @@ public class ChoiceSpanServiceImpl extends BaseServiceImpl<ChoiceSpan> implement
         return reduce;
     }
 
-    private Map<Category, Map<Integer, List<ChoiceSpan>>> allChoiceSpansAsMap(List<Category> categories) {
+    private Map<Category, Map<Integer, List<ChoiceSpan>>> allChoiceSpans(List<Category> categories) {
         Map<Category, Map<Integer, List<ChoiceSpan>>> choices = new LinkedHashMap<>();
         for (Category category : categories) {
             if (!choices.containsKey(category)) {

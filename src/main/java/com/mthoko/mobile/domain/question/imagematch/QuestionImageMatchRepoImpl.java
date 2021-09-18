@@ -5,7 +5,7 @@ import com.mthoko.mobile.domain.question.image.QuestionImage;
 
 import java.util.*;
 
-import static com.mthoko.mobile.common.util.MyConstants.IMAGES_TEST_QUESTIONS;
+import static com.mthoko.mobile.common.util.MyConstants.QUESTIONS_IMAGES_PATH;
 import static com.mthoko.mobile.domain.question.image.QuestionImageRepoImpl.*;
 
 public class QuestionImageMatchRepoImpl {
@@ -21,7 +21,7 @@ public class QuestionImageMatchRepoImpl {
         Set<Integer> large = largeImages();
         Set<Integer> unsquared = unsquaredImages();
         Map<Integer, List<QuestionImageMatch>> matches = new LinkedHashMap<>();
-        for (String filename : filesList(IMAGES_TEST_QUESTIONS)) {
+        for (String filename : filesList(QUESTIONS_IMAGES_PATH)) {
             if (filename.startsWith("q_")) {
                 String substring = filename.substring(2, filename.indexOf("."));
                 if (substring.contains("_")) {

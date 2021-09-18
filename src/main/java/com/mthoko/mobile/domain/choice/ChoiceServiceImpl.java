@@ -1,7 +1,6 @@
 package com.mthoko.mobile.domain.choice;
 
 import com.mthoko.mobile.common.service.BaseServiceImpl;
-import com.mthoko.mobile.common.util.EntityUtil;
 import com.mthoko.mobile.domain.category.Category;
 import com.mthoko.mobile.domain.question.Question;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static com.mthoko.mobile.common.util.EntityUtil.allocateChoicesToQuestions;
+import static com.mthoko.mobile.common.util.EntityUtil.distinctCategories;
+import static com.mthoko.mobile.common.util.EntityUtil.filterQuestionsByCategory;
 
 @Service
 public class ChoiceServiceImpl extends BaseServiceImpl<Choice> implements ChoiceService {
@@ -45,66 +44,54 @@ public class ChoiceServiceImpl extends BaseServiceImpl<Choice> implements Choice
     }
 
     @Override
-    public Map<Integer, List<Choice>> saveChoices(Category category) {
-        Map<Integer, List<Choice>> choices = extractChoices(category);
-        choiceRepo.saveAll(questionChoices(choices));
-        return choices;
-    }
-
-    private Map<Integer, List<Choice>> extractChoices(Category category) {
-        return choiceRepoImpl.extractChoices(category);
-    }
-
-    private List<Choice> questionChoices(Map<Integer, List<Choice>> choicesMap) {
-        List<Choice> allChoices = choicesMap.values().stream().reduce(new ArrayList<>(), (target, elements) -> {
-            target.addAll(elements);
-            return target;
-        });
-        return allChoices;
-    }
-
-    @Override
     public int countByCategoryName(String categoryName) {
         return choiceRepo.findByCategoryName(categoryName).size();
     }
 
     @Override
     public Map<Category, Map<Integer, List<Choice>>> populateChoices(List<Question> questions) {
-        List<Category> categories = EntityUtil.distinctCategories(questions);
-        Map<Category, Map<Integer, List<Choice>>> choices = extractAllChoicesAsMap(categories);
+        Map<Category, Map<Integer, List<Choice>>> choices = extractAllChoices(distinctCategories(questions));
         saveAll(choicesMapToList(choices));
-        for (Category category : categories) {
-            allocateChoicesToQuestions(category, filterQuestionsByCategory(questions, category), choices.get(category));
-        }
+        allocateChoicesToCategories(questions, choices);
         return choices;
+    }
+
+    private void allocateChoicesToCategories(List<Question> questions, Map<Category, Map<Integer, List<Choice>>> choices) {
+        choices.entrySet().forEach(entry -> {
+            Category category = entry.getKey();
+            Map<Integer, List<Choice>> choicesByCategory = entry.getValue();
+            List<Question> questionsByCategory = filterQuestionsByCategory(category, questions);
+            questionsByCategory.forEach(question -> {
+                if (choicesByCategory.containsKey(question.getNumber())) {
+                    question.setChoices(choicesByCategory.get(question.getNumber()));
+                } else {
+                    question.setChoices(new ArrayList<>());
+                }
+            });
+        });
     }
 
     private List<Choice> choicesMapToList(Map<Category, Map<Integer, List<Choice>>> choices) {
-        List<Choice> allChoices = choices.values()
+        return choices.values()
                 .stream()
-                .map(integerListMap -> questionChoices(integerListMap))
-                .reduce((choices1, choices2) -> {
+                .map(integerListMap -> integerListMap.values()).reduce(new ArrayList<>(), (lists, lists2) -> {
+                    lists.addAll(lists2);
+                    return lists;
+                }).stream().reduce(new ArrayList<>(), (choices1, choices2) -> {
                     choices1.addAll(choices2);
                     return choices1;
-                }).get();
-        return allChoices;
+                });
     }
 
-    private Map<Category, Map<Integer, List<Choice>>> extractAllChoicesAsMap(List<Category> categories) {
+    private Map<Category, Map<Integer, List<Choice>>> extractAllChoices(List<Category> categories) {
         Map<Category, Map<Integer, List<Choice>>> choices = new LinkedHashMap<>();
         for (Category category : categories) {
-            Map<Integer, List<Choice>> choicesByCategory = extractChoices(category);
             if (!choices.containsKey(category)) {
                 choices.put(category, new LinkedHashMap<>());
             }
-            choices.get(category).putAll(choicesByCategory);
+            choices.get(category).putAll(choiceRepoImpl.extractChoices(category));
         }
         return choices;
-    }
-
-    private List<Question> filterQuestionsByCategory(List<Question> questions, Category category) {
-        return questions.stream().filter(question -> question.getCategory().equals(category))
-                .collect(Collectors.toList());
     }
 
     @Override

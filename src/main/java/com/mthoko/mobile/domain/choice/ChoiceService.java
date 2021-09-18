@@ -9,16 +9,14 @@ import java.util.Map;
 
 public interface ChoiceService extends BaseService<Choice> {
 
-	List<Choice> findByQuestionNumberAndCategory(int questionNum, String category);
+    List<Choice> findByQuestionNumberAndCategory(int questionNum, String category);
 
     Map<Category, Map<Integer, List<Choice>>> populateChoices(List<Question> questions);
 
     List<Choice> findByCategoryId(Long id);
 
-	List<Choice> findByCategoryName(String categoryName);
+    List<Choice> findByCategoryName(String categoryName);
 
-	Map<Integer, List<Choice>> saveChoices(Category category);
-
-	int countByCategoryName(String categoryName);
+    int countByCategoryName(String categoryName);
 
 }

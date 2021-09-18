@@ -13,7 +13,5 @@ public interface ChoiceSpanService extends BaseService<ChoiceSpan> {
 
     List<ChoiceSpan> findByCategoryId(Long id);
 
-    Map<Integer, List<ChoiceSpan>> saveChoiceSpans(Category category);
-
     Map<Category, Map<Integer, List<ChoiceSpan>>> populateChoiceSpans(List<Question> questions);
 }

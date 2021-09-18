@@ -15,3 +15,4 @@ public interface CategoryService extends BaseService<Category> {
 
     List<Category> populateCategories();
 }
+

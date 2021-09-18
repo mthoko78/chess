@@ -1,10 +1,15 @@
 package com.mthoko.mobile.domain.question.image;
 
-import java.io.File;
-import java.net.URL;
-import java.util.*;
+import com.mthoko.mobile.exception.ApplicationException;
+import com.mthoko.mobile.exception.ErrorCode;
 
-import static com.mthoko.mobile.common.util.MyConstants.IMAGES_TEST_QUESTIONS;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.mthoko.mobile.common.util.MyConstants.QUESTIONS_IMAGES_PATH;
 
 public class QuestionImageRepoImpl {
 
@@ -14,11 +19,10 @@ public class QuestionImageRepoImpl {
     }
 
     public Map<Integer, QuestionImage> getQuestionSignImages() {
-        String path = IMAGES_TEST_QUESTIONS;
         Set<Integer> large = largeImages();
         Set<Integer> unsquared = unsquaredImages();
         Map<Integer, QuestionImage> questionImages = new LinkedHashMap<>();
-        for (String filename : filesList(path)) {
+        for (String filename : filesList(QUESTIONS_IMAGES_PATH)) {
             if (filename.startsWith("q_")) {
                 String substring = filename.substring(2, filename.indexOf("."));
                 if (!substring.contains("_")) {
@@ -33,11 +37,10 @@ public class QuestionImageRepoImpl {
     }
 
     public Map<Integer, QuestionImage> getQuestionSketchImages() {
-        String path = IMAGES_TEST_QUESTIONS;
         Map<Integer, QuestionImage> questionImages = new LinkedHashMap<>();
         Integer[] largeDimensions = new Integer[]{450, 320};
         Integer[] extraLarge = new Integer[]{550, 400};
-        for (String filename : filesList(path)) {
+        for (String filename : filesList(QUESTIONS_IMAGES_PATH)) {
             if (filename.startsWith("sketch_")) {
                 String substring = filename.substring("sketch_".length(), filename.indexOf("."));
                 String[] tokens = substring.split("_");
@@ -62,20 +65,23 @@ public class QuestionImageRepoImpl {
     }
 
     public QuestionImage heavyControlsImage() {
-        String path = IMAGES_TEST_QUESTIONS + "/heavy_controls.png";
-        return new QuestionImage(path.substring(path.lastIndexOf('/') + 1), 550, 400);
+        return new QuestionImage("heavy_controls.png", 550, 400);
     }
 
     public QuestionImage lightControlsImage() {
-        String path = IMAGES_TEST_QUESTIONS + "/light_controls.png";
-        return new QuestionImage(path.substring(path.lastIndexOf('/') + 1), 500, 500);
+        return new QuestionImage("light_controls.png", 500, 500);
     }
 
-    public static String[] filesList(String dirName) {
-        URL resource = QuestionImage.class.getClassLoader().getResource(dirName);
-        File dir = new File(resource.getFile());
-        String[] filenames = dir.list();
-        return filenames;
+    public static List<String> filesList(String dirName) {
+
+        try {
+            return Files.list(Paths.get(dirName + "/"))
+                    .map(path1 -> path1.toFile().getName())
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ApplicationException(ErrorCode.DIRECTORY_DOES_NOT_EXIST);
+        }
     }
 
     public static Integer[] imageDimensions(int qNum, Set<Integer> unsquared, Set<Integer> large) {

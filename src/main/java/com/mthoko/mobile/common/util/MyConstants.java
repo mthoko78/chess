@@ -83,7 +83,6 @@ public interface MyConstants { // 'public static final' modifiers are prepended 
      * TEXTUAL CONSTANTS
      * */
 
-    String IMAGES_TEST_QUESTIONS = "./images/test/questions";
     String ROAD_SIGNS_MARKINGS = "ROAD SIGNS & MARKINGS";
     String RULES_OF_THE_ROAD = "RULES OF THE ROAD";
     String HEAVY_MOTOR_VEHICLE_CONTROLS = "HEAVY MOTOR VEHICLE CONTROLS";
