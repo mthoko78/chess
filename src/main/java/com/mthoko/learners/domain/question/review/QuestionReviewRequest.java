@@ -5,30 +5,70 @@ import com.mthoko.learners.domain.account.member.Member;
 import com.mthoko.learners.domain.question.Question;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 public class QuestionReviewRequest extends UniqueEntity {
 
-    public final String REVIEW_STATUS_OPEN = "open";
-    public final String REVIEW_STATUS_IN_PROGRESS = "closed";
-    public final String REVIEW_STATUS_CLOSED = "closed";
+    public static final String REVIEW_STATUS_OPEN = "open";
+    public static final String REVIEW_STATUS_PENDING_CLOSURE = "in progress";
+    public static final String REVIEW_STATUS_CLOSED = "closed";
 
     @OneToOne
     private Member member;
 
-    @OneToMany
-    private List<Question> questions;
+    @OneToOne
+    private Question question;
 
-    private Date lastReviewDate;
+    private Date lastReviewed;
 
     private String status;
 
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public Date getLastReviewed() {
+        return lastReviewed;
+    }
+
+    public void setLastReviewed(Date lastReviewed) {
+        this.lastReviewed = lastReviewed;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String getUniqueIdentifier() {
-        return null;
+        return member.getUniqueIdentifier();
+    }
+
+    @Override
+    public String toString() {
+        return "QuestionReviewRequest{" +
+                "member=" + member +
+                ", questions=" + question +
+                ", lastReviewed=" + lastReviewed +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

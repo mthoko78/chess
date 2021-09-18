@@ -216,9 +216,12 @@ public final class Question extends UniqueEntity {
 
     @Override
     public String toString() {
-        return "Question [number=" + number + ", type=" + type + ", text=" + text + ", category=" + category
-                + ", image=" + image + ", answer=" + answer + ", choices=" + choices + ", choiceSpans=" + choiceSpans
-                + ", matches=" + matches + ", id=" + getId() + "]";
+        return "Question{" +
+                "number=" + number +
+                ", text='" + text + '\'' +
+                ", choices=" + choices +
+                ", choiceSpans=" + choiceSpans +
+                '}';
     }
 
     public void addSelection(char letter) {

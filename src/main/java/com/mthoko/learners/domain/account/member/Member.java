@@ -54,8 +54,11 @@ public class Member extends UniqueEntity {
 
 	@Override
 	public String toString() {
-		return "Member [id=" + getId() + ", name=" + name + ", surname=" + surname + ", phone=" + phone + ", email="
-				+ email + "]";
+		return "Member{" +
+				"name='" + name + '\'' +
+				", surname='" + surname + '\'' +
+				", phone='" + phone + '\'' +
+				", email='" + email + '\'' +
+				'}';
 	}
-
 }

@@ -158,11 +158,13 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
 
     @Override
     public List<T> updateAll(List<T> entities) {
+        setDateBeforeUpdate(entities, new Date());
         return saveAll(entities);
     }
 
     @Override
     public <V extends UniqueEntity> V setDateBeforeUpdate(V entity, Date date) {
+        entity.setLastModified(date);
         return entity;
     }
 
