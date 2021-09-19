@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("questionReviewRequest")
 public class QuestionReviewRequestController extends BaseController<QuestionReviewRequest> {
@@ -30,6 +32,16 @@ public class QuestionReviewRequestController extends BaseController<QuestionRevi
     @DeleteMapping("approve")
     public QuestionReviewRequest approveReviewedRequest(@RequestBody QuestionReviewRequest reviewRequest) {
         return requestService.approveReviewedRequest(reviewRequest);
+    }
+
+    @PutMapping("mark-all-reviewed")
+    public List<QuestionReviewRequest> markAsReviewedRequests(@RequestBody List<QuestionReviewRequest> reviewRequests) {
+        return requestService.markAsReviewedRequest(reviewRequests);
+    }
+
+    @DeleteMapping("approve-all")
+    public List<QuestionReviewRequest> approveReviewedRequests(@RequestBody List<QuestionReviewRequest> reviewRequests) {
+        return requestService.approveReviewedRequest(reviewRequests);
     }
 
     @Override

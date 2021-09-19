@@ -2,6 +2,7 @@ package com.mthoko.learners.domain.question.review;
 
 import com.mthoko.learners.common.service.BaseService;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface QuestionReviewRequestService extends BaseService<QuestionReviewRequest> {
@@ -13,4 +14,8 @@ public interface QuestionReviewRequestService extends BaseService<QuestionReview
     QuestionReviewRequest handleNewReviewRequest(QuestionReviewRequest reviewRequest);
 
     QuestionReviewRequest approveReviewedRequest(QuestionReviewRequest reviewRequest);
+
+    List<QuestionReviewRequest> markAsReviewedRequest(List<QuestionReviewRequest> reviewRequests);
+
+    List<QuestionReviewRequest> approveReviewedRequest(List<QuestionReviewRequest> reviewRequests);
 }

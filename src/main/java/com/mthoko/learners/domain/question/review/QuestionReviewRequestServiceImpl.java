@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -79,6 +81,24 @@ public class QuestionReviewRequestServiceImpl extends BaseServiceImpl<QuestionRe
         delete(reviewRequest);
         sendNotifyReceiptOfRequest(reviewRequest, "Hi, %s. Please note the question '%s' has been reviewed and the query has been closed. ", reviewRequest.getQuestion().getText());
         return reviewRequest;
+    }
+
+    @Override
+    public List<QuestionReviewRequest> markAsReviewedRequest(List<QuestionReviewRequest> reviewRequests) {
+        List<QuestionReviewRequest> result = new ArrayList<>();
+        for (QuestionReviewRequest reviewRequest : reviewRequests) {
+            result.add(markAsReviewedRequest(reviewRequest));
+        }
+        return result;
+    }
+
+    @Override
+    public List<QuestionReviewRequest> approveReviewedRequest(List<QuestionReviewRequest> reviewRequests) {
+        List<QuestionReviewRequest> result = new ArrayList<>();
+        for (QuestionReviewRequest reviewRequest : reviewRequests) {
+            result.add(approveReviewedRequest(reviewRequest));
+        }
+        return result;
     }
 
     @Override
