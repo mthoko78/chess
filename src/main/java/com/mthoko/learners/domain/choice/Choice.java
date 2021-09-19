@@ -45,9 +45,6 @@ public final class Choice extends UniqueEntity {
 
     @Override
     public String toString() {
-        return "Choice{" +
-                "letter=" + letter +
-                ", text='" + text + '\'' +
-                '}';
+        return String.format("%s) %s", Character.toLowerCase(getLetter()), getText());
     }
 }

@@ -605,7 +605,7 @@ d) None of the above
 4. D
 5. A, D, C, B
 6. D, C, A, B
-7. C, A, D,B
+7. C, A, D, B
 8. C, D, A, B
 9. C, A, B
 10. C

@@ -185,4 +185,16 @@ public class EntityUtil {
         });
     }
 
+    public static String questionsToString(List<Question> questions) {
+        String questionsAsString = questions
+                .stream()
+                .map(question -> question.toString())
+                .collect(Collectors.joining("\n\n"));
+        String answersAsString = questions
+                .stream()
+                .map(question -> question.getNumber() + ". " + question.getAnswer().toString())
+                .collect(Collectors.joining("\n"));
+        return questionsAsString + "\n\n" + answersAsString;
+    }
+
 }

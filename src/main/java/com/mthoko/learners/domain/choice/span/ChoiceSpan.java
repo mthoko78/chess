@@ -42,9 +42,6 @@ public final class ChoiceSpan extends UniqueEntity {
 
     @Override
     public String toString() {
-        return "ChoiceSpan{" +
-                "romFigure='" + romFigure + '\'' +
-                ", text='" + text + '\'' +
-                '}';
+        return String.format("(%s) %s", getRomFigure(), getText());
     }
 }

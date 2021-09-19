@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Mthoko
@@ -216,12 +217,20 @@ public final class Question extends UniqueEntity {
 
     @Override
     public String toString() {
-        return "Question{" +
-                "number=" + number +
-                ", text='" + text + '\'' +
-                ", choices=" + choices +
-                ", choiceSpans=" + choiceSpans +
-                '}';
+        StringBuilder builder = new StringBuilder(String.format("%s. %s", number, text));
+        if (!choiceSpans.isEmpty()) {
+            builder.append("\n").append(choiceSpans
+                    .stream()
+                    .map(choiceSpan -> choiceSpan.toString())
+                    .collect(Collectors.joining("\n")));
+        }
+        if (!choices.isEmpty()) {
+            builder.append("\n").append(this.choices
+                    .stream()
+                    .map(choice -> choice.toString())
+                    .collect(Collectors.joining("\n")));
+        }
+        return builder.toString();
     }
 
     public void addSelection(char letter) {

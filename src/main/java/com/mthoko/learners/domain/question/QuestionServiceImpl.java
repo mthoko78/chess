@@ -13,16 +13,24 @@ import com.mthoko.learners.domain.question.image.QuestionImage;
 import com.mthoko.learners.domain.question.image.QuestionImageRepo;
 import com.mthoko.learners.domain.question.image.QuestionImageRepoImpl;
 import com.mthoko.learners.domain.question.imagematch.QuestionImageMatchRepo;
+import com.mthoko.learners.exception.ApplicationException;
+import com.mthoko.learners.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.mthoko.learners.common.util.EntityUtil.allocateAnswers;
+import static com.mthoko.learners.common.util.EntityUtil.questionsToString;
+import static com.mthoko.learners.common.util.MyConstants.DOCS;
 
 @Service
 public class QuestionServiceImpl extends BaseServiceImpl<Question> implements QuestionService {
@@ -207,8 +215,10 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
 
     @Override
     @Transactional
-    public Question update(Question entity) {
-        return questionRepo.save(saveDependencies(setDateBeforeUpdate(entity, new Date())));
+    public Question update(Question question) {
+        Question saved = questionRepo.save(saveDependencies(setDateBeforeUpdate(question, new Date())));
+        rewriteQuestionsToFile(question.getCategory());
+        return saved;
     }
 
     private Question saveDependencies(Question question) {
@@ -222,25 +232,29 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
 
     @Override
     public <V extends UniqueEntity> V setDateBeforeUpdate(V entity, Date date) {
-        Question question = (Question) entity;
-        super.setDateBeforeUpdate(question, date);
-        super.setDateBeforeUpdate(question.getAnswer(), date);
-        super.setDateBeforeUpdate(question.getMatches(), date);
-        super.setDateBeforeUpdate(extractAllImages(question), date);
-        super.setDateBeforeUpdate(question.getChoices(), date);
-        super.setDateBeforeUpdate(question.getChoiceSpans(), date);
+        super.setDateBeforeUpdate(entity, date);
+        if (entity instanceof Question) {
+            Question question = (Question) entity;
+            super.setDateBeforeUpdate(question.getAnswer(), date);
+            super.setDateBeforeUpdate(question.getMatches(), date);
+            super.setDateBeforeUpdate(extractAllImages(question), date);
+            super.setDateBeforeUpdate(question.getChoices(), date);
+            super.setDateBeforeUpdate(question.getChoiceSpans(), date);
+        }
         return entity;
     }
 
     @Override
     public <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
-        Question question = (Question) entity;
-        super.setDateBeforeSave(question, date);
-        super.setDateBeforeSave(question.getAnswer(), date);
-        super.setDateBeforeSave(question.getMatches(), date);
-        super.setDateBeforeSave(extractAllImages(question), date);
-        super.setDateBeforeSave(question.getChoices(), date);
-        super.setDateBeforeSave(question.getChoiceSpans(), date);
+        super.setDateBeforeSave(entity, date);
+        if (entity instanceof Question) {
+            Question question = (Question) entity;
+            super.setDateBeforeSave(question.getAnswer(), date);
+            super.setDateBeforeSave(question.getMatches(), date);
+            super.setDateBeforeSave(extractAllImages(question), date);
+            super.setDateBeforeSave(question.getChoices(), date);
+            super.setDateBeforeSave(question.getChoiceSpans(), date);
+        }
         return entity;
     }
 
@@ -276,4 +290,18 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     public List<Question> findByCategoryNumber(Integer categoryNumber) {
         return questionRepo.findByCategory_Number(categoryNumber);
     }
-};
+
+    @Override
+    public List<Question> rewriteQuestionsToFile(Category category) {
+        List<Question> questions = findByCategoryId(category.getId());
+        String questionsToString = questionsToString(questions);
+        Path path = Paths.get(DOCS + category.getName() + ".txt");
+        try {
+            Files.write(path, questionsToString.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ApplicationException(e, ErrorCode.FAILED_TO_WRITE_TEXT_TO_FILE);
+        }
+        return questions;
+    }
+}

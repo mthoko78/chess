@@ -33,4 +33,6 @@ public interface QuestionService extends BaseService<Question> {
     Question findByCategoryNumberAndQuestionNumber(Integer categoryNumber, Integer questionNumber);
 
     List<Question> findByCategoryNumber(Integer categoryNumber);
+
+    List<Question> rewriteQuestionsToFile(Category category);
 }

@@ -1,6 +1,7 @@
 package com.mthoko.learners.domain.question.review;
 
 import com.mthoko.learners.common.service.BaseServiceImpl;
+import com.mthoko.learners.common.util.MyConstants;
 import com.mthoko.learners.domain.question.QuestionService;
 import com.mthoko.learners.domain.sms.Sms;
 import com.mthoko.learners.domain.sms.SmsService;
@@ -55,28 +56,28 @@ public class QuestionReviewRequestServiceImpl extends BaseServiceImpl<QuestionRe
     @Transactional
     public QuestionReviewRequest markAsReviewedRequest(QuestionReviewRequest reviewRequest) {
         reviewRequest.setStatus(reviewRequest.REVIEW_STATUS_PENDING_CLOSURE);
+        MyConstants.print("BEFORE\n\t" + reviewRequest);
+        MyConstants.print("AFTER\n\t" + reviewRequest);
         QuestionReviewRequest updated = update(reviewRequest);
-        String body = String.format(
-                "Hi, %s. Please note the question '%s' has been reviewed. " +
-                        "Please login to approve.",
-                updated.getMember().getName(),
-                updated.getQuestion().getText()
-        );
-        sendSms(updated.getMember().getPhone(), body);
+        sendNotifyReceiptOfRequest(updated, "Hi, %s. Please note the question '%s' has been reviewed. ", "Please login to approve.");
         return updated;
+    }
+
+    private void sendNotifyReceiptOfRequest(QuestionReviewRequest updated, String s, String s2) {
+//        String body = String.format(
+//                s +
+//                        s2,
+//                updated.getMember().getName(),
+//                updated.getQuestion().getText()
+//        );
+//        sendSms(updated.getMember().getPhone(), body);
     }
 
     @Override
     public QuestionReviewRequest approveReviewedRequest(QuestionReviewRequest reviewRequest) {
         reviewRequest.setStatus(reviewRequest.REVIEW_STATUS_CLOSED);
         delete(reviewRequest);
-        String body = String.format(
-                "Hi, %s. Please note the question '%s' has been reviewed and the query has been closed. " +
-                        reviewRequest.getQuestion().getText(),
-                reviewRequest.getMember().getName(),
-                reviewRequest.getQuestion().getText()
-        );
-        sendSms(reviewRequest.getMember().getPhone(), body);
+        sendNotifyReceiptOfRequest(reviewRequest, "Hi, %s. Please note the question '%s' has been reviewed and the query has been closed. ", reviewRequest.getQuestion().getText());
         return reviewRequest;
     }
 
@@ -85,6 +86,7 @@ public class QuestionReviewRequestServiceImpl extends BaseServiceImpl<QuestionRe
     public QuestionReviewRequest update(QuestionReviewRequest reviewRequest) {
         questionService.update(reviewRequest.getQuestion());
         QuestionReviewRequest update = super.update(setDateBeforeUpdate(reviewRequest, reviewRequest.getQuestion().getLastModified()));
+        reviewRequest.setLastReviewed(update.getLastModified());
         repo.save(reviewRequest);
         return update;
     }
