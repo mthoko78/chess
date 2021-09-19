@@ -39,9 +39,14 @@ public class QuestionReviewRequestController extends BaseController<QuestionRevi
         return requestService.markAsReviewedRequest(reviewRequests);
     }
 
-    @DeleteMapping("approve-all")
+    @PutMapping("approve-all")
     public List<QuestionReviewRequest> approveReviewedRequests(@RequestBody List<QuestionReviewRequest> reviewRequests) {
         return requestService.approveReviewedRequest(reviewRequests);
+    }
+
+    @PostMapping("ids")
+    List<QuestionReviewRequest> findByIds(@RequestBody List<Long> ids) {
+        return requestService.findByIds(ids);
     }
 
     @Override

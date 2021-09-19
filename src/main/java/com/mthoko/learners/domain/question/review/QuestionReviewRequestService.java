@@ -18,4 +18,6 @@ public interface QuestionReviewRequestService extends BaseService<QuestionReview
     List<QuestionReviewRequest> markAsReviewedRequest(List<QuestionReviewRequest> reviewRequests);
 
     List<QuestionReviewRequest> approveReviewedRequest(List<QuestionReviewRequest> reviewRequests);
+
+    List<QuestionReviewRequest> findByIds(List<Long> ids);
 }

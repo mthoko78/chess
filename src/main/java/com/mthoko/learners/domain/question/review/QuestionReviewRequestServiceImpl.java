@@ -3,7 +3,6 @@ package com.mthoko.learners.domain.question.review;
 import com.mthoko.learners.common.service.BaseServiceImpl;
 import com.mthoko.learners.common.util.MyConstants;
 import com.mthoko.learners.domain.question.QuestionService;
-import com.mthoko.learners.domain.sms.Sms;
 import com.mthoko.learners.domain.sms.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -102,6 +101,11 @@ public class QuestionReviewRequestServiceImpl extends BaseServiceImpl<QuestionRe
     }
 
     @Override
+    public List<QuestionReviewRequest> findByIds(List<Long> ids) {
+        return repo.findAllById(ids);
+    }
+
+    @Override
     @Transactional
     public QuestionReviewRequest update(QuestionReviewRequest reviewRequest) {
         questionService.update(reviewRequest.getQuestion());
@@ -123,9 +127,9 @@ public class QuestionReviewRequestServiceImpl extends BaseServiceImpl<QuestionRe
     }
 
     private void sendSms(String phone, String body) {
-        Sms sms = new Sms();
-        sms.setRecipient(phone);
-        sms.setBody(body);
-        smsService.sendSms(sms);
+//        Sms sms = new Sms();
+//        sms.setRecipient(phone);
+//        sms.setBody(body);
+//        smsService.sendSms(sms);
     }
 }

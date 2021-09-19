@@ -75,7 +75,6 @@ b) Stop on this pointed island to have a break
 c) Not drive or stop on this pointed island
 d) Only overtake where you see this line
 
-
 14. What does this sign forbid:
 a) Stopping between the times indicated
 b) Driving here between 06:00 and 09:00
@@ -117,7 +116,6 @@ a) That there is a road bridge ahead
 b) To be on the lookout for other vehicles
 c) That if you are driving a motor car you must drive here
 d) All of the above
-
 
 21. What does this sign mean:
 a) Slow down in case other vehicles are coming
@@ -193,7 +191,7 @@ d) No cyclists may ride here
 
 33. When you see this sign ahead of you, you must:
 a) Slow down and keep moving if it is safe
-b) Try to get post as quickly as possible
+b) Try to get past as quickly as possible
 c) Get out of the vehicle and direct the traffic
 d) Be on the lookout for stop/go traffic controllers
 
@@ -245,7 +243,7 @@ b) No racing is allowed in this area
 c) They are not allowed here
 d) None of the above
 
-42. This sign prohibits slopping for:
+42. This sign prohibits stopping for:
 a) Motorcycles
 b) Light motor vehicles
 c) Trucks
@@ -345,7 +343,7 @@ d) None of the above
 a) A gravel road starting ahead
 b) Rough sea washing across the road
 c) The possibility of loose boulders head
-d) On uneven roadway ahead
+d) An uneven roadway ahead
 
 59. This sign prohibits you from:
 a) Stopping where you see this sign
