@@ -1,8 +1,7 @@
 package com.mthoko.learners.domain.question.review;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
 import com.mthoko.learners.common.service.BaseServiceImpl;
-import com.mthoko.learners.domain.question.QuestionRepo;
+import com.mthoko.learners.domain.question.QuestionService;
 import com.mthoko.learners.domain.sms.Sms;
 import com.mthoko.learners.domain.sms.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -19,13 +17,15 @@ public class QuestionReviewRequestServiceImpl extends BaseServiceImpl<QuestionRe
     private final QuestionReviewRequestRepo repo;
 
     private final SmsService smsService;
-    private final QuestionRepo questionRepo;
+
+    private final QuestionService questionService;
 
     @Autowired
-    public QuestionReviewRequestServiceImpl(QuestionReviewRequestRepo repo, SmsService smsService, QuestionRepo questionRepo) {
+    public QuestionReviewRequestServiceImpl(QuestionReviewRequestRepo repo, SmsService smsService
+            , QuestionService questionService) {
         this.repo = repo;
         this.smsService = smsService;
-        this.questionRepo = questionRepo;
+        this.questionService = questionService;
     }
 
     @Override
@@ -83,15 +83,10 @@ public class QuestionReviewRequestServiceImpl extends BaseServiceImpl<QuestionRe
     @Override
     @Transactional
     public QuestionReviewRequest update(QuestionReviewRequest reviewRequest) {
-        QuestionReviewRequest update = super.update(reviewRequest);
-        questionRepo.save(reviewRequest.getQuestion());
+        questionService.update(reviewRequest.getQuestion());
+        QuestionReviewRequest update = super.update(setDateBeforeUpdate(reviewRequest, reviewRequest.getQuestion().getLastModified()));
+        repo.save(reviewRequest);
         return update;
-    }
-
-    @Override
-    public <V extends UniqueEntity> V setDateBeforeUpdate(V entity, Date date) {
-        super.setDateBeforeUpdate(((QuestionReviewRequest) entity).getQuestion(), date);
-        return super.setDateBeforeUpdate(entity, date);
     }
 
     @Override
@@ -102,8 +97,7 @@ public class QuestionReviewRequestServiceImpl extends BaseServiceImpl<QuestionRe
     @Override
     @Transactional
     public QuestionReviewRequest save(QuestionReviewRequest reviewRequest) {
-        QuestionReviewRequest saved = repo.save(reviewRequest);
-        return saved;
+        return repo.save(reviewRequest);
     }
 
     private void sendSms(String phone, String body) {

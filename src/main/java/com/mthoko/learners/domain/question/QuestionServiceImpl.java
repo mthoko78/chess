@@ -1,18 +1,25 @@
 package com.mthoko.learners.domain.question;
 
+import com.mthoko.learners.common.entity.UniqueEntity;
 import com.mthoko.learners.common.service.BaseServiceImpl;
 import com.mthoko.learners.domain.category.Category;
 import com.mthoko.learners.domain.category.CategoryRepo;
 import com.mthoko.learners.domain.choice.Choice;
+import com.mthoko.learners.domain.choice.ChoiceRepo;
+import com.mthoko.learners.domain.choice.span.ChoiceSpanRepo;
 import com.mthoko.learners.domain.question.answer.Answer;
 import com.mthoko.learners.domain.question.answer.AnswerRepo;
 import com.mthoko.learners.domain.question.image.QuestionImage;
+import com.mthoko.learners.domain.question.image.QuestionImageRepo;
 import com.mthoko.learners.domain.question.image.QuestionImageRepoImpl;
+import com.mthoko.learners.domain.question.imagematch.QuestionImageMatchRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.mthoko.learners.common.util.EntityUtil.allocateAnswers;
@@ -26,16 +33,28 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
 
     private final CategoryRepo categoryRepo;
 
+    private final QuestionImageRepo questionImageRepo;
+
     private final QuestionRepoImpl questionRepoImpl = new QuestionRepoImpl();
 
-    private final QuestionImageRepoImpl questionImageRepo = new QuestionImageRepoImpl();
+    private final QuestionImageRepoImpl questionImageRepoImpl = new QuestionImageRepoImpl();
+
+    private final ChoiceRepo choiceRepo;
+
+    private final ChoiceSpanRepo choiceSpanRepo;
+
+    private final QuestionImageMatchRepo questionImageMatchRepo;
 
     @Autowired
     public QuestionServiceImpl(QuestionRepo questionRepo,
-                               AnswerRepo answerRepo, CategoryRepo categoryRepo) {
+                               AnswerRepo answerRepo, CategoryRepo categoryRepo, QuestionImageRepo questionImageRepo, ChoiceRepo choiceRepo, ChoiceSpanRepo choiceSpanRepo, QuestionImageMatchRepo questionImageMatchRepo) {
         this.questionRepo = questionRepo;
         this.answerRepo = answerRepo;
         this.categoryRepo = categoryRepo;
+        this.questionImageRepo = questionImageRepo;
+        this.choiceRepo = choiceRepo;
+        this.choiceSpanRepo = choiceSpanRepo;
+        this.questionImageMatchRepo = questionImageMatchRepo;
     }
 
     @Override
@@ -128,7 +147,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     }
 
     public Map<Integer, QuestionImage> getQuestionImages() {
-        return questionImageRepo.getQuestionSignImages();
+        return questionImageRepoImpl.getQuestionSignImages();
     }
 
     @Override
@@ -179,6 +198,61 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     @Override
     public List<Question> populateQuestions(List<Category> categories) {
         return saveAll(extractAllQuestions(categories));
+    }
+
+    @Override
+    public Question save(Question question) {
+        return questionRepo.save(saveDependencies(setDateBeforeSave(question, new Date())));
+    }
+
+    @Override
+    @Transactional
+    public Question update(Question entity) {
+        return questionRepo.save(saveDependencies(setDateBeforeUpdate(entity, new Date())));
+    }
+
+    private Question saveDependencies(Question question) {
+        choiceRepo.saveAll(question.getChoices());
+        choiceSpanRepo.saveAll(question.getChoiceSpans());
+        answerRepo.save(question.getAnswer());
+        questionImageRepo.saveAll(extractAllImages(question));
+        questionImageMatchRepo.saveAll(question.getMatches());
+        return question;
+    }
+
+    @Override
+    public <V extends UniqueEntity> V setDateBeforeUpdate(V entity, Date date) {
+        Question question = (Question) entity;
+        super.setDateBeforeUpdate(question, date);
+        super.setDateBeforeUpdate(question.getAnswer(), date);
+        super.setDateBeforeUpdate(question.getMatches(), date);
+        super.setDateBeforeUpdate(extractAllImages(question), date);
+        super.setDateBeforeUpdate(question.getChoices(), date);
+        super.setDateBeforeUpdate(question.getChoiceSpans(), date);
+        return entity;
+    }
+
+    @Override
+    public <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
+        Question question = (Question) entity;
+        super.setDateBeforeSave(question, date);
+        super.setDateBeforeSave(question.getAnswer(), date);
+        super.setDateBeforeSave(question.getMatches(), date);
+        super.setDateBeforeSave(extractAllImages(question), date);
+        super.setDateBeforeSave(question.getChoices(), date);
+        super.setDateBeforeSave(question.getChoiceSpans(), date);
+        return entity;
+    }
+
+    private List<QuestionImage> extractAllImages(Question updated) {
+        List<QuestionImage> allImages = updated.getMatches()
+                .stream()
+                .map(questionImageMatch -> questionImageMatch.getQuestionImage())
+                .collect(Collectors.toList());
+        if (updated.getImage() != null) {
+            allImages.add(updated.getImage());
+        }
+        return allImages;
     }
 
     @Override
