@@ -13,8 +13,10 @@ import com.mthoko.learners.domain.question.answer.AnswerRepo;
 import com.mthoko.learners.domain.question.image.QuestionImage;
 import com.mthoko.learners.domain.question.image.QuestionImageRepo;
 import com.mthoko.learners.domain.question.image.QuestionImageRepoImpl;
+import com.mthoko.learners.domain.question.image.QuestionImageServiceImpl;
 import com.mthoko.learners.domain.question.imagematch.QuestionImageMatch;
 import com.mthoko.learners.domain.question.imagematch.QuestionImageMatchRepo;
+import com.mthoko.learners.domain.question.imagematch.QuestionImageMatchServiceImpl;
 import com.mthoko.learners.exception.ApplicationException;
 import com.mthoko.learners.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +30,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.mthoko.learners.common.util.EntityUtil.allocateAnswers;
-import static com.mthoko.learners.common.util.EntityUtil.questionsToString;
+import static com.mthoko.learners.common.util.EntityUtil.*;
 import static com.mthoko.learners.common.util.MyConstants.DOCS;
 
 @Service
@@ -46,8 +46,6 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     private final QuestionImageRepo questionImageRepo;
 
     private final QuestionRepoImpl questionRepoImpl = new QuestionRepoImpl();
-
-    private final QuestionImageRepoImpl questionImageRepoImpl = new QuestionImageRepoImpl();
 
     private final ChoiceRepo choiceRepo;
 
@@ -116,14 +114,6 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         return result;
     }
 
-    public static boolean hasDuplicates(HashMap<Integer, Question> questions) {
-        LinkedHashSet<Question> set = new LinkedHashSet<>();
-        for (Question q : questions.values()) {
-            set.add(q);
-        }
-        return set.size() != questions.size();
-    }
-
     public static ArrayList<Integer> getRandomList(int total) {
         ArrayList<Integer> list = new ArrayList<Integer>();
         for (int i = 1; i <= total; i++) {
@@ -138,41 +128,22 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         return newList;
     }
 
-    public Optional<Category> findCategoryByName(String string) {
-        return categoryRepo.findByName(string);
-    }
-
-    public Optional<Category> findCategoryById(long categoryId) {
-        return categoryRepo.findById(categoryId);
-    }
-
-    public String getAnswersAsText(Question q) {
-        final StringBuilder result = new StringBuilder();
-        Stream<Choice> filter = q.getChoices().stream()
-                .filter((choice) -> q.getAnswer().getSelection().contains(choice.getLetter()));
-        filter.forEach((choice) -> {
-            result.append("\n" + choice.getLetter() + ")" + choice.getText());
-        });
-        return result.toString();
-    }
-
-    public Map<Integer, QuestionImage> getQuestionImages() {
-        return questionImageRepoImpl.getQuestionSignImages();
-    }
-
-    @Override
-    public List<Question> populateQuestionTable(Category category) {
-        List<Question> existingQuestions = findByCategoryId(category.getId());
-        if (!existingQuestions.isEmpty()) {
-            return existingQuestions;
-        }
-        return saveAll(extractQuestions(category));
-    }
-
     private List<Question> extractQuestions(Category category) {
-        Collection<Question> questions = questionRepoImpl.extractQuestions(category).values();
-        questions.stream().forEach(q -> q.setCategory(category));
-        return new ArrayList<>(questions);
+        Map<Integer, Question> questionMap = questionRepoImpl.extractQuestions(category);
+        ArrayList<Question> questions = new ArrayList<>(questionMap.values());
+        questionMap.values().stream().forEach(q -> q.setCategory(category));
+        QuestionImageServiceImpl questionImageService = new QuestionImageServiceImpl(null, new QuestionImageRepoImpl());
+        QuestionImageMatchServiceImpl matchService = new QuestionImageMatchServiceImpl(null, null, null);
+        Map<Integer, QuestionImage> questionImageMap = questionImageService.extractQuestionImages(category, questions);
+        Map<Integer, List<QuestionImageMatch>> matches = matchService.extractImageMatches(category);
+        questionMap.values()
+                .stream()
+                .forEach(q -> {
+                    q.setImage(questionImageMap.get(q.getNumber()));
+                    List<QuestionImageMatch> matchesForQuestion = matches.get(q.getNumber());
+                    q.setMatches(matchesForQuestion != null ? matchesForQuestion : new ArrayList<>());
+                });
+        return questions;
     }
 
     @Override
@@ -206,18 +177,25 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     }
 
     @Override
-    public List<Question> populateQuestions(List<Category> categories) {
-        return saveAll(extractAllQuestions(categories));
-    }
-
-    @Override
     public Question save(Question question) {
         return questionRepo.save(saveDependencies(setDateBeforeSave(question, new Date())));
     }
 
     @Override
+    @Transactional
     public List<Question> saveAll(List<Question> questions) {
-        setDateBeforeSave(questions, new Date());
+        List<Category> categories = distinctCategories(questions);
+        categoryRepo.saveAll(categories);
+        questions.forEach(question -> {
+            Category savedCategory = categories
+                    .stream()
+                    .filter(category -> category.equals(question.getCategory()))
+                    .findFirst()
+                    .get();
+            question.setCategory(savedCategory);
+        });
+        Date date = new Date();
+        setDateBeforeSave(questions, date);
         saveDependencies(questions);
         return questionRepo.saveAll(questions);
     }
@@ -235,15 +213,38 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     public List<Question> updateAll(List<Question> questions) {
         setDateBeforeUpdate(questions, new Date());
         saveDependencies(questions);
-        return questionRepo.saveAll(questions);
+        List<Question> saved = questionRepo.saveAll(questions);
+        distinctCategories(questions).forEach(category -> {
+            rewriteQuestionsToFile(category);
+        });
+        return saved;
     }
 
     private void saveDependencies(List<Question> questions) {
         choiceRepo.saveAll(extractAllChoices(questions));
         choiceSpanRepo.saveAll(extractAllChoiceSpans(questions));
         answerRepo.saveAll(extractAllAnswers(questions));
-        questionImageRepo.saveAll(extractAllImages(questions));
-        questionImageMatchRepo.saveAll(extractAllMatches(questions));
+        List<QuestionImage> images = extractAllImages(questions);
+        List<QuestionImageMatch> matches = extractAllMatches(questions);
+        images.addAll(matches
+                .stream()
+                .map(questionImageMatch -> questionImageMatch.getQuestionImage())
+                .collect(Collectors.toList()));
+        List<QuestionImage> uniqueImages = images
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
+        questionImageRepo.saveAll(uniqueImages);
+        questions
+                .stream()
+                .filter(question -> question.getImage() != null && question.getImage().getId() == null)
+                .forEach(question -> {
+                    QuestionImage image = uniqueImages
+                            .stream()
+                            .filter(questionImage -> question.getImage().equals(questionImage)).findFirst().get();
+                    question.setImage(image);
+                });
+        questionImageMatchRepo.saveAll(matches);
     }
 
     private List<QuestionImageMatch> extractAllMatches(List<Question> questions) {
@@ -259,11 +260,9 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     private List<QuestionImage> extractAllImages(List<Question> questions) {
         return questions
                 .stream()
-                .map(question -> extractAllImages(question))
-                .reduce(new ArrayList<>(), (questionImages, questionImages2) -> {
-                    questionImages.addAll(questionImages2);
-                    return questionImages;
-                });
+                .map(question -> question.getImage())
+                .filter(questionImage -> questionImage != null)
+                .collect(Collectors.toList());
     }
 
     private List<Answer> extractAllAnswers(List<Question> questions) {
@@ -323,7 +322,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
             Question question = (Question) entity;
             super.setDateBeforeSave(question.getAnswer(), date);
             super.setDateBeforeSave(question.getMatches(), date);
-            super.setDateBeforeSave(extractAllImages(question), date);
+            super.setDateBeforeSave(question.getImage(), date);
             super.setDateBeforeSave(question.getChoices(), date);
             super.setDateBeforeSave(question.getChoiceSpans(), date);
         }
@@ -340,14 +339,13 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
 
     @Override
     public List<Question> extractAllQuestions(List<Category> categories) {
-        List<Question> allQuestions = categories
+        return categories
                 .stream()
                 .map(category -> extractQuestions(category))
-                .reduce((questions, questions2) -> {
+                .reduce(new ArrayList<>(), (questions, questions2) -> {
                     questions.addAll(questions2);
                     return questions;
-                }).get();
-        return allQuestions;
+                });
     }
 
     @Override
@@ -363,6 +361,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     @Override
     public List<Question> rewriteQuestionsToFile(Category category) {
         List<Question> questions = findByCategoryId(category.getId());
+        questions.sort((question, question2) -> question.getNumber() - question2.getNumber());
         String questionsToString = questionsToString(questions);
         Path path = Paths.get(DOCS + category.getName() + ".txt");
         try {

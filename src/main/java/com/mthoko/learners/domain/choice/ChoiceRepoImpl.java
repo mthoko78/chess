@@ -33,7 +33,8 @@ public class ChoiceRepoImpl {
             } else if (Character.isLetter(line.charAt(0))) {
                 char letter = Character.toUpperCase(line.charAt(0));
                 String val = line.substring(line.indexOf(")") + 1).trim();
-                choices.get(questionNum).add(new Choice(letter, val));
+                Choice choice = new Choice(letter, val);
+                choices.get(questionNum).add(choice);
             }
         }
         return choices;

@@ -161,9 +161,7 @@ public class EntityUtil {
                 }
                 questionNum = num;
                 if (processAnswers) {
-                    String text = line.substring(line.indexOf(".") + 1).trim();
-                    final Answer answer = new Answer(new ArrayList<>());
-                    Arrays.asList(text.split(", ")).forEach((choice) -> answer.getSelection().add(choice.charAt(0)));
+                    final Answer answer = extractAnswer(line);
                     answers.put(questionNum, answer);
                 }
 
@@ -171,6 +169,13 @@ public class EntityUtil {
         }
 
         return answers;
+    }
+
+    public static Answer extractAnswer(String line) {
+        String text = line.substring(line.indexOf(".") + 1).trim();
+        final Answer answer = new Answer(new ArrayList<>());
+        Arrays.asList(text.split(", ")).forEach((choice) -> answer.getSelection().add(choice.charAt(0)));
+        return answer;
     }
 
     public static void allocateImagesToQuestions(Category category, List<Question> questions,

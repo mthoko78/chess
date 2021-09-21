@@ -10,8 +10,6 @@ public interface QuestionService extends BaseService<Question> {
 
     Question findByQuestionNumberAndCategory(int questionNum, String category);
 
-    List<Question> populateQuestionTable(Category category);
-
     List<Question> findByCategoryId(Long id);
 
     List<Answer> findAnswersByCategoryId(Long id);
@@ -25,8 +23,6 @@ public interface QuestionService extends BaseService<Question> {
     long countByCategoryId(Long categoryId);
 
     long countByCategoryName(String categoryName);
-
-    List<Question> populateQuestions(List<Category> categories);
 
     List<Question> extractAllQuestions(List<Category> categories);
 

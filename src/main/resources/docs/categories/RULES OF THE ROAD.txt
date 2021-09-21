@@ -1,7 +1,7 @@
 1. When turning right or left at an intersection:
 (i) And the little green man of the pedestrian crossing is still on, you may go if there are no pedestrians crossing
 (ii) And pedestrians waiting to cross have a red man, you must still stop for them
-(iii) Pedestrians crossing the intersection after the little man hos turned red, still have right of way
+(iii) Pedestrians crossing the intersection after the little man has turned red, still have right of way
 (iv) Motor vehicles have right of way over pedestrians where there are no crossing lines
 a) (i), (ii) And (iii)
 b) (ii) And (iv)
@@ -150,7 +150,7 @@ b) (i), (ii) And (iii)
 c) (ii), (iii) And (iv)
 d) (iii) And (iv)
 
-19. You may not obtain a learner’s license if:
+19. You may not obtain a learner's license if:
 (i) you are older than 70 years, or younger than I8 years
 (ii) you were declared unfit to obtain a license for a certain period and that period is not over
 (iii) you suffer from epilepsy but the fits are controlled by medication
@@ -160,7 +160,7 @@ b) (ii)
 c) (iii) And (iv)
 d) (i) And (iv)
 
-20. You are also not allowed to get a learner’s license if you:
+20. You are also not allowed to get a learner's license if you:
 (i) had a license suspended temporarily and that suspension is not over
 (ii) have only one arm or one leg
 (iii) Do not have the use of your legs
@@ -194,7 +194,7 @@ d) use hand signals on a freeway in on emergency
 
 24. Passengers may:
 (i) use hand signals out of the window
-(ii) ride in the vehicle if the driver only has a learner’s license
+(ii) ride in the vehicle if the driver only has a learner's license
 (iii) Change the channel of the radio for the driver
 (iv) leave the vehicle before it has stopped
 a) (i), (iii) And (iv)

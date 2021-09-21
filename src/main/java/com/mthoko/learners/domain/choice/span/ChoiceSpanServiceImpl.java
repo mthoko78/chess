@@ -75,10 +75,10 @@ public class ChoiceSpanServiceImpl extends BaseServiceImpl<ChoiceSpan> implement
                             target.addAll(elements);
                             return target;
                         }))
-                .reduce((choiceSpans1, choiceSpans2) -> {
+                .reduce(new ArrayList<>(),(choiceSpans1, choiceSpans2) -> {
                     choiceSpans1.addAll(choiceSpans2);
                     return choiceSpans1;
-                }).get();
+                });
         return reduce;
     }
 

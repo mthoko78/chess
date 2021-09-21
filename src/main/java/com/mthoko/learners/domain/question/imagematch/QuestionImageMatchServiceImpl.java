@@ -46,16 +46,29 @@ public class QuestionImageMatchServiceImpl extends BaseServiceImpl<QuestionImage
     public Map<Category, Map<Integer, List<QuestionImageMatch>>> extractQuestionImageMatches(List<Question> questions) {
         Map<Category, Map<Integer, List<QuestionImageMatch>>> categoryMapMap = new HashMap<>();
         for (Category category : EntityUtil.distinctCategories(questions)) {
+            if (!categoryMapMap.containsKey(category)) {
+                categoryMapMap.put(category, new HashMap<>());
+            }
             switch (category.getName()) {
                 case ROAD_SIGNS_MARKINGS:
-                    if (!categoryMapMap.containsKey(category)) {
-                        categoryMapMap.put(category, new HashMap<>());
-                    }
                     Map<Integer, List<QuestionImageMatch>> choicesMap = imageMatchRepoImpl.getQuestionMatches();
                     categoryMapMap.get(category).putAll(choicesMap);
+                    break;
+                default:
+                    categoryMapMap.get(category).putAll(new HashMap<>());
             }
         }
         return categoryMapMap;
+    }
+
+    @Override
+    public Map<Integer, List<QuestionImageMatch>> extractImageMatches(Category category) {
+        switch (category.getName()) {
+            case ROAD_SIGNS_MARKINGS:
+                return imageMatchRepoImpl.getQuestionMatches();
+            default:
+                return new HashMap<>();
+        }
     }
 
     @Override
@@ -106,10 +119,10 @@ public class QuestionImageMatchServiceImpl extends BaseServiceImpl<QuestionImage
                         .stream()
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList()))
-                .reduce((questionImageMatches, questionImageMatches2) -> {
+                .reduce(new ArrayList<>(), (questionImageMatches, questionImageMatches2) -> {
                     questionImageMatches.addAll(questionImageMatches2);
                     return questionImageMatches;
-                }).get();
+                });
         return allImageMatches;
     }
 

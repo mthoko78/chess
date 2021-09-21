@@ -11,6 +11,8 @@ public interface QuestionImageMatchService extends BaseService<QuestionImageMatc
 
     Map<Category, Map<Integer, List<QuestionImageMatch>>> extractQuestionImageMatches(List<Question> questions);
 
+    Map<Integer, List<QuestionImageMatch>> extractImageMatches(Category category);
+
     void allocateMatchesToQuestions(List<Question> questions,
                                     Map<Category, Map<Integer, List<QuestionImageMatch>>> choicesMap);
 

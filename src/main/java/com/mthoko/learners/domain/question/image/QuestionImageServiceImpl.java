@@ -24,7 +24,7 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
 
     private final QuestionImageRepo imageRepo;
 
-    private QuestionImageRepoImpl imageRepoImpl = new QuestionImageRepoImpl();
+    private final QuestionImageRepoImpl imageRepoImpl;
 
     @Autowired
     public QuestionImageServiceImpl(QuestionImageRepo imageRepo, QuestionImageRepoImpl imageRepoImpl) {
@@ -52,7 +52,8 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
         return integerQuestionImageMap;
     }
 
-    private Map<Integer, QuestionImage> extractQuestionImages(Category category, List<Question> questions) {
+    @Override
+    public Map<Integer, QuestionImage> extractQuestionImages(Category category, List<Question> questions) {
         String categoryName = category.getName();
         questions = filterQuestionsByCategory(category, questions);
         Map<Integer, QuestionImage> images = new HashMap<>();
@@ -130,7 +131,8 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
         return images;
     }
 
-    private Map<Category, Map<Integer, QuestionImage>> extractAllImages(List<Question> questions, List<Category> categories) {
+    @Override
+    public Map<Category, Map<Integer, QuestionImage>> extractAllImages(List<Question> questions, List<Category> categories) {
         Map<Category, Map<Integer, QuestionImage>> images = new HashMap<>();
         for (Category category : categories) {
             if (!images.containsKey(category)) {
@@ -146,10 +148,10 @@ public class QuestionImageServiceImpl extends BaseServiceImpl<QuestionImage> imp
                 .stream()
                 .map(integerQuestionImageMap -> new ArrayList(integerQuestionImageMap.values()))
                 .collect(Collectors.toList())
-                .stream().reduce((questionImages, questionImages2) -> {
+                .stream().reduce(new ArrayList(), (questionImages, questionImages2) -> {
                     questionImages.addAll(questionImages2);
                     return questionImages;
-                }).get();
+                });
         return allQuestionImages;
     }
 }

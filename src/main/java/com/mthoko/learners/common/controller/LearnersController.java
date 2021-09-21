@@ -1,7 +1,6 @@
 package com.mthoko.learners.common.controller;
 
 import com.mthoko.learners.common.service.BaseService;
-import com.mthoko.learners.domain.category.Category;
 import com.mthoko.learners.domain.category.CategoryService;
 import com.mthoko.learners.domain.choice.ChoiceService;
 import com.mthoko.learners.domain.choice.span.ChoiceSpanService;
@@ -68,26 +67,12 @@ public class LearnersController extends BaseController<Question> {
 
     @GetMapping("load")
     public List<Question> load() {
-        List<Category> categories = categoryService.getCategories();
-        List<Question> questions = questionService.extractAllQuestions(categories);
-        categoryService.saveAll(categories);
-        choiceService.populateChoices(questions);
-        choiceSpanService.populateChoiceSpans(questions);
-        answerService.populateAnswers(questions);
-        imageService.populateQuestionImages(questions);
-        imageMatchService.populateQuestionImageMatches(questions);
-        questionService.saveAll(questions);
-        return questions;
+        return questionService.saveAll(questionService.extractAllQuestions(categoryService.getCategories()));
     }
 
     @Override
     public BaseService<Question> getService() {
         return questionService;
-    }
-
-    @GetMapping(value = "image/{id}", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] getImage(@PathVariable("id") Long imageId) throws IOException {
-        return imageService.getImageAsBytes(imageId);
     }
 
 }

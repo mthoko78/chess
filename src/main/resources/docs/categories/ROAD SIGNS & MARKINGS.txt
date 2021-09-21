@@ -64,7 +64,7 @@ c) Hoot back when someone hoots at you
 d) All of the above
 
 12. When you see these signs you must:
-a) Check if your mileage reads 300, 200, I00, 0
+a) Check if your mileage reads 300, 200, 100, 0
 b) Stop for a police roadblock in 300 m
 c) Begin slowing down if turning off a freeway
 d) Check your 3-second following distance
@@ -102,7 +102,7 @@ d) There is a one-way in that direction
 18. This sign shows you that:
 a) There is a deport off to the left of this road
 b) The road ends at this area to the left
-c) 500 m ahead there is on arrestor bed to the left if your brakes fail
+c) 500 m ahead there is an arrestor bed to the left if your brakes fail
 d) There is a race track 500 m from the side of the road
 
 19. This sign tells you that:
@@ -155,7 +155,7 @@ d) None of the above
 
 27. This sign tells you that:
 a) Vehicles weighing less than this are not allowed
-b) Vehicles weighing more than his are not allowed post this sign
+b) Vehicles weighing more than his are not allowed past this sign
 c) Two trucks are not allowed at the same time
 d) None of the above
 
@@ -357,7 +357,7 @@ b) You are approaching a T-junction
 c) You are approaching a two-way stop
 d) None of the above
 
-61. This sign instructs you that in the right-hand Ione you must:
+61. This sign instructs you that in the right-hand lane you must:
 a) Go slower than 60 km/h for 7 km
 b) Only drive for 7 km, then the lane ends
 c) Drive at a minimum of 60 km/h for 7 km
@@ -388,7 +388,7 @@ c) Are children ahead
 d) Is a school ahead
 
 66. This sign warns you of:
-a) A sloping road lo the right
+a) A sloping road to the right
 b) A sharp curve to the right
 c) A hairpin bend ahead to the right
 d) None of the above
@@ -406,8 +406,8 @@ c) Only vehicles of this height cannot enter
 d) None of the above
 
 69. This sign indicates:
-a) Compulsory stopping for pedestrians between these limes
-b) That pedestrians are not allowed in this area between these limes
+a) Compulsory stopping for pedestrians between these times
+b) That pedestrians are not allowed in this area between these times
 c) No walking between these times, only jogging
 d) A pedestrian crossing between these times
 
@@ -527,8 +527,8 @@ d) None of the above
 
 89. This sign indicates to the driver that:
 a) There is a turn off to the left
-b) That there is on additional lane in the road ahead
-c) There is a parking area lo the left
+b) That there is an additional lane in the road ahead
+c) There is a parking area to the left
 d) None of the above
 
 90. This sign informs the driver that:
@@ -588,7 +588,7 @@ d) None of the above
 99. What is the meaning of this sign:
 a) It warns of a dead end to the right
 b) It warns of a dead end to the left
-c) It shows on entrance to a shopping centre
+c) It shows an entrance to a shopping centre
 d) None of the above
 
 100. What is the meaning of this selective regulatory sign:
