@@ -57,8 +57,6 @@ public class QuestionReviewRequestServiceImpl extends BaseServiceImpl<QuestionRe
     @Transactional
     public QuestionReviewRequest markAsReviewedRequest(QuestionReviewRequest reviewRequest) {
         reviewRequest.setStatus(reviewRequest.REVIEW_STATUS_PENDING_CLOSURE);
-        MyConstants.print("BEFORE\n\t" + reviewRequest);
-        MyConstants.print("AFTER\n\t" + reviewRequest);
         QuestionReviewRequest updated = update(reviewRequest);
         sendNotifyReceiptOfRequest(updated, "Hi, %s. Please note the question '%s' has been reviewed. ", "Please login to approve.");
         return updated;

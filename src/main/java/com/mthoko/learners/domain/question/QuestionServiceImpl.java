@@ -6,12 +6,14 @@ import com.mthoko.learners.domain.category.Category;
 import com.mthoko.learners.domain.category.CategoryRepo;
 import com.mthoko.learners.domain.choice.Choice;
 import com.mthoko.learners.domain.choice.ChoiceRepo;
+import com.mthoko.learners.domain.choice.span.ChoiceSpan;
 import com.mthoko.learners.domain.choice.span.ChoiceSpanRepo;
 import com.mthoko.learners.domain.question.answer.Answer;
 import com.mthoko.learners.domain.question.answer.AnswerRepo;
 import com.mthoko.learners.domain.question.image.QuestionImage;
 import com.mthoko.learners.domain.question.image.QuestionImageRepo;
 import com.mthoko.learners.domain.question.image.QuestionImageRepoImpl;
+import com.mthoko.learners.domain.question.imagematch.QuestionImageMatch;
 import com.mthoko.learners.domain.question.imagematch.QuestionImageMatchRepo;
 import com.mthoko.learners.exception.ApplicationException;
 import com.mthoko.learners.exception.ErrorCode;
@@ -214,11 +216,81 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     }
 
     @Override
+    public List<Question> saveAll(List<Question> questions) {
+        setDateBeforeSave(questions, new Date());
+        saveDependencies(questions);
+        return questionRepo.saveAll(questions);
+    }
+
+    @Override
     @Transactional
     public Question update(Question question) {
         Question saved = questionRepo.save(saveDependencies(setDateBeforeUpdate(question, new Date())));
         rewriteQuestionsToFile(question.getCategory());
         return saved;
+    }
+
+    @Override
+    @Transactional
+    public List<Question> updateAll(List<Question> questions) {
+        setDateBeforeUpdate(questions, new Date());
+        saveDependencies(questions);
+        return questionRepo.saveAll(questions);
+    }
+
+    private void saveDependencies(List<Question> questions) {
+        choiceRepo.saveAll(extractAllChoices(questions));
+        choiceSpanRepo.saveAll(extractAllChoiceSpans(questions));
+        answerRepo.saveAll(extractAllAnswers(questions));
+        questionImageRepo.saveAll(extractAllImages(questions));
+        questionImageMatchRepo.saveAll(extractAllMatches(questions));
+    }
+
+    private List<QuestionImageMatch> extractAllMatches(List<Question> questions) {
+        return questions
+                .stream()
+                .map(question -> question.getMatches())
+                .reduce(new ArrayList<>(), (questionImageMatches, questionImageMatches2) -> {
+                    questionImageMatches.addAll(questionImageMatches2);
+                    return questionImageMatches;
+                });
+    }
+
+    private List<QuestionImage> extractAllImages(List<Question> questions) {
+        return questions
+                .stream()
+                .map(question -> extractAllImages(question))
+                .reduce(new ArrayList<>(), (questionImages, questionImages2) -> {
+                    questionImages.addAll(questionImages2);
+                    return questionImages;
+                });
+    }
+
+    private List<Answer> extractAllAnswers(List<Question> questions) {
+        return questions
+                .stream()
+                .map(question -> question.getAnswer())
+                .collect(Collectors.toList());
+    }
+
+    private List<Choice> extractAllChoices(List<Question> questions) {
+        return questions
+                .stream()
+                .map(question -> question.getChoices())
+                .reduce(new ArrayList<>(), (choices1, choices2) -> {
+                    choices1.addAll(choices2);
+                    return choices1;
+                });
+    }
+
+    private List<ChoiceSpan> extractAllChoiceSpans(List<Question> questions) {
+        return questions
+                .stream()
+                .map(question -> question.getChoiceSpans())
+                .reduce(new ArrayList<>(), (spans1, spans2) -> {
+                    spans1.addAll(spans2);
+                    return spans1;
+                });
     }
 
     private Question saveDependencies(Question question) {
@@ -258,15 +330,12 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         return entity;
     }
 
-    private List<QuestionImage> extractAllImages(Question updated) {
-        List<QuestionImage> allImages = updated.getMatches()
+    private List<QuestionImage> extractAllImages(Question question) {
+        return question.getMatches()
                 .stream()
                 .map(questionImageMatch -> questionImageMatch.getQuestionImage())
+                .filter(questionImage -> questionImage != null)
                 .collect(Collectors.toList());
-        if (updated.getImage() != null) {
-            allImages.add(updated.getImage());
-        }
-        return allImages;
     }
 
     @Override
