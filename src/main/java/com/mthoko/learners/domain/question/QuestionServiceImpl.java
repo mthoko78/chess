@@ -185,6 +185,9 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     @Transactional
     public List<Question> saveAll(List<Question> questions) {
         List<Category> categories = distinctCategories(questions);
+        Date date = new Date();
+        setDateBeforeSave(categories, date);
+        setDateBeforeSave(questions, date);
         categoryRepo.saveAll(categories);
         questions.forEach(question -> {
             Category savedCategory = categories
@@ -194,8 +197,6 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
                     .get();
             question.setCategory(savedCategory);
         });
-        Date date = new Date();
-        setDateBeforeSave(questions, date);
         saveDependencies(questions);
         return questionRepo.saveAll(questions);
     }
@@ -307,10 +308,16 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         if (entity instanceof Question) {
             Question question = (Question) entity;
             super.setDateBeforeUpdate(question.getAnswer(), date);
-            super.setDateBeforeUpdate(question.getMatches(), date);
             super.setDateBeforeUpdate(extractAllImages(question), date);
             super.setDateBeforeUpdate(question.getChoices(), date);
             super.setDateBeforeUpdate(question.getChoiceSpans(), date);
+            super.setDateBeforeUpdate(question.getMatches(), date);
+            super.setDateBeforeUpdate(question.getMatches()
+                    .stream()
+                    .map(questionImageMatch -> questionImageMatch.getQuestionImage())
+                    .collect(Collectors.toList()), date
+            );
+
         }
         return entity;
     }
@@ -321,10 +328,15 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         if (entity instanceof Question) {
             Question question = (Question) entity;
             super.setDateBeforeSave(question.getAnswer(), date);
-            super.setDateBeforeSave(question.getMatches(), date);
             super.setDateBeforeSave(question.getImage(), date);
             super.setDateBeforeSave(question.getChoices(), date);
             super.setDateBeforeSave(question.getChoiceSpans(), date);
+            super.setDateBeforeSave(question.getMatches(), date);
+            super.setDateBeforeSave(question.getMatches()
+                    .stream()
+                    .map(questionImageMatch -> questionImageMatch.getQuestionImage())
+                    .collect(Collectors.toList()), date
+            );
         }
         return entity;
     }
