@@ -375,7 +375,13 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     @Override
     public List<Question> rewriteQuestionsToFile(Category category) {
         List<Question> questions = findByCategoryId(category.getId());
-        questions.sort((question, question2) -> question.getNumber() - question2.getNumber());
+        questions.sort(Comparator.comparingInt(Question::getNumber));
+        questions.forEach(question -> {
+            question.getChoices()
+                    .sort(Comparator.comparingInt(Choice::getLetter));
+            question.getChoiceSpans()
+                    .sort(Comparator.comparing(ChoiceSpan::getRomFigure));
+        });
         String questionsToString = questionsToString(questions);
         Path path = Paths.get(DOCS + category.getName() + ".txt");
         try {
