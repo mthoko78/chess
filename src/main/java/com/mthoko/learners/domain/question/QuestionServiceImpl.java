@@ -178,7 +178,9 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
 
     @Override
     public Question save(Question question) {
-        return questionRepo.save(saveDependencies(setDateBeforeSave(question, new Date())));
+        Question saved = questionRepo.save(saveDependencies(setDateBeforeSave(question, new Date())));
+        rewriteQuestionsToFile(question.getCategory());
+        return saved;
     }
 
     @Override
@@ -198,7 +200,9 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
             question.setCategory(savedCategory);
         });
         saveDependencies(questions);
-        return questionRepo.saveAll(questions);
+        List<Question> saved = questionRepo.saveAll(questions);
+        categories.forEach(category -> rewriteQuestionsToFile(category));
+        return saved;
     }
 
     @Override
@@ -215,9 +219,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         setDateBeforeUpdate(questions, new Date());
         saveDependencies(questions);
         List<Question> saved = questionRepo.saveAll(questions);
-        distinctCategories(questions).forEach(category -> {
-            rewriteQuestionsToFile(category);
-        });
+        distinctCategories(questions).forEach(category -> rewriteQuestionsToFile(category));
         return saved;
     }
 

@@ -14,7 +14,7 @@ b) You may overtake another vehicle when turning right
 c) You must stop if the robot turns red even if the flashing green filter arrow is on for you to turn right
 d) None of the above
 
-3. When approaching on intersection you must stop if
+3. When approaching an intersection you must stop if
 a) Passengers are waiting to be picked up
 b) The robot turns to amber and you will stop over the line
 c) There is a long queue of vehicles in front of you trying to cross the road
@@ -26,7 +26,7 @@ b) Stop and, when safe, pull off again as on a four-way stop
 c) Stop and wait for it to turn green before you can go
 d) Stop because it indicates a police roadblock ahead
 
-5. When turning right or left of on intersection you must:
+5. When turning right or left of an intersection you must:
 a) Slow down to a safe speed and turn when it is safe
 b) Indicate just before turning and turn when it is safe
 c) Observe around you and indicate well in advance of the turn, slow down to a lower gear, and turn after ensuring that it is safe
@@ -38,13 +38,13 @@ b) You want to turn right and there is not enough space in the intersection for 
 c) a) and b)
 d) None of the above
 
-7. When approaching a four-way stop, the driver mush
+7. When approaching a four-way stop, the driver must
 a) Stop behind the vehicle in front and drive off together with the other vehicle
 b) Stop regardless of whether there is other traffic or not, and only move if it is safe to do so
 c) Give the appropriate signal and then keep moving if there is no other traffic coming
 d) Stop and only move off when there is no other traffic in sight
 
-8. lf the vehicle you are towing hos defective brakes, you must:
+8. If the vehicle you are towing has defective brakes, you must:
 (i) Only use a tow rope shorter than 3,5 m
 (ii) Keep the speed slower than 30 km/h
 (iii) Carry only two passengers in the towed vehicle
@@ -55,7 +55,7 @@ c) (i)
 d) (iv)
 
 9. Name a few of the rules of towing:
-(i) A tractor is allowed to pull a trailer carrying l0 passengers if travelling at 30 km/h
+(i) A tractor is allowed to pull a trailer carrying 10 passengers if travelling at 30 km/h
 (ii) Only one passenger is allowed in the towed vehicle
 (iii) When towing a vehicle on a freeway at 30 km/h you may use a tow rope
 (iv) Your tow rope can be shorter than 1,8 m, but may not exceed 3,5 m
@@ -64,9 +64,9 @@ b) (i), (iii) And (iv)
 c) (ii) And (iv)
 d) (i) And (iv)
 
-10. When parking on a public road or night you may only use your parking lights:
+10. When parking on a public road at night you may only use your parking lights:
 (i) If you are in a parking area marked by traffic signs
-(ii) If you are within l0 m of a lit street lamp
+(ii) If you are within 10 m of a lit street lamp
 (iii) If you are parked well off the road
 (iv) If you are parked in a street that is not painted with parking lines or properly lit
 a) (iv)
@@ -85,8 +85,8 @@ c) (ii), (iii) And (iv)
 d) (i), (iii) And (iv)
 
 12. What are the maximum distances that driving and passing beams should be able to illuminate:
-a) Driving beams I00 m - passing beams 50 m
-b) Driving beams I50 m - passing beams 75 m
+a) Driving beams 100 m - passing beams 50 m
+b) Driving beams 150 m - passing beams 75 m
 c) Driving beams 100 m - passing beams 45 m
 d) Driving beams 175 m - passing beams 50 m
 
@@ -114,7 +114,7 @@ d) (i)
 (i) on a long drive, if you are feeling a little tired, stop and have a break
 (ii) you should always wear soft rubber shoes
 (iii) you should always be able to see clearly on all sides of the vehicle
-(iv) your hands should be on the steering wheel ad all times
+(iv) your hands should be on the steering wheel at all times
 a) (i) And (ii)
 b) (i) And (iii)
 c) (ii) And (iv)
@@ -122,7 +122,7 @@ d) (ii), (iii) And (iv)
 
 16. When you become aware that someone is trying to pass you, you must:
 (i) drive a little faster
-(ii) keep as for left as possible
+(ii) keep as far left as possible
 (iii) do not accelerate
 (iv) pull off the road and stop
 a) (i), (ii) And (iii)
@@ -134,7 +134,7 @@ d) (i), (ii), (iii) And (iv)
 (i) If the vehicle is turning right at a corner and it is safe to do so without driving on the shoulder of the road
 (ii) If you have been instructed to do so by a police officer
 (iii) At all times when a vehicle is turning right
-(iv) If you are driving in a road with two or more lanes going in the some direction
+(iv) If you are driving in a road with two or more lanes going in the same direction
 a) (i), (ii), (iii) And (iv)
 b) (i) And (iii)
 c) (i), (ii) And (iv)
@@ -151,7 +151,7 @@ c) (ii), (iii) And (iv)
 d) (iii) And (iv)
 
 19. You may not obtain a learner's license if:
-(i) you are older than 70 years, or younger than I8 years
+(i) you are older than 70 years, or younger than 18 years
 (ii) you were declared unfit to obtain a license for a certain period and that period is not over
 (iii) you suffer from epilepsy but the fits are controlled by medication
 (iv) you are blind in one eye
@@ -170,7 +170,7 @@ b) (ii), (iii) And (iv)
 c) (i) And (iv)
 d) (ii) And (iii)
 
-21. Is your following distance safe if the vehicle in front of you suddenly stops and you arable to:
+21. Is your following distance safe if the vehicle in front of you suddenly stops and you are able to:
 a) Swerve and pass the vehicle
 b) Stop without swerving
 c) hoot and accelerate past it
@@ -190,7 +190,7 @@ d) (i), (ii) And (iv)
 a) Allow a passenger to help him steer the vehicle
 b) let a passenger ride on the bumper of a vehicle
 c) leave the vehicle unattended while the engine is still running
-d) use hand signals on a freeway in on emergency
+d) use hand signals on a freeway in an emergency
 
 24. Passengers may:
 (i) use hand signals out of the window
@@ -225,8 +225,8 @@ c) (i) And (iii)
 d) (ii) And (iv)
 
 28. The maximum legal speed at which you may drive on:
-(i) freeways is I20 km/h
-(ii) notional roads is 100 km/h
+(i) freeways is 120 km/h
+(ii) national roads is 100 km/h
 (iii) roads in most built-up areas is 60 km/h
 (iv) None of the above
 a) (i)
@@ -237,7 +237,7 @@ d) (i), (ii) And (iii)
 29. Where is it legal to stop your vehicle:
 a) 9 m from a pedestrian crossing
 b) 5 m from a roadway crossing
-c) 4mfromotunnel
+c) 4 m from a tunnel
 d) opposite another vehicle where the road is 8 m wide
 
 30. To avoid a fine, you must produce your license on request from a traffic officer:
@@ -408,7 +408,7 @@ b) (ii), (iii) And (iv)
 c) (ii) And (iv)
 d) (i), (ii) And (iv)
 
-54. lf you have q learners license for a light motor vehicle you:
+54. If you have q learners license for a light motor vehicle you:
 a) Can drive to work by yourself if it is very early in the morning and there is no traffic about
 b) Can only drive if there is someone in the vehicle who hos a license of the some code
 c) Cannot drive on a freeway
