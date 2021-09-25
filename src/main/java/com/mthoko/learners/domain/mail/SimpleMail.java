@@ -20,18 +20,6 @@ public class SimpleMail extends UniqueEntity {
 
 	private Date dateDelivered;
 
-	public String getRecipient() {
-		return recipient;
-	}
-
-	public void setRecipient(String recipient) {
-		this.recipient = recipient;
-	}
-
-	public boolean isDelivered() {
-		return dateDelivered != null;
-	}
-
 	public String getSender() {
 		return sender;
 	}
@@ -40,12 +28,12 @@ public class SimpleMail extends UniqueEntity {
 		this.sender = sender;
 	}
 
-	public String getTo() {
+	public String getRecipient() {
 		return recipient;
 	}
 
-	public void setTo(String to) {
-		this.recipient = to;
+	public void setRecipient(String recipient) {
+		this.recipient = recipient;
 	}
 
 	public String getSubject() {

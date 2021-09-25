@@ -2,6 +2,7 @@ package com.mthoko.learners.domain.sms;
 
 import com.mthoko.learners.common.service.BaseService;
 import com.mthoko.learners.domain.account.PhoneVerification;
+import com.mthoko.learners.domain.mail.SimpleMail;
 
 import java.util.List;
 import java.util.Map;
@@ -11,9 +12,9 @@ public interface SmsService extends BaseService<Sms> {
 
 	List<Sms> findByRecipient(String recipient);
 
-	Map<String, Long> sendAsMail(Sms sms);
+	SimpleMail sendAsMail(Sms sms);
 
-	Map<String, Long> sendAllAsMail(List<Sms> sms);
+	SimpleMail sendAllAsMail(List<Sms> sms);
 
 	int countByRecipient(String recipient);
 

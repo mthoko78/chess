@@ -5,6 +5,7 @@ import com.mthoko.learners.common.util.HttpManager;
 import com.mthoko.learners.common.util.RequestPackage;
 import com.mthoko.learners.domain.account.PhoneVerification;
 import com.mthoko.learners.domain.mail.MailService;
+import com.mthoko.learners.domain.mail.SimpleMail;
 import com.mthoko.learners.domain.property.Property;
 import com.mthoko.learners.domain.property.PropertyService;
 import com.mthoko.learners.exception.ApplicationException;
@@ -23,8 +24,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.mthoko.learners.domain.mail.MailService.SUCCESS;
 
 @Service
 public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
@@ -70,11 +69,9 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     }
 
     @Override
-    public Map<String, Long> sendAsMail(Sms sms) {
+    public SimpleMail sendAsMail(Sms sms) {
         try {
-            return mailService.sendEmail("New Sms - " + sms.getId(), sms.getFormattedString()) == SUCCESS
-                    ? extractVerification(sms)
-                    : new HashMap<>();
+            return mailService.sendEmail("New Sms - " + sms.getId(), sms.getFormattedString());
         } catch (Exception e) {
             String key = "Error:Sms:" + sms.getUniqueIdentifier();
             String value = "" + e.getMessage();
@@ -85,16 +82,15 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     }
 
     @Override
-    public Map<String, Long> sendAllAsMail(List<Sms> smsList) {
+    public SimpleMail sendAllAsMail(List<Sms> smsList) {
         if (smsList == null || smsList.isEmpty()) {
-            return new HashMap<>();
+            return null;
         }
         if (smsList.size() == 1) {
             return sendAsMail(smsList.get(0));
         }
         try {
-            return mailService.sendEmail("New Smses", getBodyText(smsList)) == SUCCESS ? extractVerification(smsList)
-                    : new HashMap<>();
+            return mailService.sendEmail("New Smses", getBodyText(smsList));
         } catch (Exception e) {
             String value = "" + e.getMessage();
             List<Property> properties = new ArrayList<>();

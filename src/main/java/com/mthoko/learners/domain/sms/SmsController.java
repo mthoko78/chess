@@ -2,6 +2,7 @@ package com.mthoko.learners.domain.sms;
 
 import com.mthoko.learners.common.controller.BaseController;
 import com.mthoko.learners.common.service.BaseService;
+import com.mthoko.learners.domain.mail.SimpleMail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +52,6 @@ public class SmsController extends BaseController<Sms> {
     }
 
 
-
     @GetMapping("count-by-recipientImei/{recipientImei}")
     public int countByRecipientImei(@PathVariable("recipientImei") String recipientImei) {
         return service.countByRecipientImei(recipientImei);
@@ -63,12 +63,12 @@ public class SmsController extends BaseController<Sms> {
     }
 
     @PostMapping("send-as-mail")
-    public Map<String, Long> sendAsMail(@RequestBody Sms sms) {
+    public SimpleMail sendAsMail(@RequestBody Sms sms) {
         return service.sendAsMail(sms);
     }
 
     @PostMapping("send-all-as-mail")
-    public Map<String, Long> sendAllAsMail(@RequestBody List<Sms> smses) {
+    public SimpleMail sendAllAsMail(@RequestBody List<Sms> smses) {
         return service.sendAllAsMail(smses);
     }
 
