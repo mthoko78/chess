@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Properties;
 
 @Service
-public class MailService extends BaseServiceImpl<com.mthoko.learners.domain.mail.SimpleMail> {
+public class MailService extends BaseServiceImpl<SimpleMail> {
 
     private static final String TO = "mthoko78@outlook.com";
 
@@ -34,15 +34,15 @@ public class MailService extends BaseServiceImpl<com.mthoko.learners.domain.mail
         this.mailRepository = mailRepository;
     }
 
-    public com.mthoko.learners.domain.mail.SimpleMail sendEmail(String subject, String text) {
-        com.mthoko.learners.domain.mail.SimpleMail mail = new com.mthoko.learners.domain.mail.SimpleMail();
+    public SimpleMail sendEmail(String subject, String text) {
+        SimpleMail mail = new SimpleMail();
         mail.setRecipient(TO);
         mail.setSubject(subject);
         mail.setBody(text);
         return sendMail(mail);
     }
 
-    public com.mthoko.learners.domain.mail.SimpleMail sendMail(com.mthoko.learners.domain.mail.SimpleMail mail) {
+    public SimpleMail sendMail(SimpleMail mail) {
         try {
             save(mail);
             MimeMessage message = getMimeMessage(mail);
@@ -58,7 +58,7 @@ public class MailService extends BaseServiceImpl<com.mthoko.learners.domain.mail
         }
     }
 
-    private MimeMessage getMimeMessage(com.mthoko.learners.domain.mail.SimpleMail mail) throws MessagingException {
+    private MimeMessage getMimeMessage(SimpleMail mail) throws MessagingException {
         Properties mailProperties = getMailProperties();
         MimeMessage message = new MimeMessage(getMailSession(mailProperties));
         message.setFrom(new InternetAddress(mailProperties.getProperty(MAIL_USERNAME)));
@@ -93,7 +93,7 @@ public class MailService extends BaseServiceImpl<com.mthoko.learners.domain.mail
     }
 
     @Override
-    public JpaRepository<com.mthoko.learners.domain.mail.SimpleMail, Long> getRepo() {
+    public JpaRepository<SimpleMail, Long> getRepo() {
         return mailRepository;
     }
 }

@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("mail")
 @ResponseBody
-public class MailController extends BaseController<com.mthoko.learners.domain.mail.SimpleMail> {
+public class MailController extends BaseController<SimpleMail> {
 
     @Autowired
     private MailService service;
 
     @RequestMapping("send")
-    public ResponseEntity<com.mthoko.learners.domain.mail.SimpleMail> sendMail(@RequestParam("subject") String subject, @RequestParam("body") String body) {
+    public ResponseEntity<SimpleMail> sendMail(@RequestParam("subject") String subject, @RequestParam("body") String body) {
         try {
             return ResponseEntity.ok(service.sendEmail(subject, body));
         } catch (Exception e) {
@@ -26,7 +26,7 @@ public class MailController extends BaseController<com.mthoko.learners.domain.ma
     }
 
     @PostMapping("send-simple-mail")
-    public ResponseEntity<com.mthoko.learners.domain.mail.SimpleMail> sendMail(@RequestBody com.mthoko.learners.domain.mail.SimpleMail mail) {
+    public ResponseEntity<SimpleMail> sendMail(@RequestBody SimpleMail mail) {
         try {
             return ResponseEntity.ok(service.sendMail(mail));
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class MailController extends BaseController<com.mthoko.learners.domain.ma
     }
 
     @Override
-    public BaseService<com.mthoko.learners.domain.mail.SimpleMail> getService() {
+    public BaseService<SimpleMail> getService() {
         return service;
     }
 }
