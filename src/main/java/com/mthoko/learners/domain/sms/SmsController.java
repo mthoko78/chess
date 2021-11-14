@@ -4,8 +4,10 @@ import com.mthoko.learners.common.controller.BaseController;
 import com.mthoko.learners.common.service.BaseService;
 import com.mthoko.learners.domain.mail.SimpleMail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -116,6 +118,11 @@ public class SmsController extends BaseController<Sms> {
     @RequestMapping("messageId/{messageId}")
     public Optional<Sms> findByMessageId(@PathVariable("messageId") String messageId) {
         return service.findByMessageId(messageId);
+    }
+
+    @RequestMapping("fromDate/{fromDate}")
+    public List<Sms> fromDate(@PathVariable("fromDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
+        return service.findFromDate(date);
     }
 
 

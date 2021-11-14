@@ -3,6 +3,7 @@ package com.mthoko.learners.domain.sms;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,4 +25,6 @@ public interface SmsResourceRepo extends JpaRepository<Sms, Long> {
     int countByRecipientImei(String recipientImei);
 
     List<Sms> findByRecipientImei(String recipientImei);
+
+    List<Sms> findByDateCreatedBetween(Date date, Date date2);
 }

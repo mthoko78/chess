@@ -4,6 +4,7 @@ import com.mthoko.learners.common.service.BaseService;
 import com.mthoko.learners.domain.account.PhoneVerification;
 import com.mthoko.learners.domain.mail.SimpleMail;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,4 +48,6 @@ public interface SmsService extends BaseService<Sms> {
 	List<Sms> findByRecipientImei(String recipientImei);
 
     Sms sendPhoneVerificationSms(String phoneNumber, PhoneVerification verification);
+
+    List<Sms> findFromDate(Date date);
 }

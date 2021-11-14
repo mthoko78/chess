@@ -136,6 +136,11 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     }
 
     @Override
+    public List<Sms> findFromDate(Date date) {
+        return smsResourceRepo.findByDateCreatedBetween(date, new Date());
+    }
+
+    @Override
     public JpaRepository<Sms, Long> getRepo() {
         return smsResourceRepo;
     }
