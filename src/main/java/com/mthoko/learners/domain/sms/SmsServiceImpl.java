@@ -196,7 +196,9 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
         RequestPackage requestPackage = getRequestPackage(sms);
         String messageResponseData = HttpManager.getData(requestPackage);
         MessageResponse response = parseMessageResponse(messageResponseData);
-        sms.setSender(API_PHONE_NUMBER);
+        if (sms.getSender() == null) {
+            sms.setSender(API_PHONE_NUMBER);
+        }
         sms.setMessageId(response.getMessages().get(0).getApiMessageId());
         sms.setDeliveryReportRequested(true);
         saveMessageResponse(response);
