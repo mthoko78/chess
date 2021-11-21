@@ -142,6 +142,7 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<finalName>learners</finalName>
 	</build>
 
 </project>
