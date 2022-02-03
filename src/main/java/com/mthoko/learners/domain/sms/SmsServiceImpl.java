@@ -25,6 +25,9 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.mthoko.learners.domain.sms.SmsController.DELIVERED_TO_GATEWAY;
+import static com.mthoko.learners.domain.sms.SmsController.RECEIVED_BY_RECIPIENT;
+
 @Service
 public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
 
@@ -103,16 +106,12 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
         }
     }
 
-    public String getBodyText(List<Sms> smsList) {
+    private String getBodyText(List<Sms> smsList) {
         StringBuilder body = new StringBuilder();
         for (Sms sms : smsList) {
             body.append(sms.getFormattedString());
         }
         return body.toString();
-    }
-
-    public void saveAllToRemote(List<Sms> unverified) {
-        smsResourceRepo.saveAll(unverified);
     }
 
     @Override
@@ -138,6 +137,24 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     @Override
     public List<Sms> findFromDate(Date date) {
         return smsResourceRepo.findByDateCreatedBetween(date, new Date());
+    }
+
+    @Override
+    public SmsDeliveryReport handleDeliveryReport(Map<String, Object> deliveryReport) {
+        SmsDeliveryReport report = createSmsDeliveryReport(deliveryReport);
+        Optional<Sms> optionalSms = findByMessageId(report.getMessageId());
+        if (optionalSms.isPresent()) {
+            Sms sms = optionalSms.get();
+            if (DELIVERED_TO_GATEWAY.equals(report.getStatus())) {
+                sms.setSent(true);
+            } else if (RECEIVED_BY_RECIPIENT.equals(report.getStatus())) {
+                sms.setDelivered(true);
+            }
+            update(sms);
+            return saveSmsDeliveryReport(report);
+        } else {
+            throw new ApplicationException("Sms with message id: " + report.getMessageId() + " not found");
+        }
     }
 
     @Override

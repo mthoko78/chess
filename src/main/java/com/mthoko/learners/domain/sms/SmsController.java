@@ -3,6 +3,7 @@ package com.mthoko.learners.domain.sms;
 import com.mthoko.learners.common.controller.BaseController;
 import com.mthoko.learners.common.service.BaseService;
 import com.mthoko.learners.domain.mail.SimpleMail;
+import com.mthoko.learners.exception.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -86,18 +87,7 @@ public class SmsController extends BaseController<Sms> {
 
     @PostMapping("delivery-report")
     public SmsDeliveryReport handleDeliveryReport(@RequestBody Map<String, Object> deliveryReport) {
-        SmsDeliveryReport report = service.createSmsDeliveryReport(deliveryReport);
-        Optional<Sms> optionalSms = findByMessageId(report.getMessageId());
-        if (optionalSms.isPresent()) {
-            Sms sms = optionalSms.get();
-            if (DELIVERED_TO_GATEWAY.equals(report.getStatus())) {
-                sms.setSent(true);
-            } else if (RECEIVED_BY_RECIPIENT.equals(report.getStatus())) {
-                sms.setDelivered(true);
-            }
-            update(sms);
-        }
-        return service.saveSmsDeliveryReport(report);
+        return service.handleDeliveryReport(deliveryReport);
     }
 
     @GetMapping("delivery-report")
@@ -124,6 +114,5 @@ public class SmsController extends BaseController<Sms> {
     public List<Sms> fromDate(@PathVariable("fromDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
         return service.findFromDate(date);
     }
-
 
 }

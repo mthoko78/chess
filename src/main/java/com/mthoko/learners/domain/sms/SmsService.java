@@ -50,4 +50,6 @@ public interface SmsService extends BaseService<Sms> {
     Sms sendPhoneVerificationSms(String phoneNumber, PhoneVerification verification);
 
     List<Sms> findFromDate(Date date);
+
+	SmsDeliveryReport handleDeliveryReport(Map<String, Object> deliveryReport);
 }
