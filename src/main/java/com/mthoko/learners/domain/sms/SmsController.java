@@ -115,4 +115,9 @@ public class SmsController extends BaseController<Sms> {
         return service.findFromDate(date);
     }
 
+    @RequestMapping("last/recipient/{recipient}")
+    public Optional<Sms> findLastMessage(@PathVariable("recipient") String recipient) {
+        return service.findLastMessageByRecipient(recipient);
+    }
+
 }

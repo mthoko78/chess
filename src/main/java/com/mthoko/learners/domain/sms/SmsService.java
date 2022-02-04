@@ -52,4 +52,6 @@ public interface SmsService extends BaseService<Sms> {
     List<Sms> findFromDate(Date date);
 
 	SmsDeliveryReport handleDeliveryReport(Map<String, Object> deliveryReport);
+
+	Optional<Sms> findLastMessageByRecipient(String recipient);
 }
