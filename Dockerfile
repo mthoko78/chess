@@ -1,4 +1,7 @@
 FROM openjdk:8
-COPY ./target/learners.jar /tmp/learners.jar
+COPY ./target/java-getting-started-1.0.jar /tmp/java-getting-started-1.0.jar
+COPY ./wait_for_mysql.sh /tmp/wait_for_mysql.sh
+RUN chmod +x /tmp/wait_for_mysql.sh
+RUN apt-get update && apt-get install -y netcat
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/tmp/learners.jar"]
+ENTRYPOINT ["/tmp/wait_for_mysql.sh"]

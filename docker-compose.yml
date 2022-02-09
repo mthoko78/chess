@@ -1,20 +1,23 @@
 version: "3"
 services:
   mysql-learners:
-    image: mysql:5.7.25
+    image: mysql:8.0.27
+    container_name: mysql
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
       - MYSQL_DATABASE=learners
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
     ports:
-      - "3306:3306"
+      - "3307:3306"
   learners-container:
     image: learners-container
+    container_name: learners-container
     ports:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-learners:3306/learners?serverTimezone=UTC&autoReconnect=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD:
+      spring.profiles.active: prod
     build:
       context: "./"
       dockerfile: Dockerfile

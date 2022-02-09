@@ -48,9 +48,9 @@ public class LearnersController extends BaseController<Question> {
         this.choiceSpanService = choiceSpanService;
         this.imageService = imageService;
         this.imageMatchService = imageMatchService;
-        if (categoryService.count() == 0) {
-            load();
-        }
+//        if (categoryService.count() == 0) {
+//            load();
+//        }
     }
 
     public static final int MINUTES = 60;
