@@ -187,11 +187,6 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     }
 
     @Override
-    public Optional<Sms> findLastMessageByRecipient(String recipient) {
-        return smsResourceRepo.findFirstByRecipientOrderByDateCreatedDesc(recipient);
-    }
-
-    @Override
     public JpaRepository<Sms, Long> getRepo() {
         return smsResourceRepo;
     }

@@ -302,10 +302,12 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Optional<Account> findByEmail(String email) {
         return accountRepo.findByEmail(email);
     }
 
+    @Override
     public Optional<Account> findByPhone(String phone) {
         return accountRepo.findByPhone(phone);
     }
