@@ -2,7 +2,6 @@ package com.mthoko.learners.domain.sms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mthoko.learners.common.entity.UniqueEntity;
-import com.mthoko.learners.domain.account.PhoneVerification;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +16,7 @@ public class Sms extends UniqueEntity {
 
     private String recipientImei;
 
-    @Column(length = 1024)
+    @Column(length = 10240)
     private byte[] body;
 
     private Date date;

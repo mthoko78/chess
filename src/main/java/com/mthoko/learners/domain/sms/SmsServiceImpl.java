@@ -159,10 +159,8 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
                 sms.setDelivered(true);
             }
             update(sms);
-            return saveSmsDeliveryReport(report);
-        } else {
-            throw new ApplicationException("Sms with message id: " + report.getMessageId() + " not found");
         }
+        return saveSmsDeliveryReport(report);
     }
 
     private SmsDeliveryReport copyFieldToExistingReport(SmsDeliveryReport report) {

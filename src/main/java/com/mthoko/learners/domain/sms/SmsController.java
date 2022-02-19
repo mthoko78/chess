@@ -3,7 +3,6 @@ package com.mthoko.learners.domain.sms;
 import com.mthoko.learners.common.controller.BaseController;
 import com.mthoko.learners.common.service.BaseService;
 import com.mthoko.learners.domain.mail.SimpleMail;
-import com.mthoko.learners.exception.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
