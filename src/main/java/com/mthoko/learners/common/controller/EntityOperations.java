@@ -1,6 +1,5 @@
 package com.mthoko.learners.common.controller;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public interface EntityOperations<T> {
     List<T> retrieveAll();
 
     @DeleteMapping(BY_ID)
-    ResponseEntity<Object> deleteById(@PathVariable("id") Long id);
+    void deleteById(@PathVariable("id") Long id);
 
     @DeleteMapping(DELETE_BY_IDS)
     void deleteByIdsIn(@RequestBody List<Long> ids);
@@ -40,10 +39,10 @@ public interface EntityOperations<T> {
     List<T> saveAll(@RequestBody List<T> entity);
 
     @DeleteMapping(DELETE_ALL)
-    Object deleteAll(@RequestBody List<T> entities);
+    void deleteAll(@RequestBody List<T> entities);
 
     @DeleteMapping
-    Object delete(@RequestBody T entity);
+    void delete(@RequestBody T entity);
 
     @GetMapping(COUNT)
     long count();

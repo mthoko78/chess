@@ -223,9 +223,11 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
         if (targetAccount.getMember().getPhone() != null) {
             phones.add("'" + targetAccount.getMember().getPhone() + "'");
         }
-        for (SimCard card : targetAccount.getSimCards()) {
-            if (card.getPhone() != null) {
-                phones.add("'" + card.getPhone() + "'");
+        if (targetAccount.getSimCards() != null) {
+            for (SimCard card : targetAccount.getSimCards()) {
+                if (card.getPhone() != null) {
+                    phones.add("'" + card.getPhone() + "'");
+                }
             }
         }
         return phones;
@@ -254,7 +256,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
     }
 
     @Override
-    public Account delete(Account account) {
+    public void delete(Account account) {
         deleteSimContacts(account);
         deleteDeviceContacts(account);
         deleteSmses(account);
@@ -264,7 +266,6 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
         credentialsService.deleteById(account.getCredentials().getId());
         super.deleteById(account.getId());
         memberService.deleteById(account.getMember().getId());
-        return account;
     }
 
     private void deleteDeviceContacts(Account account) {
@@ -301,12 +302,10 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
     }
 
     @Override
-    public List<Account> deleteAll(List<Account> accounts) {
-        List<Account> results = new ArrayList<>();
+    public void deleteAll(List<Account> accounts) {
         for (Account account : accounts) {
-            results.add(delete(account));
+            delete(account);
         }
-        return results;
     }
 
     @Override

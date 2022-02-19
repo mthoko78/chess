@@ -2,8 +2,9 @@ package com.mthoko.learners.common.controller;
 
 import com.mthoko.learners.common.entity.UniqueEntity;
 import com.mthoko.learners.common.service.BaseService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,13 +25,14 @@ public abstract class BaseController<T extends UniqueEntity> implements EntityOp
     }
 
     @Override
-    public Object deleteAll(List<T> entities) {
-        return getService().deleteAll(entities);
+    public void deleteAll(List<T> entities) {
+        getService().deleteAll(entities);
     }
 
     @Override
-    public Object delete(T entity) {
-        return getService().delete(entity);
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(T entity) {
+        getService().delete(entity);
     }
 
     @Override
@@ -39,9 +41,9 @@ public abstract class BaseController<T extends UniqueEntity> implements EntityOp
     }
 
     @Override
-    public ResponseEntity<Object> deleteById(Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteById(Long id) {
         getService().deleteById(id);
-        return null;
     }
 
     @Override

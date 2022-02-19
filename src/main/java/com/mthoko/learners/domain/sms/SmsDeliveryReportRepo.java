@@ -4,14 +4,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SmsDeliveryReportRepo extends JpaRepository<SmsDeliveryReport, Long> {
 
-	public int countByRecipient(String recipient);
+    int countByRecipient(String recipient);
 
-	public List<SmsDeliveryReport> findByMessageId(String messageId);
+    List<SmsDeliveryReport> findByMessageId(String messageId);
 
-	public List<SmsDeliveryReport> findByRecipient(String recipient);
+    List<SmsDeliveryReport> findByRecipient(String recipient);
 
+    Optional<SmsDeliveryReport> findByMessageIdAndRequestId(String messageId, String requestId);
+
+    boolean existsByMessageIdAndRequestId(String messageId, String requestId);
 }

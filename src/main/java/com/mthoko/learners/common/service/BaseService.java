@@ -24,9 +24,9 @@ public interface BaseService<T extends UniqueEntity> {
 
 	List<T> saveAll(List<T> entities);
 
-	List<T> deleteAll(List<T> entities);
+	void deleteAll(List<T> entities);
 
-	T delete(T entity);
+	void delete(T entity);
 
 	List<T> retrieveAll();
 

@@ -4,6 +4,7 @@ import com.mthoko.learners.common.service.BaseServiceImpl;
 import com.mthoko.learners.common.util.HttpManager;
 import com.mthoko.learners.common.util.RequestPackage;
 import com.mthoko.learners.domain.account.PhoneVerification;
+import com.mthoko.learners.domain.account.PhoneVerificationRepo;
 import com.mthoko.learners.domain.mail.MailService;
 import com.mthoko.learners.domain.mail.SimpleMail;
 import com.mthoko.learners.domain.property.Property;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -61,14 +63,17 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
 
     private final MessageRepo messageRepo;
 
+    private final PhoneVerificationRepo verificationRepo;
+
     @Autowired
-    public SmsServiceImpl(SmsResourceRepo smsResourceRepo, MailService mailService, PropertyService propertyResource, SmsDeliveryReportRepo smsDeliveryReportRepo, MessageResponseRepo messageResponseRepo, MessageRepo messageRepo) {
+    public SmsServiceImpl(SmsResourceRepo smsResourceRepo, MailService mailService, PropertyService propertyResource, SmsDeliveryReportRepo smsDeliveryReportRepo, MessageResponseRepo messageResponseRepo, MessageRepo messageRepo, PhoneVerificationRepo verificationRepo) {
         this.smsResourceRepo = smsResourceRepo;
         this.mailService = mailService;
         this.propertyResource = propertyResource;
         this.smsDeliveryReportRepo = smsDeliveryReportRepo;
         this.messageResponseRepo = messageResponseRepo;
         this.messageRepo = messageRepo;
+        this.verificationRepo = verificationRepo;
     }
 
     @Override
@@ -142,6 +147,9 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     @Override
     public SmsDeliveryReport handleDeliveryReport(Map<String, Object> deliveryReport) {
         SmsDeliveryReport report = createSmsDeliveryReport(deliveryReport);
+        if (smsDeliveryReportRepo.existsByMessageIdAndRequestId(report.getMessageId(), report.getRequestId())) {
+            report = copyFieldToExistingReport(report);
+        }
         Optional<Sms> optionalSms = findByMessageId(report.getMessageId());
         if (optionalSms.isPresent()) {
             Sms sms = optionalSms.get();
@@ -155,6 +163,27 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
         } else {
             throw new ApplicationException("Sms with message id: " + report.getMessageId() + " not found");
         }
+    }
+
+    private SmsDeliveryReport copyFieldToExistingReport(SmsDeliveryReport report) {
+        SmsDeliveryReport existingReport = smsDeliveryReportRepo
+                .findByMessageIdAndRequestId(report.getMessageId(), report.getRequestId())
+                .get();
+        existingReport.setStatus(report.getStatus());
+        existingReport.setStatusCode(report.getStatusCode());
+        existingReport.setStatusDescription(report.getStatusDescription());
+        existingReport.setClientMessageId(report.getClientMessageId());
+        existingReport.setTimestamp(report.getTimestamp());
+        existingReport.setLastModified(report.getLastModified());
+        existingReport.setIntegrationName(report.getIntegrationName());
+        existingReport.setLastModified(new Date());
+        report = existingReport;
+        return report;
+    }
+
+    @Override
+    public Optional<Sms> findLastMessageByRecipient(String recipient) {
+        return smsResourceRepo.findFirstByRecipientOrderByDateCreatedDesc(recipient);
     }
 
     @Override
@@ -220,13 +249,13 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     }
 
     private MessageResponse sendViaClickatel(Sms sms) {
-        RequestPackage requestPackage = getRequestPackage(sms);
-        String messageResponseData = HttpManager.getData(requestPackage);
+        String messageResponseData = HttpManager.getData(getRequestPackage(sms));
         MessageResponse response = parseMessageResponse(messageResponseData);
+        Message message = response.getMessages().get(0);
         if (sms.getSender() == null) {
             sms.setSender(API_PHONE_NUMBER);
         }
-        sms.setMessageId(response.getMessages().get(0).getApiMessageId());
+        sms.setMessageId(message.getApiMessageId());
         sms.setDeliveryReportRequested(true);
         saveMessageResponse(response);
         save(sms);
@@ -361,4 +390,20 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
         return null;
     }
 
+    @Override
+    @Transactional
+    public void delete(Sms sms) {
+        deleteById(sms.getId());
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        Optional<PhoneVerification> verificationOptional = verificationRepo.findByVerificationSms_Id(id);
+        if (verificationOptional.isPresent()) {
+            verificationRepo.deleteById(verificationOptional.get().getId());
+        } else {
+            super.deleteById(id);
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.mthoko.learners.domain.sms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.domain.account.PhoneVerification;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

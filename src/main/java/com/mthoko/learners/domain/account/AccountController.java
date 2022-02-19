@@ -95,12 +95,6 @@ public class AccountController extends BaseController<Account> {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Object> deleteById(@PathVariable("id") Long id) {
-        service.deleteById(id);
-        return ResponseEntity.ok().build();
-    }
-
 
     @PostMapping("register")
     public ResponseEntity<Account> register(@RequestBody Account account) {
