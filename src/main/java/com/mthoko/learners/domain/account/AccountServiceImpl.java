@@ -20,6 +20,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl extends BaseServiceImpl<Account> implements AccountService {
@@ -138,9 +139,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
         List<Account> accounts = new ArrayList<>();
         List<Member> members = findMatchingMembersByAccount(targetAccount);
         if (members.size() > 0) {
-            for (int i = 0; i < members.size(); i++) {
-                accounts.add(findByMemberId(members.get(i).getId()));
-            }
+            members.forEach(member -> accounts.add(findByMemberId(member.getId())));
         }
         return accounts;
     }
@@ -193,13 +192,6 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
         return accountRepo;
     }
 
-    private Account retrieveAccountByMemberId(Long memberId) {
-        if (memberId == null) {
-            return null;
-        }
-        return findByMemberId(memberId);
-    }
-
     @Override
     public Account findByMemberId(Long memberId) {
         return accountRepo.findByMemberId(memberId);
@@ -224,11 +216,13 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
             phones.add("'" + targetAccount.getMember().getPhone() + "'");
         }
         if (targetAccount.getSimCards() != null) {
-            for (SimCard card : targetAccount.getSimCards()) {
-                if (card.getPhone() != null) {
-                    phones.add("'" + card.getPhone() + "'");
-                }
-            }
+            List<String> additionalPhones = targetAccount
+                    .getSimCards()
+                    .stream()
+                    .map(simCard -> simCard.getPhone())
+                    .filter(phone -> phone != null)
+                    .collect(Collectors.toList());
+            phones.addAll(additionalPhones);
         }
         return phones;
     }
@@ -239,16 +233,14 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
         List<Credentials> credentialsList = new ArrayList<>();
         List<SimCard> simCards = new ArrayList<>();
         List<Device> devices = new ArrayList<>();
-        for (Account account : accounts) {
+        accounts.forEach(account -> {
             members.add(account.getMember());
             credentialsList.add(account.getCredentials());
             simCards.addAll(account.getSimCards());
             devices.addAll(account.getDevices());
-        }
+        });
         memberService.saveAll(members);
-        for (Account account : accounts) {
-            account.setMemberId(account.getMember().getId());
-        }
+        accounts.forEach(account -> account.setMemberId(account.getMember().getId()));
         credentialsService.saveAll(credentialsList);
         simCardService.saveAll(simCards);
         deviceService.saveAll(devices);
@@ -262,34 +254,30 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
         deleteSmses(account);
         simCardService.deleteAll(account.getSimCards());
         deviceService.deleteAll(account.getDevices());
-
         credentialsService.deleteById(account.getCredentials().getId());
         super.deleteById(account.getId());
         memberService.deleteById(account.getMember().getId());
     }
 
     private void deleteDeviceContacts(Account account) {
-        List<Long> deviceIds = new ArrayList<>();
-        for (Device device : account.getDevices()) {
-            deviceIds.add(device.getId());
-        }
-        devContactService.deleteByDevIdIn(deviceIds);
+        devContactService.deleteByDevIdIn(account.getDevices()
+                .stream()
+                .map(device -> device.getId())
+                .collect(Collectors.toList()));
     }
 
     private void deleteSimContacts(Account account) {
-        List<Long> simCardIds = new ArrayList<>();
-        for (SimCard simCard : account.getSimCards()) {
-            simCardIds.add(simCard.getId());
-        }
-        simContactService.deleteBySimCardIdIn(simCardIds);
+        simContactService.deleteBySimCardIdIn(account.getSimCards()
+                .stream()
+                .map(simCard -> simCard.getId())
+                .collect(Collectors.toList()));
     }
 
     private Object deleteSmses(Account account) {
-        List<String> phones = new ArrayList<>();
-        for (SimCard simCard : account.getSimCards()) {
-            phones.add(simCard.getPhone());
-        }
-        return smsService.deleteByRecipientIn(phones);
+        return smsService.deleteByRecipientIn(account.getSimCards()
+                .stream()
+                .map(simCard -> simCard.getPhone())
+                .collect(Collectors.toList()));
     }
 
     @Override
@@ -303,25 +291,15 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 
     @Override
     public void deleteAll(List<Account> accounts) {
-        for (Account account : accounts) {
-            delete(account);
-        }
+        accounts.forEach(account -> delete(account));
     }
 
     @Override
     public List<Account> updateAll(List<Account> accounts) {
-        for (Account account : accounts) {
-            update(account);
-        }
-        return accounts;
-    }
-
-    private Map<String, Long> extractVerification(Account account, Map<String, Long> verification) {
-        UniqueEntity.putVerification(account.getMember(), verification);
-        UniqueEntity.putVerification(account.getCredentials(), verification);
-        UniqueEntity.putVerification(account.getSimCards(), verification);
-        UniqueEntity.putVerification(account.getDevices(), verification);
-        return verification;
+        return accounts
+                .stream()
+                .map(account -> update(account))
+                .collect(Collectors.toList());
     }
 
     public Optional<Account> findByEmail(String email) {
