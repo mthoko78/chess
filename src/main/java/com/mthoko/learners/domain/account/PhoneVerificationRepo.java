@@ -12,4 +12,5 @@ public interface PhoneVerificationRepo extends JpaRepository<PhoneVerification, 
 
     Optional<PhoneVerification> findByVerificationCode(String verificationCode);
 
+    Optional<PhoneVerification> findByVerificationSms_Id(Long id);
 }

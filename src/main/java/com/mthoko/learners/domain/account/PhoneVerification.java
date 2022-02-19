@@ -3,6 +3,7 @@ package com.mthoko.learners.domain.account;
 import com.mthoko.learners.common.entity.UniqueEntity;
 import com.mthoko.learners.domain.sms.Sms;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import java.util.Date;
@@ -10,10 +11,13 @@ import java.util.Date;
 @Entity
 public class PhoneVerification extends UniqueEntity {
 
+    @Column(nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private String verificationCode;
 
+    @Column(nullable = false)
     private Date expiryDate;
 
     @OneToOne

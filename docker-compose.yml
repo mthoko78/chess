@@ -12,7 +12,7 @@ services:
     image: learners-container
     container_name: learners-container
     ports:
-      - "8080:8080"
+      - "5000:5000"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-learners:3306/learners?serverTimezone=UTC&autoReconnect=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: root

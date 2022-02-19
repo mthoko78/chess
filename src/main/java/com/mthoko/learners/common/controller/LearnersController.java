@@ -10,13 +10,10 @@ import com.mthoko.learners.domain.question.answer.AnswerService;
 import com.mthoko.learners.domain.question.image.QuestionImageService;
 import com.mthoko.learners.domain.question.imagematch.QuestionImageMatchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -48,9 +45,9 @@ public class LearnersController extends BaseController<Question> {
         this.choiceSpanService = choiceSpanService;
         this.imageService = imageService;
         this.imageMatchService = imageMatchService;
-//        if (categoryService.count() == 0) {
-//            load();
-//        }
+        if (categoryService.count() == 0) {
+            load();
+        }
     }
 
     public static final int MINUTES = 60;

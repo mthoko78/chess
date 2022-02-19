@@ -125,15 +125,13 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
     }
 
     @Override
-    public T delete(T entity) {
+    public void delete(T entity) {
         getRepo().delete(entity);
-        return entity;
     }
 
     @Override
-    public List<T> deleteAll(List<T> entities) {
+    public void deleteAll(List<T> entities) {
         getRepo().deleteAll(entities);
-        return entities;
     }
 
     @Override
