@@ -1,39 +1,21 @@
 package com.mthoko.learners.domain.choice.span;
 
 import com.mthoko.learners.common.entity.UniqueEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public final class ChoiceSpan extends UniqueEntity {
 
     private String romFigure;
 
     private String text;
-
-    public ChoiceSpan() {
-    }
-
-    public ChoiceSpan(String romFigure, String text) {
-        this.romFigure = romFigure;
-        this.text = text;
-    }
-
-    public String getRomFigure() {
-        return romFigure;
-    }
-
-    public void setRomFigure(String romFigure) {
-        this.romFigure = romFigure;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
 
     @Override
     public String getUniqueIdentifier() {

@@ -10,10 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
-class CalculatorRepositoryTest {
+class AccountRepositoryTest {
 
     @Autowired
     AccountRepo accountRepo;
@@ -38,13 +35,6 @@ class CalculatorRepositoryTest {
 
     @Autowired
     DeviceRepo deviceRepo;
-
-    @PersistenceContext
-    EntityManager entityManager;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
 
     @BeforeEach
     void setupDatabase() {
@@ -74,15 +64,13 @@ class CalculatorRepositoryTest {
         // When
         accountService.saveAll(rows); // this is just the stock JPA method as an example, but ideally we would only test custom JPA queries.
         // Then
-        assertEquals(3, accountService.count());
+        assertEquals(1, accountService.count());
         Optional<Account> saved = accountService.findByEmail(email);
         assertNotNull(saved);
         Account actual = saved.get();
         assertEquals(account, actual);
         assertEquals(account.getMember(), actual.getMember());
         assertEquals(account.getCredentials(), actual.getCredentials());
-
-
     }
 
     private Account createEntity(String name, String surname, String phone, String email, String password) {

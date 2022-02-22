@@ -92,7 +92,7 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
         for (SimContact simContact : simContacts) {
             DevContact devContact = new DevContact();
             devContact.setName(simContact.getName());
-            devContact.getValues().add(new DevContactValue(TYPE_MOBILE, simContact.getPhone()));
+            devContact.getValues().add(new DevContactValue(TYPE_MOBILE, simContact.getPhone(), null));
             devContacts.add(devContact);
         }
         return devContacts;

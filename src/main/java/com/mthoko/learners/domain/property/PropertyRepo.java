@@ -8,6 +8,6 @@ import java.util.Optional;
 @Repository
 public interface PropertyRepo extends JpaRepository<Property, Long> {
 
-	public Optional<Property> findByPropertyKey(String key);
+	Optional<Property> findByPropertyKey(String key);
 
 }

@@ -7,6 +7,9 @@ import com.mthoko.learners.domain.choice.span.ChoiceSpan;
 import com.mthoko.learners.domain.question.answer.Answer;
 import com.mthoko.learners.domain.question.image.QuestionImage;
 import com.mthoko.learners.domain.question.imagematch.QuestionImageMatch;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -15,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author Mthoko
- */
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public final class Question extends UniqueEntity {
 
     public static final int TYPE_ONE_ANSWER = 0;
@@ -49,94 +52,6 @@ public final class Question extends UniqueEntity {
     @OneToMany
     private List<QuestionImageMatch> matches = new ArrayList<>();
 
-    public Question() {
-    }
-
-    public Question(int number, int type, String text, Category category, QuestionImage image, Answer answer,
-                    List<Choice> choices, List<ChoiceSpan> choiceSpans, List<QuestionImageMatch> matches) {
-        this.number = number;
-        this.type = type;
-        this.text = text;
-        this.category = category;
-        this.image = image;
-        this.answer = answer;
-        this.choices = choices;
-        this.choiceSpans = choiceSpans;
-        this.matches = matches;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public List<Choice> getChoices() {
-        return choices;
-    }
-
-    public void setChoices(List<Choice> choices) {
-        this.choices = choices;
-    }
-
-    public List<ChoiceSpan> getChoiceSpans() {
-        return choiceSpans;
-    }
-
-    public void setChoiceSpans(List<ChoiceSpan> choiceSpans) {
-        this.choiceSpans = choiceSpans;
-    }
-
-    public int getTotalAnswers() {
-        return choices.size();
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public List<QuestionImageMatch> getMatches() {
-        return matches;
-    }
-
-    public QuestionImage getImage() {
-        return image;
-    }
-
-    public void setImage(QuestionImage image) {
-        this.image = image;
-    }
-
-    public Answer getAnswer() {
-        return answer;
-    }
-
-    public void setMatches(List<QuestionImageMatch> matches) {
-        this.matches = matches;
-    }
-
     public void setAnswer(Answer answer) {
         this.answer = answer;
         if (answer != null) {
@@ -151,41 +66,6 @@ public final class Question extends UniqueEntity {
     @Override
     public String getUniqueIdentifier() {
         return (category != null ? category.getName() : null) + "|" + number + "|" + text;
-    }
-
-    public static List<String> formatString(String s, int maxLen) {
-        List<String> result = new ArrayList<String>();
-        if (s.length() <= maxLen) {
-            result.add(s);
-            return result;
-        } else {
-            int i = 0;
-            String[] tokens = s.split(" ");
-            if (tokens.length < 2) {
-                result.add(s);
-                return result;
-            }
-            String newS = tokens[i];
-            while ((newS + " " + tokens[i + 1]).length() <= maxLen) {
-                newS += " " + tokens[++i];
-                if (i + 1 >= tokens.length) {
-                    break;
-                }
-            }
-            result.add(newS);
-            if (i + 1 >= tokens.length)
-                return result;
-            else {
-                String nextLine = tokens[++i];
-                for (i = i + 1; i < tokens.length; i++) {
-                    nextLine += " " + tokens[i];
-                }
-                result.addAll(formatString(nextLine, maxLen));
-                return result;
-                // result.add(nextLine);
-            }
-
-        }
     }
 
     @Override
@@ -231,15 +111,6 @@ public final class Question extends UniqueEntity {
                     .collect(Collectors.joining("\n")));
         }
         return builder.toString();
-    }
-
-    public void addSelection(char letter) {
-        if (answer == null) {
-            answer = new Answer(new ArrayList<>());
-        }
-        if (!answer.getSelection().contains(letter)) {
-            answer.getSelection().add(letter);
-        }
     }
 
 }

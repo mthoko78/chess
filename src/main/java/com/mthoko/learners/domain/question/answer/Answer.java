@@ -1,6 +1,9 @@
 package com.mthoko.learners.domain.question.answer;
 
 import com.mthoko.learners.common.entity.UniqueEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -8,29 +11,14 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * @author Mthoko
- */
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Answer extends UniqueEntity {
 
     @ElementCollection(targetClass = Character.class)
     private List<Character> selection;
-
-    public Answer() {
-    }
-
-    public Answer(List<Character> selection) {
-        this.selection = selection;
-    }
-
-    public List<Character> getSelection() {
-        return selection;
-    }
-
-    public void setSelection(List<Character> selection) {
-        this.selection = selection;
-    }
 
     @Override
     public String getUniqueIdentifier() {

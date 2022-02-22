@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface DeviceRepo extends JpaRepository<Device, Long> {
 
-	public List<Device> findByMemberId(long memberId);
+    List<Device> findByMemberId(long memberId);
 
-	public Optional<Device> findByImei(String imei);
+    Optional<Device> findByImei(String imei);
 }

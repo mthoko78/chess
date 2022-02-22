@@ -199,7 +199,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 
     @Override
     public Account findByMemberId(Long memberId) {
-        return accountRepo.findByMemberId(memberId);
+        return accountRepo.findByMember_Id(memberId);
     }
 
     private List<Member> findMatchingMembersByAccount(Account targetAccount) {
@@ -339,12 +339,12 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 
     @Override
     public Optional<Account> findByEmail(String email) {
-        return accountRepo.findByEmail(email);
+        return accountRepo.findByMember_Email(email);
     }
 
     @Override
     public Optional<Account> findByPhone(String phone) {
-        return accountRepo.findByPhone(phone);
+        return accountRepo.findByMember_Phone(phone);
     }
 
     @Override

@@ -1,13 +1,16 @@
 package com.mthoko.learners.domain.question.image;
 
 import com.mthoko.learners.common.entity.UniqueEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
-/**
- * @author Mthoko
- */
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public final class QuestionImage extends UniqueEntity {
 
     private String path;
@@ -15,39 +18,6 @@ public final class QuestionImage extends UniqueEntity {
     private int width;
 
     private int height;
-
-    public QuestionImage() {
-    }
-
-    public QuestionImage(String path, int width, int height) {
-        this.path = path;
-        this.width = width;
-        this.height = height;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
 
     @Override
     public String getUniqueIdentifier() {

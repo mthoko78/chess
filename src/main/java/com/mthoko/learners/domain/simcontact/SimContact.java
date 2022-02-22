@@ -1,64 +1,40 @@
 package com.mthoko.learners.domain.simcontact;
 
 import com.mthoko.learners.common.entity.UniqueEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class SimContact extends UniqueEntity {
-	
-	private Long simCardId;
 
-	private byte[] name;
+    private Long simCardId;
 
-	private String phone;
+    private byte[] name;
 
-	public SimContact() {
-	}
+    private String phone;
 
-	public SimContact(String name, String phone) {
-		setName(name);
-		setPhone(phone);
-	}
+    public String getName() {
+        return byteArrayToString(name);
+    }
 
-	public SimContact(Long simCardId, String name, String phone) {
-		setSimCardId(simCardId);
-		setName(name);
-		setPhone(phone);
-	}
+    public void setName(String name) {
+        this.name = stringToByteArray(name);
+    }
 
-	public String getName() {
-		return byteArrayToString(name);
-	}
+    @Override
+    public String getUniqueIdentifier() {
+        return phone;
+    }
 
-	public void setName(String name) {
-		this.name = stringToByteArray(name);
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public Long getSimCardId() {
-		return simCardId;
-	}
-
-	public void setSimCardId(Long simCardId) {
-		this.simCardId = simCardId;
-	}
-
-	@Override
-	public String getUniqueIdentifier() {
-		return phone;
-	}
-
-	@Override
-	public String toString() {
-		return "SimContact [id=" + getId() + ", simCardId=" + simCardId + ", name=" + getName() + ", phone=" + phone + "]";
-	}
+    @Override
+    public String toString() {
+        return "SimContact [id=" + getId() + ", simCardId=" + simCardId + ", name=" + getName() + ", phone=" + phone + "]";
+    }
 
 }
