@@ -3,16 +3,15 @@ package com.mthoko.learners.domain.account;
 import com.mthoko.learners.common.entity.UniqueEntity;
 import com.mthoko.learners.common.service.BaseServiceImpl;
 import com.mthoko.learners.domain.account.credentials.Credentials;
-import com.mthoko.learners.domain.account.credentials.CredentialsService;
+import com.mthoko.learners.domain.account.credentials.CredentialsRepo;
 import com.mthoko.learners.domain.account.member.Member;
-import com.mthoko.learners.domain.account.member.MemberService;
-import com.mthoko.learners.domain.devcontact.DevContactService;
-import com.mthoko.learners.domain.device.Device;
-import com.mthoko.learners.domain.device.DeviceService;
+import com.mthoko.learners.domain.account.member.MemberRepo;
+import com.mthoko.learners.domain.devcontact.DevContactRepo;
+import com.mthoko.learners.domain.device.DeviceRepo;
 import com.mthoko.learners.domain.simcard.SimCard;
-import com.mthoko.learners.domain.simcard.SimCardService;
-import com.mthoko.learners.domain.simcontact.SimContactService;
-import com.mthoko.learners.domain.sms.SmsService;
+import com.mthoko.learners.domain.simcard.SimCardRepo;
+import com.mthoko.learners.domain.simcontact.SimContactRepo;
+import com.mthoko.learners.domain.sms.SmsRepo;
 import com.mthoko.learners.exception.ApplicationException;
 import com.mthoko.learners.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,33 +28,33 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 
     private final PhoneVerificationRepo phoneVerificationRepo;
 
-    private final MemberService memberService;
+    private final MemberRepo memberRepo;
 
-    private final CredentialsService credentialsService;
+    private final CredentialsRepo credentialsRepo;
 
-    private final SimCardService simCardService;
+    private final SimCardRepo simCardRepo;
 
-    private final SimContactService simContactService;
+    private final SimContactRepo simContactRepo;
 
-    private final DeviceService deviceService;
+    private final DeviceRepo deviceRepo;
 
-    private final DevContactService devContactService;
+    private final DevContactRepo devContactRepo;
 
-    private final SmsService smsService;
+    private final SmsRepo smsRepo;
 
     @Autowired
-    public AccountServiceImpl(AccountRepo accountRepo, PhoneVerificationRepo phoneVerificationRepo, MemberService memberService, CredentialsService credentialsService,
-                              SimCardService simCardService, SimContactService simContactService, DeviceService deviceService,
-                              DevContactService devContactService, SmsService smsService) {
+    public AccountServiceImpl(AccountRepo accountRepo, PhoneVerificationRepo phoneVerificationRepo, MemberRepo memberRepo, CredentialsRepo credentialsRepo,
+                              SimCardRepo simCardRepo, SimContactRepo simContactRepo, DeviceRepo deviceRepo,
+                              DevContactRepo devContactRepo, SmsRepo smsRepo) {
         this.accountRepo = accountRepo;
         this.phoneVerificationRepo = phoneVerificationRepo;
-        this.memberService = memberService;
-        this.credentialsService = credentialsService;
-        this.simCardService = simCardService;
-        this.simContactService = simContactService;
-        this.deviceService = deviceService;
-        this.devContactService = devContactService;
-        this.smsService = smsService;
+        this.memberRepo = memberRepo;
+        this.credentialsRepo = credentialsRepo;
+        this.simCardRepo = simCardRepo;
+        this.simContactRepo = simContactRepo;
+        this.deviceRepo = deviceRepo;
+        this.devContactRepo = devContactRepo;
+        this.smsRepo = smsRepo;
     }
 
     @Override
@@ -116,22 +115,28 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
     @Override
     public Account save(Account account) {
         setDateBeforeSave(account, new Date());
-        memberService.save(account.getMember());
-        account.setMemberId(account.getMember().getId());
-        credentialsService.save(account.getCredentials());
-        deviceService.saveAll(account.getDevices());
-        simCardService.saveAll(account.getSimCards());
+        memberRepo.save(account.getMember());
+        Long memberId = account.getMember().getId();
+        account.getCredentials().setMemberId(memberId);
+        if (account.getDevices() != null) {
+            account.getDevices().forEach(device -> device.setMemberId(memberId));
+        }
+        if (account.getSimCards() != null) {
+            account.getSimCards().forEach(simCard -> simCard.setMemberId(memberId));
+        }
+        credentialsRepo.save(account.getCredentials());
+        deviceRepo.saveAll(account.getDevices());
+        simCardRepo.saveAll(account.getSimCards());
         return super.save(account);
     }
 
-    @Override
-    public <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
+    public static <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
         Account account = (Account) entity;
-        memberService.setDateBeforeSave(account.getMember(), date);
-        credentialsService.setDateBeforeSave(account.getCredentials(), date);
-        deviceService.setDateBeforeSave(account.getDevices(), date);
-        simCardService.setDateBeforeSave(account.getSimCards(), date);
-        return super.setDateBeforeSave(entity, date);
+        BaseServiceImpl.setDateBeforeSave(account.getMember(), date);
+        BaseServiceImpl.setDateBeforeSave(account.getCredentials(), date);
+        BaseServiceImpl.setDateBeforeSave(account.getDevices(), date);
+        BaseServiceImpl.setDateBeforeSave(account.getSimCards(), date);
+        return BaseServiceImpl.setDateBeforeSave(entity, date);
     }
 
     @Override
@@ -146,7 +151,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 
     @Override
     public void loadMatchingEntries(Account first, Account second, Set<String> duplicateEntries) {
-        if (first.getEmail().equals(second.getEmail()))
+        if (first.getMember().getEmail().equals(second.getMember().getEmail()))
             duplicateEntries.add("email");
         if (first.getMember().getPhone().equals(second.getMember().getPhone()))
             duplicateEntries.add("phone");
@@ -169,7 +174,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
                     phoneAlreadyInUse = true;
                 }
             }
-            if (!emailAlreadyInUse && account.getEmail().equals(matchingAccount.getEmail())) {
+            if (!emailAlreadyInUse && account.getMember().getEmail().equals(matchingAccount.getMember().getEmail())) {
                 emailAlreadyInUse = true;
             }
             if (!phoneAlreadyInUse && account.getMember().getPhone().equals(matchingAccount.getMember().getPhone())) {
@@ -200,12 +205,12 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
     private List<Member> findMatchingMembersByAccount(Account targetAccount) {
         Set<String> phones = getAllPhones(targetAccount);
         List<Member> members = new ArrayList<>();
-        Optional<Member> optionalMember = memberService.findByEmail(targetAccount.getEmail());
+        Optional<Member> optionalMember = memberRepo.findByEmail(targetAccount.getMember().getEmail());
         if (optionalMember.isPresent()) {
             members.add(optionalMember.get());
         }
         if (!phones.isEmpty()) {
-            members.addAll(memberService.findByPhoneIn(phones));
+            members.addAll(memberRepo.findByPhoneIn(phones));
         }
         return members;
     }
@@ -229,21 +234,51 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 
     @Override
     public List<Account> saveAll(List<Account> accounts) {
-        List<Member> members = new ArrayList<>();
-        List<Credentials> credentialsList = new ArrayList<>();
-        List<SimCard> simCards = new ArrayList<>();
-        List<Device> devices = new ArrayList<>();
-        accounts.forEach(account -> {
-            members.add(account.getMember());
-            credentialsList.add(account.getCredentials());
-            simCards.addAll(account.getSimCards());
-            devices.addAll(account.getDevices());
-        });
-        memberService.saveAll(members);
-        accounts.forEach(account -> account.setMemberId(account.getMember().getId()));
-        credentialsService.saveAll(credentialsList);
-        simCardService.saveAll(simCards);
-        deviceService.saveAll(devices);
+        memberRepo.saveAll(accounts
+                .stream()
+                .map(account -> account.getMember())
+                .collect(Collectors.toList()));
+        accounts
+                .stream()
+                .filter(account -> account.getDevices() != null)
+                .forEach(account -> {
+                    account.getDevices().forEach(device -> device.setMemberId(account.getMember().getId()));
+                });
+        accounts
+                .stream()
+                .filter(account -> account.getSimCards() != null)
+                .forEach(account -> {
+                    account.getSimCards().forEach(simCard -> simCard.setMemberId(account.getMember().getId()));
+                });
+        List<Credentials> credentialsList = accounts
+                .stream()
+                .map(account -> account.getCredentials().setMemberId(account.getMember().getId()))
+                .collect(Collectors.toList());
+        credentialsRepo.saveAll(credentialsList);
+        simCardRepo.saveAll(accounts
+                .stream()
+                .filter(account -> account.getSimCards() != null)
+                .map(account -> account.getSimCards()
+                        .stream()
+                        .map(simCard -> simCard.setMemberId(account.getMember().getId()))
+                        .collect(Collectors.toList()))
+                .reduce(new ArrayList<>(), (simCards, simCards2) -> {
+                    simCards.addAll(simCards2);
+                    return simCards;
+                })
+        );
+        deviceRepo.saveAll(accounts
+                .stream()
+                .filter(account -> account.getDevices() != null)
+                .map(account -> account.getDevices()
+                        .stream()
+                        .map(device -> device.setMemberId(account.getMember().getId()))
+                        .collect(Collectors.toList()))
+                .reduce(new ArrayList<>(), (devices, devices2) -> {
+                    devices.addAll(devices2);
+                    return devices;
+                })
+        );
         return super.saveAll(accounts);
     }
 
@@ -252,29 +287,29 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
         deleteSimContacts(account);
         deleteDeviceContacts(account);
         deleteSmses(account);
-        simCardService.deleteAll(account.getSimCards());
-        deviceService.deleteAll(account.getDevices());
-        credentialsService.deleteById(account.getCredentials().getId());
+        simCardRepo.deleteAll(account.getSimCards());
+        deviceRepo.deleteAll(account.getDevices());
+        credentialsRepo.deleteById(account.getCredentials().getId());
         super.deleteById(account.getId());
-        memberService.deleteById(account.getMember().getId());
+        memberRepo.deleteById(account.getMember().getId());
     }
 
     private void deleteDeviceContacts(Account account) {
-        devContactService.deleteByDevIdIn(account.getDevices()
+        devContactRepo.deleteByDevIdIn(account.getDevices()
                 .stream()
                 .map(device -> device.getId())
                 .collect(Collectors.toList()));
     }
 
     private void deleteSimContacts(Account account) {
-        simContactService.deleteBySimCardIdIn(account.getSimCards()
+        simContactRepo.deleteBySimCardIdIn(account.getSimCards()
                 .stream()
                 .map(simCard -> simCard.getId())
                 .collect(Collectors.toList()));
     }
 
     private Object deleteSmses(Account account) {
-        return smsService.deleteByRecipientIn(account.getSimCards()
+        return smsRepo.deleteByRecipientIn(account.getSimCards()
                 .stream()
                 .map(simCard -> simCard.getPhone())
                 .collect(Collectors.toList()));
@@ -282,10 +317,10 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
 
     @Override
     public Account update(Account entity) {
-        memberService.save(entity.getMember());
-        credentialsService.save(entity.getCredentials());
-        simCardService.saveAll(entity.getSimCards());
-        deviceService.saveAll(entity.getDevices());
+        memberRepo.save(entity.getMember());
+        credentialsRepo.save(entity.getCredentials());
+        simCardRepo.saveAll(entity.getSimCards());
+        deviceRepo.saveAll(entity.getDevices());
         return entity;
     }
 

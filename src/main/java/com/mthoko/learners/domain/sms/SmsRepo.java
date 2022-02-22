@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SmsResourceRepo extends JpaRepository<Sms, Long> {
+public interface SmsRepo extends JpaRepository<Sms, Long> {
 
     int countByRecipient(String recipient);
 

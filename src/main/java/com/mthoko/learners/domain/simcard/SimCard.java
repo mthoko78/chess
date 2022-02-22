@@ -1,10 +1,18 @@
 package com.mthoko.learners.domain.simcard;
 
 import com.mthoko.learners.common.entity.UniqueEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Accessors(chain = true)
 public class SimCard extends UniqueEntity {
 
     private Long memberId;
@@ -12,33 +20,6 @@ public class SimCard extends UniqueEntity {
     private String phone;
 
     private String networkProvider;
-
-    public SimCard() {
-    }
-
-    public Long getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getNetworkProvider() {
-        return networkProvider;
-    }
-
-    public void setNetworkProvider(String networkProvider) {
-        this.networkProvider = networkProvider;
-    }
 
     @Override
     public String getUniqueIdentifier() {

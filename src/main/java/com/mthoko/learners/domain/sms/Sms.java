@@ -16,7 +16,7 @@ public class Sms extends UniqueEntity {
 
     private String recipientImei;
 
-    @Column(length = 10240)
+    @Column(length = 4096)
     private byte[] body;
 
     private Date date;

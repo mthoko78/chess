@@ -14,8 +14,6 @@ public interface DevContactService extends BaseService<DevContact> {
 
 	Map<DevContactValue, List<DevContact>> mapContactsByValues(List<DevContact> contacts);
 
-	List<DevContactValue> extractContactValues(List<DevContact> unverified);
-
 	List<DevContact> findByImei(String imei);
 
 	List<DevContact> findByImeiExcludingIds(String imei, List<Long> ids);

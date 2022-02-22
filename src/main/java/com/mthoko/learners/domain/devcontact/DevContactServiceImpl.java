@@ -112,8 +112,7 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
         return contactsMappedByValues;
     }
 
-    @Override
-    public List<DevContactValue> extractContactValues(List<DevContact> contacts) {
+    public static List<DevContactValue> extractContactValues(List<DevContact> contacts) {
         List<DevContactValue> values = new ArrayList<>();
         for (DevContact contact : contacts) {
             values.addAll(contact.getValues());
@@ -258,18 +257,16 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
         return super.save(entity);
     }
 
-    @Override
-    public <V extends UniqueEntity> List<V> setDateBeforeSave(List<V> entities, Date date) {
+    public static <V extends UniqueEntity> List<V> setDateBeforeSave(List<V> entities, Date date) {
         List<DevContactValue> values = extractContactValues((List<DevContact>) entities);
-        setDateBeforeSave(values, date);
-        super.setDateBeforeSave(entities, date);
+        BaseServiceImpl.setDateBeforeSave(values, date);
+        BaseServiceImpl.setDateBeforeSave(entities, date);
         return entities;
     }
 
-    @Override
-    public <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
-        super.setDateBeforeSave(((DevContact) entity).getValues(), date);
-        super.setDateBeforeSave(entity, date);
+    public static <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
+        BaseServiceImpl.setDateBeforeSave(((DevContact) entity).getValues(), date);
+        BaseServiceImpl.setDateBeforeSave(entity, date);
         return entity;
     }
 

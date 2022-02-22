@@ -2,6 +2,7 @@ package com.mthoko.learners.domain.property;
 
 import com.mthoko.learners.common.entity.UniqueEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
@@ -9,6 +10,7 @@ public class Property extends UniqueEntity {
 
 	private String propertyKey;
 
+	@Column(length = 4096)
 	private String propertyValue;
 
 	public Property(String key, String value) {

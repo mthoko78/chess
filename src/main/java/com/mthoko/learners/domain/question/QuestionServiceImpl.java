@@ -324,17 +324,16 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         return entity;
     }
 
-    @Override
-    public <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
-        super.setDateBeforeSave(entity, date);
+    public static <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
+        BaseServiceImpl.setDateBeforeSave(entity, date);
         if (entity instanceof Question) {
             Question question = (Question) entity;
-            super.setDateBeforeSave(question.getAnswer(), date);
-            super.setDateBeforeSave(question.getImage(), date);
-            super.setDateBeforeSave(question.getChoices(), date);
-            super.setDateBeforeSave(question.getChoiceSpans(), date);
-            super.setDateBeforeSave(question.getMatches(), date);
-            super.setDateBeforeSave(question.getMatches()
+            BaseServiceImpl.setDateBeforeSave(question.getAnswer(), date);
+            BaseServiceImpl.setDateBeforeSave(question.getImage(), date);
+            BaseServiceImpl.setDateBeforeSave(question.getChoices(), date);
+            BaseServiceImpl.setDateBeforeSave(question.getChoiceSpans(), date);
+            BaseServiceImpl.setDateBeforeSave(question.getMatches(), date);
+            BaseServiceImpl.setDateBeforeSave(question.getMatches()
                     .stream()
                     .map(questionImageMatch -> questionImageMatch.getQuestionImage())
                     .collect(Collectors.toList()), date

@@ -57,7 +57,7 @@ public class AccountController extends BaseController<Account> {
         Optional<Account> optionalAccount = service.findByEmail(user.getName());
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
-            if (account.getPassword().equals(user.getPassword())) {
+            if (account.getCredentials().getPassword().equals(user.getPassword())) {
                 return ResponseEntity.ok(account);
             }
         }

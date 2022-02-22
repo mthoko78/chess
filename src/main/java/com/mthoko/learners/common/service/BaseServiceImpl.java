@@ -78,16 +78,14 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
         return getRepo().save(entity);
     }
 
-    @Override
-    public <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
+    public static <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
         if (entity != null && entity.getDateCreated() == null) {
             entity.setDateCreated(date);
         }
         return entity;
     }
 
-    @Override
-    public <V extends UniqueEntity> List<V> setDateBeforeSave(List<V> entities, Date date) {
+    public static <V extends UniqueEntity> List<V> setDateBeforeSave(List<V> entities, Date date) {
         if (entities != null) {
             for (V entity : entities) {
                 setDateBeforeSave(entity, date);
@@ -103,20 +101,6 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
             return getRepo().saveAll(entities);
         }
         return new ArrayList<>();
-    }
-
-    @Override
-    public Map<String, Long> extractVerification(T entity) {
-        Map<String, Long> verification = new HashMap<>();
-        UniqueEntity.putVerification(entity, verification);
-        return verification;
-    }
-
-    @Override
-    public Map<String, Long> extractVerification(List<T> entities) {
-        Map<String, Long> verification = new HashMap<>();
-        entities.forEach((entity) -> UniqueEntity.putVerification(entity, verification));
-        return verification;
     }
 
     @Override

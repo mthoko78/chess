@@ -42,14 +42,6 @@ public interface BaseService<T extends UniqueEntity> {
 
 	Optional<T> findById(Long id);
 
-	<V extends UniqueEntity> V setDateBeforeSave(V entity, Date date);
-
-	<V extends UniqueEntity> List<V> setDateBeforeSave(List<V> entities, Date date);
-
-    Map<String, Long> extractVerification(T entity);
-
-    Map<String, Long> extractVerification(List<T> entities);
-
 	<V extends UniqueEntity> V setDateBeforeUpdate(V entity, Date date);
 
 	<V extends UniqueEntity> List<V> setDateBeforeUpdate(List<V> entities, Date date);

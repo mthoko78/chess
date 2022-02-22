@@ -2,6 +2,7 @@ package com.mthoko.learners.domain.mail;
 
 import com.mthoko.learners.common.entity.UniqueEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.util.Date;
 
@@ -14,6 +15,7 @@ public class SimpleMail extends UniqueEntity {
 
 	private String subject;
 
+	@Column(length = 4096)
 	private String body;
 
 	private Date dateSent;

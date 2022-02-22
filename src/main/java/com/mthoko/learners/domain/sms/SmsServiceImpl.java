@@ -51,7 +51,7 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
 
     public static final String API_PHONE_NUMBER = "0820072381";
 
-    private SmsResourceRepo smsResourceRepo;
+    private SmsRepo smsRepo;
 
     private final MailService mailService;
 
@@ -66,8 +66,8 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     private final PhoneVerificationRepo verificationRepo;
 
     @Autowired
-    public SmsServiceImpl(SmsResourceRepo smsResourceRepo, MailService mailService, PropertyService propertyResource, SmsDeliveryReportRepo smsDeliveryReportRepo, MessageResponseRepo messageResponseRepo, MessageRepo messageRepo, PhoneVerificationRepo verificationRepo) {
-        this.smsResourceRepo = smsResourceRepo;
+    public SmsServiceImpl(SmsRepo smsRepo, MailService mailService, PropertyService propertyResource, SmsDeliveryReportRepo smsDeliveryReportRepo, MessageResponseRepo messageResponseRepo, MessageRepo messageRepo, PhoneVerificationRepo verificationRepo) {
+        this.smsRepo = smsRepo;
         this.mailService = mailService;
         this.propertyResource = propertyResource;
         this.smsDeliveryReportRepo = smsDeliveryReportRepo;
@@ -121,12 +121,12 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
 
     @Override
     public List<Sms> findByRecipient(String recipient) {
-        return smsResourceRepo.findByRecipient(recipient);
+        return smsRepo.findByRecipient(recipient);
     }
 
     @Override
     public List<Sms> findByRecipientImei(String recipientImei) {
-        return smsResourceRepo.findByRecipientImei(recipientImei);
+        return smsRepo.findByRecipientImei(recipientImei);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
 
     @Override
     public List<Sms> findFromDate(Date date) {
-        return smsResourceRepo.findByDateCreatedBetween(date, new Date());
+        return smsRepo.findByDateCreatedBetween(date, new Date());
     }
 
     @Override
@@ -181,27 +181,27 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
 
     @Override
     public Optional<Sms> findLastMessageByRecipient(String recipient) {
-        return smsResourceRepo.findFirstByRecipientOrderByDateCreatedDesc(recipient);
+        return smsRepo.findFirstByRecipientOrderByDateCreatedDesc(recipient);
     }
 
     @Override
     public JpaRepository<Sms, Long> getRepo() {
-        return smsResourceRepo;
+        return smsRepo;
     }
 
     @Override
     public int countByRecipient(String recipient) {
-        return smsResourceRepo.countByRecipient(recipient);
+        return smsRepo.countByRecipient(recipient);
     }
 
     @Override
     public int countByRecipientImei(String recipientImei) {
-        return smsResourceRepo.countByRecipientImei(recipientImei);
+        return smsRepo.countByRecipientImei(recipientImei);
     }
 
     @Override
     public List<Sms> findByRecipientExcludingIds(String recipient, List<Long> ids) {
-        return smsResourceRepo.findByRecipient(recipient).stream().filter(call -> !ids.contains(call.getId()))
+        return smsRepo.findByRecipient(recipient).stream().filter(call -> !ids.contains(call.getId()))
                 .collect(Collectors.toList());
     }
 
@@ -215,7 +215,7 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
         Sms forwarded = new Sms();
         forwarded.setBody(sms.getFormattedString());
         forwarded.setRecipient(to);
-        return sendViaClickatel(forwarded);
+        return sendSms(forwarded);
     }
 
     private String sendViaNexmo(Sms sms, String to) {
@@ -242,6 +242,7 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
     }
 
     private MessageResponse sendViaClickatel(Sms sms) {
+        validateBodyLength(sms);
         String messageResponseData = HttpManager.getData(getRequestPackage(sms));
         MessageResponse response = parseMessageResponse(messageResponseData);
         Message message = response.getMessages().get(0);
@@ -253,6 +254,13 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
         saveMessageResponse(response);
         save(sms);
         return response;
+    }
+
+    private void validateBodyLength(Sms sms) throws ApplicationException {
+        int maxLen = 6 * (160 - 7);
+        if (sms.getBody().length() > maxLen) {
+            throw new ApplicationException("Message body exceeds max length (" + maxLen + ")");
+        }
     }
 
     @Override
@@ -314,7 +322,7 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
 
     @Override
     public Object deleteByRecipientIn(List<String> phones) {
-        return smsResourceRepo.deleteByRecipientIn(phones);
+        return smsRepo.deleteByRecipientIn(phones);
     }
 
     @Override
@@ -364,7 +372,7 @@ public class SmsServiceImpl extends BaseServiceImpl<Sms> implements SmsService {
 
     @Override
     public Optional<Sms> findByMessageId(String messageId) {
-        return smsResourceRepo.findByMessageId(messageId);
+        return smsRepo.findByMessageId(messageId);
     }
 
     private String getString(Map<String, Object> deliveryReport, String key) {
