@@ -1,11 +1,13 @@
 package com.mthoko.learners.domain.locationstamp;
 
 import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.util.DataManager;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.util.Date;
 
 @Entity
@@ -22,7 +24,14 @@ public class LocationStamp extends UniqueEntity {
 
     private String longitude;
 
+    @Transient
+    private String geoLocUrl;
+
     private Date timeCaptured;
+
+    public String getGeoLocUrl() {
+        return DataManager.getGeoLocUrl(latitude, longitude);
+    }
 
     @Override
     public String getUniqueIdentifier() {
