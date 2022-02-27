@@ -1,6 +1,6 @@
 package com.mthoko.learners.common.controller;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.common.service.BaseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = {"http://localhost:3000", "https://printing-services.herokuapp.com", "https://mthoko.herokuapp.com"})
-public abstract class BaseController<T extends UniqueEntity> implements EntityOperations<T> {
+public abstract class BaseController<T extends BaseEntity> implements EntityOperations<T> {
 
     public abstract BaseService<T> getService();
 

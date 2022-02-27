@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.question;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.common.service.BaseServiceImpl;
 import com.mthoko.learners.domain.category.Category;
 import com.mthoko.learners.domain.category.CategoryRepo;
@@ -305,7 +305,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
     }
 
     @Override
-    public <V extends UniqueEntity> V setDateBeforeUpdate(V entity, Date date) {
+    public <V extends BaseEntity> V setDateBeforeUpdate(V entity, Date date) {
         super.setDateBeforeUpdate(entity, date);
         if (entity instanceof Question) {
             Question question = (Question) entity;
@@ -324,7 +324,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<Question> implements Qu
         return entity;
     }
 
-    public static <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
+    public static <V extends BaseEntity> V setDateBeforeSave(V entity, Date date) {
         BaseServiceImpl.setDateBeforeSave(entity, date);
         if (entity instanceof Question) {
             Question question = (Question) entity;

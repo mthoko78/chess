@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.question;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.domain.category.Category;
 import com.mthoko.learners.domain.choice.Choice;
 import com.mthoko.learners.domain.choice.span.ChoiceSpan;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public final class Question extends UniqueEntity {
+public final class Question extends BaseEntity {
 
     public static final int TYPE_ONE_ANSWER = 0;
     public static final int TYPE_CHOICE = 1;

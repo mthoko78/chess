@@ -1,7 +1,7 @@
 package com.mthoko.learners.domain.sms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Sms extends UniqueEntity {
+public class Sms extends BaseEntity {
 
     private String sender;
 

@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.account;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.domain.sms.Sms;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PhoneVerification extends UniqueEntity {
+public class PhoneVerification extends BaseEntity {
 
     @Column(nullable = false)
     private String phoneNumber;

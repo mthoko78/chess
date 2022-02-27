@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.question.answer;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Answer extends UniqueEntity {
+public class Answer extends BaseEntity {
 
     @ElementCollection(targetClass = Character.class)
     private List<Character> selection;

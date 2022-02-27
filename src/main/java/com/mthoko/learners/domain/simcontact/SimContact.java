@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.simcontact;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class SimContact extends UniqueEntity {
+public class SimContact extends BaseEntity {
 
     private Long simCardId;
 

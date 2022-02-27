@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.locationstamp;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.common.util.DataManager;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class LocationStamp extends UniqueEntity {
+public class LocationStamp extends BaseEntity {
 
     private String imei;
 

@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.devcontact;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.common.service.BaseServiceImpl;
 import com.mthoko.learners.domain.device.Device;
 import com.mthoko.learners.domain.device.DeviceRepo;
@@ -257,14 +257,14 @@ public class DevContactServiceImpl extends BaseServiceImpl<DevContact> implement
         return super.save(entity);
     }
 
-    public static <V extends UniqueEntity> List<V> setDateBeforeSave(List<V> entities, Date date) {
+    public static <V extends BaseEntity> List<V> setDateBeforeSave(List<V> entities, Date date) {
         List<DevContactValue> values = extractContactValues((List<DevContact>) entities);
         BaseServiceImpl.setDateBeforeSave(values, date);
         BaseServiceImpl.setDateBeforeSave(entities, date);
         return entities;
     }
 
-    public static <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
+    public static <V extends BaseEntity> V setDateBeforeSave(V entity, Date date) {
         BaseServiceImpl.setDateBeforeSave(((DevContact) entity).getValues(), date);
         BaseServiceImpl.setDateBeforeSave(entity, date);
         return entity;

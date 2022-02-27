@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.address;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Address extends UniqueEntity {
+public class Address extends BaseEntity {
 
     private String country;
 

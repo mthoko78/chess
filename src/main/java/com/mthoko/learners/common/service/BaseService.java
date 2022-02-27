@@ -1,16 +1,15 @@
 package com.mthoko.learners.common.service;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.domain.property.Property;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Transactional
-public interface BaseService<T extends UniqueEntity> {
+public interface BaseService<T extends BaseEntity> {
 
 	String getProperty(String key);
 
@@ -42,11 +41,11 @@ public interface BaseService<T extends UniqueEntity> {
 
 	Optional<T> findById(Long id);
 
-	<V extends UniqueEntity> V setDateBeforeUpdate(V entity, Date date);
+	<V extends BaseEntity> V setDateBeforeUpdate(V entity, Date date);
 
-	<V extends UniqueEntity> List<V> setDateBeforeUpdate(List<V> entities, Date date);
+	<V extends BaseEntity> List<V> setDateBeforeUpdate(List<V> entities, Date date);
 
-	<E extends UniqueEntity> List<E> extractDuplicates(List<E> entities);
+	<E extends BaseEntity> List<E> extractDuplicates(List<E> entities);
 
 	long count();
 }

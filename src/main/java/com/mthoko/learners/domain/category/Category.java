@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.category;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public final class Category extends UniqueEntity {
+public final class Category extends BaseEntity {
 
     private String name;
 
@@ -20,7 +20,7 @@ public final class Category extends UniqueEntity {
     private int totalQuestions;
 
     @Override
-    public int compareTo(UniqueEntity that) {
+    public int compareTo(BaseEntity that) {
         if (that.getClass() != getClass()) {
             return -1;
         }

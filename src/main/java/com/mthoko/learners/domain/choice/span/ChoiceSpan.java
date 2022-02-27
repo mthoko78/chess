@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.choice.span;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public final class ChoiceSpan extends UniqueEntity {
+public final class ChoiceSpan extends BaseEntity {
 
     private String romFigure;
 

@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.device;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 @Accessors(chain = true)
-public class Device extends UniqueEntity {
+public class Device extends BaseEntity {
 
     private Long memberId;
 

@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 import java.util.*;
 
 @MappedSuperclass
-public abstract class UniqueEntity implements Comparable<UniqueEntity> {
+public abstract class BaseEntity implements Comparable<BaseEntity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +54,7 @@ public abstract class UniqueEntity implements Comparable<UniqueEntity> {
         putVerification(this, verification);
     }
 
-    public static <T extends UniqueEntity> void putVerification(T entity, Map<String, Long> verification) {
+    public static <T extends BaseEntity> void putVerification(T entity, Map<String, Long> verification) {
         if (entity.getId() != null && entity.getId() > 0) {
             String uniqueIdentifier = entity.getUniqueIdentifier();
             Long id = entity.getId();
@@ -62,9 +62,9 @@ public abstract class UniqueEntity implements Comparable<UniqueEntity> {
         }
     }
 
-    public static <T extends UniqueEntity> void putVerification(List<T> entities, Map<String, Long> verification) {
-        for (UniqueEntity uniqueEntity : entities) {
-            putVerification(uniqueEntity, verification);
+    public static <T extends BaseEntity> void putVerification(List<T> entities, Map<String, Long> verification) {
+        for (BaseEntity baseEntity : entities) {
+            putVerification(baseEntity, verification);
         }
     }
 
@@ -77,7 +77,7 @@ public abstract class UniqueEntity implements Comparable<UniqueEntity> {
             return false;
         }
         if (getClass().equals(o.getClass())) {
-            return getUniqueIdentifier().equals(((UniqueEntity) o).getUniqueIdentifier());
+            return getUniqueIdentifier().equals(((BaseEntity) o).getUniqueIdentifier());
         }
         return false;
     }
@@ -88,7 +88,7 @@ public abstract class UniqueEntity implements Comparable<UniqueEntity> {
     }
 
     @Override
-    public int compareTo(UniqueEntity that) {
+    public int compareTo(BaseEntity that) {
         if (that == null) {
             return -1;
         }
@@ -96,7 +96,7 @@ public abstract class UniqueEntity implements Comparable<UniqueEntity> {
     }
 
     @JsonIgnore
-    public <T extends UniqueEntity> String getUniqueIdentifierByList(List<T> entities) {
+    public <T extends BaseEntity> String getUniqueIdentifierByList(List<T> entities) {
         Set<String> sortedIdentifiers = new TreeSet<>();
         for (T entity : entities) {
             sortedIdentifiers.add(entity.getUniqueIdentifier());

@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.question.imagematch;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.domain.question.image.QuestionImage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public final class QuestionImageMatch extends UniqueEntity {
+public final class QuestionImageMatch extends BaseEntity {
 
     private int imageNo;
 

@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.account;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.common.service.BaseServiceImpl;
 import com.mthoko.learners.domain.account.credentials.Credentials;
 import com.mthoko.learners.domain.account.credentials.CredentialsRepo;
@@ -130,7 +130,7 @@ public class AccountServiceImpl extends BaseServiceImpl<Account> implements Acco
         return super.save(account);
     }
 
-    public static <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
+    public static <V extends BaseEntity> V setDateBeforeSave(V entity, Date date) {
         Account account = (Account) entity;
         BaseServiceImpl.setDateBeforeSave(account.getMember(), date);
         BaseServiceImpl.setDateBeforeSave(account.getCredentials(), date);

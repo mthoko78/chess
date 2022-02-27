@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.simcard;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @Data
 @Accessors(chain = true)
-public class SimCard extends UniqueEntity {
+public class SimCard extends BaseEntity {
 
     private Long memberId;
 

@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.account;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.domain.account.credentials.Credentials;
 import com.mthoko.learners.domain.account.member.Member;
 import com.mthoko.learners.domain.device.Device;
@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Accessors(chain = true)
-public class Account extends UniqueEntity {
+public class Account extends BaseEntity {
 
     @OneToOne
     private Member member;

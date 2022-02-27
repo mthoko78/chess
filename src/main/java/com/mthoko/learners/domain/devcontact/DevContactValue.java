@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.devcontact;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class DevContactValue extends UniqueEntity {
+public class DevContactValue extends BaseEntity {
 
     private Integer source;
 

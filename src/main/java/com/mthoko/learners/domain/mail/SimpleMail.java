@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.mail;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class SimpleMail extends UniqueEntity {
+public class SimpleMail extends BaseEntity {
 
     private String sender;
 

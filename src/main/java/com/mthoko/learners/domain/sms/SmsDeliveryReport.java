@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.sms;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class SmsDeliveryReport extends UniqueEntity {
+public class SmsDeliveryReport extends BaseEntity {
 
     private String integrationName;
 

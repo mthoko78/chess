@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.question.image;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public final class QuestionImage extends UniqueEntity {
+public final class QuestionImage extends BaseEntity {
 
     private String path;
 

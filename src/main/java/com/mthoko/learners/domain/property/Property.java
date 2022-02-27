@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.property;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Property extends UniqueEntity {
+public class Property extends BaseEntity {
 
     private String propertyKey;
 

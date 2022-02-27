@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.question.review;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.domain.account.member.Member;
 import com.mthoko.learners.domain.question.Question;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class QuestionReviewRequest extends UniqueEntity {
+public class QuestionReviewRequest extends BaseEntity {
 
     public static final String REVIEW_STATUS_OPEN = "open";
     public static final String REVIEW_STATUS_PENDING_CLOSURE = "in progress";

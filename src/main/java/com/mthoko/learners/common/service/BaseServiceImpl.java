@@ -1,6 +1,6 @@
 package com.mthoko.learners.common.service;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.domain.property.Property;
 import com.mthoko.learners.domain.property.PropertyRepo;
 import com.mthoko.learners.exception.ApplicationException;
@@ -14,7 +14,7 @@ import java.util.*;
 import static com.mthoko.learners.common.repo.BaseResourceRemote.APPLICATION_PROPERTIES;
 
 
-public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseService<T> {
+public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
     @Autowired
     private PropertyRepo propertyResource;
@@ -78,14 +78,14 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
         return getRepo().save(entity);
     }
 
-    public static <V extends UniqueEntity> V setDateBeforeSave(V entity, Date date) {
+    public static <V extends BaseEntity> V setDateBeforeSave(V entity, Date date) {
         if (entity != null && entity.getDateCreated() == null) {
             entity.setDateCreated(date);
         }
         return entity;
     }
 
-    public static <V extends UniqueEntity> List<V> setDateBeforeSave(List<V> entities, Date date) {
+    public static <V extends BaseEntity> List<V> setDateBeforeSave(List<V> entities, Date date) {
         if (entities != null) {
             for (V entity : entities) {
                 setDateBeforeSave(entity, date);
@@ -145,20 +145,20 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
     }
 
     @Override
-    public <V extends UniqueEntity> V setDateBeforeUpdate(V entity, Date date) {
+    public <V extends BaseEntity> V setDateBeforeUpdate(V entity, Date date) {
         entity.setLastModified(date);
         return entity;
     }
 
     @Override
-    public <V extends UniqueEntity> List<V> setDateBeforeUpdate(List<V> entities, Date date) {
+    public <V extends BaseEntity> List<V> setDateBeforeUpdate(List<V> entities, Date date) {
         for (V entity : entities) {
             setDateBeforeUpdate(entity, date);
         }
         return entities;
     }
 
-    public <E extends UniqueEntity> void removeAll(List<E> entities, List<E> toRemove) {
+    public <E extends BaseEntity> void removeAll(List<E> entities, List<E> toRemove) {
         List<E> entitiesToRemove = new ArrayList<>();
         for (E entity : entities) {
             for (E entity2 : toRemove) {
@@ -171,7 +171,7 @@ public abstract class BaseServiceImpl<T extends UniqueEntity> implements BaseSer
     }
 
     @Override
-    public <E extends UniqueEntity> List<E> extractDuplicates(List<E> entities) {
+    public <E extends BaseEntity> List<E> extractDuplicates(List<E> entities) {
         List<E> distinct = new ArrayList<>();
         List<E> duplicates = new ArrayList<>();
 

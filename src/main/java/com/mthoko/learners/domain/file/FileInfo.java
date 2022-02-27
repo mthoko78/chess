@@ -1,7 +1,7 @@
 package com.mthoko.learners.domain.file;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class FileInfo extends UniqueEntity {
+public class FileInfo extends BaseEntity {
 
     private String ownerImei;
 

@@ -1,6 +1,6 @@
 package com.mthoko.learners.domain.device;
 
-import com.mthoko.learners.common.entity.UniqueEntity;
+import com.mthoko.learners.common.entity.BaseEntity;
 import com.mthoko.learners.common.service.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,7 +35,7 @@ public class DeviceServiceImpl extends BaseServiceImpl<Device> implements Device
 		Optional<Device> optionalDevice = deviceRepo.findByImei(device.getImei());
 		Map<String, Long> verification = new HashMap<>();
 		if (optionalDevice.isPresent()) {
-			UniqueEntity.putVerification(optionalDevice.get(), verification);
+			BaseEntity.putVerification(optionalDevice.get(), verification);
 		}
 		return verification;
 	}
