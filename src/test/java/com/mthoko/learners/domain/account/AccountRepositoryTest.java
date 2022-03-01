@@ -1,11 +1,15 @@
 package com.mthoko.learners.domain.account;
 
-import com.mthoko.learners.domain.account.credentials.Credentials;
-import com.mthoko.learners.domain.account.credentials.CredentialsRepo;
-import com.mthoko.learners.domain.account.member.Member;
-import com.mthoko.learners.domain.account.member.MemberRepo;
-import com.mthoko.learners.domain.device.DeviceRepo;
-import com.mthoko.learners.domain.simcard.SimCardRepo;
+import com.mthoko.learners.persistence.entity.Account;
+import com.mthoko.learners.persistence.entity.Credentials;
+import com.mthoko.learners.persistence.repository.AccountRepo;
+import com.mthoko.learners.persistence.repository.CredentialsRepo;
+import com.mthoko.learners.persistence.entity.Member;
+import com.mthoko.learners.persistence.repository.MemberRepo;
+import com.mthoko.learners.persistence.repository.DeviceRepo;
+import com.mthoko.learners.persistence.repository.SimCardRepo;
+import com.mthoko.learners.service.AccountService;
+import com.mthoko.learners.service.AccountServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

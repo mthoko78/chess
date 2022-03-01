@@ -1,14 +1,14 @@
 package com.mthoko.learners.common.controller;
 
-import com.mthoko.learners.common.service.BaseService;
-import com.mthoko.learners.domain.category.CategoryService;
-import com.mthoko.learners.domain.choice.ChoiceService;
-import com.mthoko.learners.domain.choice.span.ChoiceSpanService;
-import com.mthoko.learners.domain.question.Question;
-import com.mthoko.learners.domain.question.QuestionService;
-import com.mthoko.learners.domain.question.answer.AnswerService;
-import com.mthoko.learners.domain.question.image.QuestionImageService;
-import com.mthoko.learners.domain.question.imagematch.QuestionImageMatchService;
+import com.mthoko.learners.service.BaseService;
+import com.mthoko.learners.service.CategoryService;
+import com.mthoko.learners.service.ChoiceService;
+import com.mthoko.learners.service.ChoiceSpanService;
+import com.mthoko.learners.persistence.entity.Question;
+import com.mthoko.learners.service.QuestionService;
+import com.mthoko.learners.service.AnswerService;
+import com.mthoko.learners.service.QuestionImageService;
+import com.mthoko.learners.service.QuestionImageMatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,8 +1,11 @@
 package com.mthoko.learners.domain.sms;
 
-import com.mthoko.learners.common.util.HttpManager;
-import com.mthoko.learners.common.util.RequestPackage;
 import com.mthoko.learners.exception.ApplicationException;
+import com.mthoko.learners.persistence.entity.Sms;
+import com.mthoko.learners.persistence.repository.MessageResponseRepo;
+import com.mthoko.learners.persistence.repository.SmsRepo;
+import com.mthoko.learners.service.SmsService;
+import com.mthoko.learners.service.SmsServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

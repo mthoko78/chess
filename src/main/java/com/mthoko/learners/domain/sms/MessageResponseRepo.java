@@ -1,8 +1,0 @@
-package com.mthoko.learners.domain.sms;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-@Repository
-public interface MessageResponseRepo extends JpaRepository<MessageResponse, Long> {
-}

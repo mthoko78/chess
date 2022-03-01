@@ -1,7 +1,7 @@
 package com.mthoko.learners.common.controller;
 
-import com.mthoko.learners.common.entity.BaseEntity;
-import com.mthoko.learners.common.service.BaseService;
+import com.mthoko.learners.persistence.entity.common.BaseEntity;
+import com.mthoko.learners.service.BaseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ResponseStatus;

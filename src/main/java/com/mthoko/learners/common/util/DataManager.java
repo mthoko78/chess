@@ -1,6 +1,6 @@
 package com.mthoko.learners.common.util;
 
-import com.mthoko.learners.domain.address.Address;
+import com.mthoko.learners.persistence.entity.Address;
 import com.mthoko.learners.exception.ApplicationException;
 import org.json.JSONException;
 import org.json.JSONObject;

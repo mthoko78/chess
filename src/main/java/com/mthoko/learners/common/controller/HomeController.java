@@ -1,9 +1,9 @@
 package com.mthoko.learners.common.controller;
 
 import com.mthoko.learners.common.util.DataManager;
-import com.mthoko.learners.domain.address.Address;
-import com.mthoko.learners.domain.locationstamp.LocationStamp;
-import com.mthoko.learners.domain.locationstamp.LocationStampService;
+import com.mthoko.learners.persistence.entity.Address;
+import com.mthoko.learners.persistence.entity.LocationStamp;
+import com.mthoko.learners.service.LocationStampService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

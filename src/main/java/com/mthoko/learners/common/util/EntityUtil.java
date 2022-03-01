@@ -1,11 +1,11 @@
 package com.mthoko.learners.common.util;
 
-import com.mthoko.learners.domain.category.Category;
-import com.mthoko.learners.domain.choice.Choice;
-import com.mthoko.learners.domain.choice.span.ChoiceSpan;
-import com.mthoko.learners.domain.question.Question;
-import com.mthoko.learners.domain.question.answer.Answer;
-import com.mthoko.learners.domain.question.image.QuestionImage;
+import com.mthoko.learners.persistence.entity.Category;
+import com.mthoko.learners.persistence.entity.Choice;
+import com.mthoko.learners.persistence.entity.ChoiceSpan;
+import com.mthoko.learners.persistence.entity.Question;
+import com.mthoko.learners.persistence.entity.Answer;
+import com.mthoko.learners.persistence.entity.QuestionImage;
 import com.mthoko.learners.exception.ApplicationException;
 import com.mthoko.learners.exception.ErrorCode;
 
@@ -21,21 +21,6 @@ import static com.mthoko.learners.common.util.MyConstants.DOCS;
 
 public class EntityUtil {
 
-    public static void allocateChoicesToQuestions(Category category, List<Question> questions,
-                                                  Map<Integer, List<Choice>> choicesMap) {
-        List<Question> filtered = filterQuestionsByCategory(category, questions);
-        for (Map.Entry<Integer, List<Choice>> entry : choicesMap.entrySet()) {
-            Integer questionNum = entry.getKey();
-            List<Choice> choices = entry.getValue();
-            Optional<Question> optionalQuestion = filtered.stream()
-                    .filter((question) -> question.getNumber() == questionNum).findFirst();
-            if (!optionalQuestion.isPresent()) {
-                throw new ApplicationException("No corresponding question to answer: " + choices);
-            }
-            optionalQuestion.get().setChoices(choices);
-        }
-    }
-
     public static List<Question> filterQuestionsByCategory(Category category, List<Question> questions) {
         return questions.stream().filter((question) -> question.getCategory().equals(category))
                 .collect(Collectors.toList());
@@ -49,21 +34,6 @@ public class EntityUtil {
                 .collect(Collectors.toList());
     }
 
-    public void allocateChoiceSpansToQuestions(Category category, List<Question> questions,
-                                               Map<Integer, List<ChoiceSpan>> choiceSpanMap) {
-        List<Question> filtered = filterQuestionsByCategory(category, questions);
-        for (Map.Entry<Integer, List<ChoiceSpan>> entry : choiceSpanMap.entrySet()) {
-            Integer questionNum = entry.getKey();
-            List<ChoiceSpan> choiceSpans = entry.getValue();
-            Optional<Question> optionalQuestion = filtered.stream()
-                    .filter((question) -> question.getNumber() == questionNum).findFirst();
-            if (!optionalQuestion.isPresent()) {
-                throw new ApplicationException("No corresponding question to span: " + choiceSpans);
-            }
-            optionalQuestion.get().setChoiceSpans(choiceSpans);
-        }
-    }
-
     public static List<Question> allocateAnswers(List<Question> questions, List<Answer> answers) {
         questions.forEach((question) -> {
             Optional<Answer> first = answers.stream().filter((answer) -> answer.getId() == question.getId())
@@ -73,30 +43,6 @@ public class EntityUtil {
             }
         });
         return questions;
-    }
-
-    private List<QuestionImage> extractNonNullImages(List<Question> questions) {
-        return questions.stream().map((question) -> question.getImage()).filter((image) -> image != null)
-                .collect(Collectors.toList());
-    }
-
-    private List<Answer> extractNonNullAnswers(List<Question> questions) {
-        return questions.stream().map((question) -> question.getAnswer()).filter((answer) -> answer != null)
-                .collect(Collectors.toList());
-    }
-
-    public static void allocateChoiceSpansToQuestions(List<Question> questions, Map<Integer, List<ChoiceSpan>> choicesMap) {
-        for (Map.Entry<Integer, List<ChoiceSpan>> entry : choicesMap.entrySet()) {
-            Integer questionNum = entry.getKey();
-            List<ChoiceSpan> choiceSpans = entry.getValue();
-            Optional<Question> optionalQuestion = questions.stream()
-                    .filter((question) -> question.getNumber() == questionNum).findFirst();
-            if (!optionalQuestion.isPresent()) {
-                throw new ApplicationException("No corresponding question to span: " + choiceSpans);
-            }
-            Question question = optionalQuestion.get();
-            question.setChoiceSpans(choiceSpans);
-        }
     }
 
     public static void allocateAnswersToQuestions(Category category, List<Question> questions,

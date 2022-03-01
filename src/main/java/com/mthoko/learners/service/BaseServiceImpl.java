@@ -1,0 +1,192 @@
+package com.mthoko.learners.service;
+
+import com.mthoko.learners.exception.ApplicationException;
+import com.mthoko.learners.persistence.entity.Property;
+import com.mthoko.learners.persistence.entity.common.BaseEntity;
+import com.mthoko.learners.persistence.repository.PropertyRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+
+public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
+
+    public static final String APPLICATION_PROPERTIES = "application.properties";
+
+    @Autowired
+    private PropertyRepo propertyResource;
+
+    public BaseServiceImpl() {
+    }
+
+    @Override
+    public String getProperty(String key) {
+        Optional<Property> optionalProperty = propertyResource.findByPropertyKey(key);
+        return optionalProperty.isPresent() ? optionalProperty.get().getPropertyValue() : null;
+    }
+
+    @Override
+    public Property setProperty(String key, String value) {
+        Optional<Property> optionalProperty = propertyResource.findByPropertyKey(key);
+        Property property = new Property(key, value);
+        if (optionalProperty.isPresent()) {
+            property.setPropertyValue(value);
+        }
+        return propertyResource.save(property);
+    }
+
+    @Override
+    public String unsetProperty(String key) {
+        Optional<Property> optionalProperty = propertyResource.findByPropertyKey(key);
+        if (optionalProperty.isPresent()) {
+            propertyResource.deleteById(optionalProperty.get().getId());
+            return optionalProperty.get().getPropertyValue();
+        }
+        return null;
+    }
+
+    @Override
+    public void removeVerified(List<T> unverified) {
+        int lastIndex = unverified.size() - 1;
+        for (int i = lastIndex; i >= 0; i--) {
+            if (unverified.get(i).isVerified()) {
+                unverified.remove(i);
+            }
+        }
+    }
+
+    @Override
+    public String getAppProperty(String propertyName) {
+        InputStream resource = getClass().getClassLoader().getResourceAsStream(APPLICATION_PROPERTIES);
+        Properties properties = new Properties();
+        try {
+            properties.load(resource);
+            return properties.getProperty(propertyName);
+        } catch (IOException e) {
+            throw new ApplicationException(e);
+        }
+    }
+
+    public abstract JpaRepository<T, Long> getRepo();
+
+    @Override
+    public T save(T entity) {
+        setDateBeforeSave(entity, new Date());
+        return getRepo().save(entity);
+    }
+
+    public static <V extends BaseEntity> V setDateBeforeSave(V entity, Date date) {
+        if (entity != null && entity.getDateCreated() == null) {
+            entity.setDateCreated(date);
+        }
+        return entity;
+    }
+
+    public static <V extends BaseEntity> List<V> setDateBeforeSave(List<V> entities, Date date) {
+        if (entities != null) {
+            for (V entity : entities) {
+                setDateBeforeSave(entity, date);
+            }
+        }
+        return entities;
+    }
+
+    @Override
+    public List<T> saveAll(List<T> entities) {
+        if (entities != null) {
+            setDateBeforeSave(entities, new Date());
+            return getRepo().saveAll(entities);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public Optional<T> findById(Long id) {
+        return getRepo().findById(id);
+    }
+
+    @Override
+    public void delete(T entity) {
+        getRepo().delete(entity);
+    }
+
+    @Override
+    public void deleteAll(List<T> entities) {
+        getRepo().deleteAll(entities);
+    }
+
+    @Override
+    public List<T> retrieveAll() {
+        return getRepo().findAll();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        getRepo().deleteById(id);
+    }
+
+    @Override
+    public void deleteByIdsIn(List<Long> ids) {
+        getRepo().deleteAll(getRepo().findAllById(ids));
+    }
+
+    @Override
+    public T update(T entity) {
+        return save(entity);
+    }
+
+    @Override
+    public List<T> updateAll(List<T> entities) {
+        setDateBeforeUpdate(entities, new Date());
+        return saveAll(entities);
+    }
+
+    @Override
+    public <V extends BaseEntity> V setDateBeforeUpdate(V entity, Date date) {
+        entity.setLastModified(date);
+        return entity;
+    }
+
+    @Override
+    public <V extends BaseEntity> List<V> setDateBeforeUpdate(List<V> entities, Date date) {
+        for (V entity : entities) {
+            setDateBeforeUpdate(entity, date);
+        }
+        return entities;
+    }
+
+    public <E extends BaseEntity> void removeAll(List<E> entities, List<E> toRemove) {
+        List<E> entitiesToRemove = new ArrayList<>();
+        for (E entity : entities) {
+            for (E entity2 : toRemove) {
+                if (entity == entity2) {
+                    entitiesToRemove.add(entity);
+                }
+            }
+        }
+        entities.removeAll(entitiesToRemove);
+    }
+
+    @Override
+    public <E extends BaseEntity> List<E> extractDuplicates(List<E> entities) {
+        List<E> distinct = new ArrayList<>();
+        List<E> duplicates = new ArrayList<>();
+
+        entities.forEach((c) -> {
+            if (!distinct.contains(c)) {
+                distinct.add(c);
+            } else {
+                duplicates.add(c);
+            }
+        });
+
+        return duplicates;
+    }
+
+    @Override
+    public long count() {
+        return getRepo().count();
+    }
+}
