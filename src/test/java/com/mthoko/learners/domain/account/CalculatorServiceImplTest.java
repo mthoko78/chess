@@ -2,7 +2,6 @@ package com.mthoko.learners.domain.account;
 
 import com.mthoko.learners.service.CalculatorService;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -48,11 +47,11 @@ class CalculatorServiceImplTest {
     @Test
     void add() {
         // given
-        var a = Integer.valueOf(1);
-        var b = Integer.valueOf(1);
+        Integer a = Integer.valueOf(1);
+        Integer b = Integer.valueOf(1);
 
         // when
-        var result = calculatorService.add(a, b);
+        Integer result = calculatorService.add(a, b);
 
         // then
         assertEquals(Integer.valueOf(2), result);
@@ -62,11 +61,11 @@ class CalculatorServiceImplTest {
     @Test
     void compare() {
         // given
-        var a = Integer.valueOf(1);
-        var b = Integer.valueOf(1);
+        Integer a = Integer.valueOf(1);
+        Integer b = Integer.valueOf(1);
 
         // when
-        var result = calculatorService.compare(a, b);
+        Boolean result = calculatorService.compare(a, b);
 
         // then
         assertTrue(result);
@@ -101,7 +100,7 @@ class CalculatorServiceImplTest {
         // given - provided by arguments
 
         // when
-        var result = calculatorService.add(a, b);
+        Integer result = calculatorService.add(a, b);
 
         // then
         assertEquals(expectedResult, result);
@@ -122,7 +121,7 @@ class CalculatorServiceImplTest {
         // given - provided by arguments
 
         // when
-        var result = calculatorService.compare(a, b);
+        Boolean result = calculatorService.compare(a, b);
 
         // then
         assertEquals(expectedResult, result);
