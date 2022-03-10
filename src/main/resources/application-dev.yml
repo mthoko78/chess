@@ -1,0 +1,49 @@
+server:
+  port: ${PORT:8081}
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  datasource:
+    url: jdbc:mysql://localhost:3307/learners?serverTimezone=UTC&autoReconnect=true&useSSL=false
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      connection-timeout: 300000
+      maximum-pool-size: 10
+  jpa:
+    dialect: org.hibernate.dialect.DB2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  thymeleaf:
+    mode: HTML
+cors:
+  allowed:
+    origins: http://localhost:3000,https://printing-services.herokuapp.com,https://mthoko.herokuapp.com
+logging:
+  level:
+    org:
+      springframework: INFO
+ftp:
+  host: ftpupload.net
+  port: 21
+  username: epiz_24456977
+  password: Qfniw5vLxB7
+  base_directory: /htdocs/uploads/general/
+  calls_directory: /htdocs/uploads/calls/
+sms:
+  apiKey: 4f5b7d6e
+  apiSecret: UWeZlAcFoJYNE5FJ
+  defaultRecipient: 27684243087
+  verificationPhrase: <#> Your verification code is
+  client: clickatel
+#  client: nexmo
+clickatel:
+  sms:
+    apiKey: 3D_dkMvfQ1SA-4a0NE13oQ==
+    defaultRecipient: 27684243087
+    url: https://platform.clickatell.com/messages/http/send
+#    longNumber: +19183085257
+app:
+  url: https://learners-drivers-api.herokuapp.com

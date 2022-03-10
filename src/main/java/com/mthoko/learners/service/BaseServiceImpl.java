@@ -13,7 +13,7 @@ import java.util.*;
 
 public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
-    public static final String APPLICATION_PROPERTIES = "application.properties";
+    public static final String APPLICATION_PROPERTIES = "application.yml";
 
     @Autowired
     private PropertyRepo propertyResource;
