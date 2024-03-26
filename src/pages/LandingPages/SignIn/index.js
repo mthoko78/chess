@@ -180,6 +180,8 @@ function SignInBasic() {
                   {register && (
                     <MKBox mb={2}>
                       <MKInput
+                        id={"name"}
+                        autoComplete={"false"}
                         type="text"
                         label="Name"
                         fullWidth
@@ -192,6 +194,8 @@ function SignInBasic() {
                   )}
                   <MKBox mb={2}>
                     <MKInput
+                      id={"email"}
+                      autoComplete={"false"}
                       type="email"
                       label="Email"
                       fullWidth
@@ -203,6 +207,7 @@ function SignInBasic() {
                   </MKBox>
                   <MKBox mb={2}>
                     <MKInput
+                      id={"password"}
                       type="password"
                       label="Password"
                       fullWidth
@@ -215,6 +220,7 @@ function SignInBasic() {
                   <MKBox mb={2}>
                     {register && (
                       <MKInput
+                        id={"confirmPassword"}
                         type="password"
                         label="Confirm password"
                         fullWidth
@@ -226,7 +232,7 @@ function SignInBasic() {
                     )}
                   </MKBox>
                   <MKBox display="flex" alignItems="center" ml={-1}>
-                    <Switch checked={rememberMe} onChange={handleSetRememberMe} />
+                    <Switch id={"rememberMe"} checked={rememberMe} onChange={handleSetRememberMe} />
                     <MKTypography
                       variant="button"
                       fontWeight="regular"
