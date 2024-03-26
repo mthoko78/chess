@@ -1,9 +1,0 @@
-package com.mthoko.learners.persistence.repository;
-
-import com.mthoko.learners.persistence.entity.MessageResponse;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-@Repository
-public interface MessageResponseRepo extends JpaRepository<MessageResponse, Long> {
-}
