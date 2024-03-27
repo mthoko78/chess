@@ -1,0 +1,26 @@
+.masonry-with-columns-2 {
+    display: -webkit-box !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -webkit-flex-wrap: wrap !important;
+    -ms-flex-wrap: wrap !important;
+    flex-wrap: wrap !important;
+    /*margin-top: 0px;*/
+}
+
+.masonry-with-columns-2 div {
+    height: auto !important;
+    width: 42px !important;
+    line-height: 100px !important;
+    background: #9b1b30 !important;
+    color: darkgray !important;
+    margin: 0 0.1rem 0.1rem 0 !important;
+    text-align: center !important;
+    font-weight: 900 !important;
+    font-size: 2rem !important;
+    -webkit-box-flex: 1 !important;
+    -webkit-flex: 1 0 auto !important;
+    -ms-flex: 1 0 auto !important;
+    flex: 1 0 auto !important;
+}

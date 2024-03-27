@@ -32,10 +32,13 @@ import routes from "routes";
 // Images
 import bgImage from "assets/images/bg-presentation.jpg";
 import MKButton from "../../components/MKButton";
+import { useNavigate } from "react-router-dom";
 
 function Presentation() {
+  const nav = useNavigate();
   const joinGame = () => {
     console.log("Joining game");
+    nav(`/game`);
   };
 
   return (
@@ -51,7 +54,7 @@ function Presentation() {
         sticky
       />
       <MKBox
-        minHeight="75vh"
+        minHeight="100vh"
         width="100%"
         sx={{
           backgroundImage: ({ functions: { linearGradient, rgba }, palette: { gradients } }) =>

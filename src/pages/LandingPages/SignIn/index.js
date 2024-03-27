@@ -61,15 +61,12 @@ function SignInBasic() {
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   const login = (user, redirectTo) => {
-    console.log(navigate);
     const encodedString = Buffer.from(`${user.username}:${user.password}`).toString("base64");
-    console.log("USER:", user);
-    console.log("AUTH:", encodedString);
     return fetch(`${baseUrl}/user/current`, {
       method: "POST",
       headers: {
-        Authorization: `Basic ${encodedString}`,
-      },
+        Authorization: `Basic ${encodedString}`
+      }
     })
       .then((response) => {
         if (response.ok) {
@@ -98,16 +95,17 @@ function SignInBasic() {
 
   const signIn = () => {
     console.log(navigate);
-    login({ username: email, password: password }, `/chess/default/0`).then(() => {});
+    login({ username: email, password: password }, `/chess/default/0`).then(() => {
+    });
   };
 
   const signUp = () => {
     return fetch(`${baseUrl}/user/register`, {
       method: "POST",
       headers: {
-        "Content-type": "application/json",
+        "Content-type": "application/json"
       },
-      body: JSON.stringify({ username: email, password: password }),
+      body: JSON.stringify({ username: email, password: password })
     })
       .then((response) => {
         if (response.ok) {
@@ -133,7 +131,7 @@ function SignInBasic() {
           type: "external",
           route: "https://www.creative-tim.com/product/material-kit-react",
           label: "",
-          color: "info",
+          color: "info"
         }}
         transparent
         light
@@ -153,7 +151,7 @@ function SignInBasic() {
             )}, url(${bgImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          backgroundRepeat: "no-repeat"
         }}
       />
       <MKBox px={1} width="100%" height="100vh" mx="auto" position="relative" zIndex={2}>
