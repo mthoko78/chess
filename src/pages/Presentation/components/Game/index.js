@@ -91,7 +91,7 @@ const ChessGame = () => {
     );
   };
 
-  const player = "0";
+  const player = "1";
   // const blackInDanger = false;
   // const whiteInDanger = false;
   // const size = "2.14em";
@@ -105,7 +105,6 @@ const ChessGame = () => {
   const environment = "local";
 
   let style = {
-    transform: player === "1" ? "rotate(180deg)" : "",
     margin: "1.2px",
     padding: "1.8px",
     width: "100px"
@@ -309,7 +308,7 @@ const ChessGame = () => {
                 (game && game.board.rows) && <>
                   {rows && game.board.rows.map((row) => (
                     row.spots.map((spot) => (
-                      getPiece(7 - spot.row, spot.col)
+                      getPiece(player === "0" ? 7 - spot.row : spot.row, player !== "0" ? 7 - spot.col : spot.col)
                     ))
                   ))}
                 </>
