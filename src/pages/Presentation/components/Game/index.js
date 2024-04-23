@@ -34,6 +34,29 @@ import "index.css";
 import { FaChessBishop, FaChessKing, FaChessKnight, FaChessPawn, FaChessQueen, FaChessRook } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { baseUrl } from "../../../LandingPages/SignIn";
+import { getDatabase, onValue, ref } from "firebase/database";
+
+export const environment = "local";
+export const fetchWithCallBack = (url: string, params: any, callback: Function, on401: Function) => {
+  fetch(url, params)
+    .then(response => {
+      if (!response.ok) {
+        console.log(response);
+        throw Error(`${response.status}`);
+      }
+      return response.json();
+    })
+    .then(
+      data => {
+        callback(data);
+      }
+    )
+    .catch((reason: Error) => {
+      if (reason.message === "401") {
+        on401();
+      }
+    });
+};
 
 const ChessGame = () => {
   const jsonHeaders = {
@@ -44,30 +67,9 @@ const ChessGame = () => {
     "Authorization": `Basic ${localStorage.getItem("auth")}`
   };
 
-  const fetchWithCallBack = (url: string, params: any, callback: Function, on401: Function) => {
-    fetch(url, params)
-      .then(response => {
-        if (!response.ok) {
-          console.log(response);
-          throw Error(`${response.status}`);
-        }
-        return response.json();
-      })
-      .then(
-        data => {
-          callback(data);
-        }
-      )
-      .catch((reason: Error) => {
-        if (reason.message === "401") {
-          on401();
-        }
-      });
-  };
-
   const findById = (gameId, environment, callback, on401) => {
     return fetchWithCallBack(
-      `${baseUrl}/chess/${gameId}?environment=${environment}`,
+      `${baseUrl}/chess?environment=${environment}`,
       {
         method: "GET",
         headers: jsonHeaders
@@ -78,7 +80,7 @@ const ChessGame = () => {
   };
 
   const sendMove = (gameId: string, move: any | null, environment: string | null, callBack, on401, crowningTo?: number) => {
-    let url = `${baseUrl}/chess/move/${gameId}?environment=${environment}${crowningTo ? `&&crowningTo=${crowningTo}` : ""}`;
+    let url = `${baseUrl}/chess/move?environment=${environment}${crowningTo ? `&&crowningTo=${crowningTo}` : ""}`;
     fetchWithCallBack(
       url,
       {
@@ -91,7 +93,7 @@ const ChessGame = () => {
     );
   };
 
-  const player = "1";
+  const player = localStorage.getItem("username");
   // const blackInDanger = false;
   // const whiteInDanger = false;
   // const size = "2.14em";
@@ -101,8 +103,7 @@ const ChessGame = () => {
   const [game, setGame] = useState();
   // const colors = [light, dark];
   const [rows, setRows] = useState([]);
-  const gameId = "default";
-  const environment = "local";
+  const gameId = "adminmthoko78";
 
   let style = {
     margin: "1.2px",
@@ -133,7 +134,7 @@ const ChessGame = () => {
   }
 
   function myTurn() {
-    return game.currentPlayer === parseInt(player);
+    return game.currentPlayer === localStorage.getItem("username");
   }
 
   const getMove = (row, col, row2, col2) => {
@@ -141,6 +142,7 @@ const ChessGame = () => {
     return filter[0];
   };
   const clickHandler = (piece, row, col) => {
+    console.log("player", player);
     if (myTurn()) {
       console.log("Clicked ", piece, row, col);
       if (selectingPiece()) {
@@ -250,15 +252,34 @@ const ChessGame = () => {
     }
   };
 
+  const listenToPlayersTurn = () => {
+    const db = getDatabase();
+    let path = "chess/" + gameId;
+    console.log("path", path);
+    const dbRef = ref(db, path);
+    onValue(dbRef, (snapshot) => {
+      if (game !== null) {
+        setUpGame(snapshot.val())
+        console.log("Game updated", snapshot.val());
+      } else {
+        console.log("Game with id", gameId, "not found");
+      }
+    });
+
+  };
+
+  function setUpGame(game) {
+    setGame(game);
+    setRows({ ...(game.board.rows) });
+  }
+
   useEffect(() => {
     findById(
       gameId,
       environment,
       (game) => {
-        setGame(game);
-        alert("ROWS: " + JSON.stringify(game.board.rows));
-        setRows({ ...(game.board.rows) });
-        console.log("game", game);
+        setUpGame(game);
+        listenToPlayersTurn();
       },
       (error) => {
         console.log(error);
@@ -306,11 +327,14 @@ const ChessGame = () => {
             <div className="row masonry-with-columns-2" id="masonry-with-columns-2">
               {
                 (game && game.board.rows) && <>
-                  {rows && game.board.rows.map((row) => (
-                    row.spots.map((spot) => (
-                      getPiece(player === "0" ? 7 - spot.row : spot.row, player !== "0" ? 7 - spot.col : spot.col)
-                    ))
-                  ))}
+                  {rows && game.board.rows.map((row) => {
+                    let black = game.whitePlayer.username;
+                    return (
+                      row.spots.map((spot) => (
+                        getPiece(player === black ? 7 - spot.row : spot.row, player !== black ? 7 - spot.col : spot.col)
+                      ))
+                    );
+                  })}
                 </>
               }
             </div>

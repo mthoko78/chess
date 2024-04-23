@@ -31,15 +31,20 @@ import routes from "routes";
 
 // Images
 import bgImage from "assets/images/bg-presentation.jpg";
-import MKButton from "../../components/MKButton";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import CenteredBlogCard from "../../examples/Cards/BlogCards/CenteredBlogCard";
 
 function Presentation() {
-  const nav = useNavigate();
-  const joinGame = () => {
-    console.log("Joining game");
-    nav(`/game`);
-  };
+  // const nav = useNavigate();
+  // const joinGame = () => {
+  //   console.log("Joining game");
+  //   nav(`/game`);
+  // };
+
+  const users = [
+    { username: "mthoko78" },
+    { username: "admin" }
+  ];
 
   return (
     <>
@@ -49,7 +54,7 @@ function Presentation() {
           type: "external",
           route: "https://www.creative-tim.com/product/material-kit-react",
           label: "free download",
-          color: "info",
+          color: "info"
         }}
         sticky
       />
@@ -65,10 +70,11 @@ function Presentation() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           display: "grid",
-          placeItems: "center",
+          placeItems: "center"
         }}
       >
         <Container>
+
           <Grid
             container
             item
@@ -78,29 +84,35 @@ function Presentation() {
             alignItems="center"
             flexDirection="column"
             sx={{ mx: "auto", textAlign: "center" }}
+            style={{ background: "tan" }}
           >
             <MKTypography
               variant="h1"
               color="white"
               sx={({ breakpoints, typography: { size } }) => ({
                 [breakpoints.down("md")]: {
-                  fontSize: size["3xl"],
-                },
+                  fontSize: size["3xl"]
+                }
               })}
             >
-              Play chess online for free
+              Challenge online players to game.
             </MKTypography>
-            <MKTypography variant="body1" color="white" opacity={0.8} mt={1} mb={3}>
-              Join other players online. Invite and challenge friends using their email or phone
-              number.
-            </MKTypography>
-            <MKButton
-              color="default"
-              sx={{ color: ({ palette: { dark } }) => dark.main }}
-              onClick={joinGame}
-            >
-              Join a game
-            </MKButton>
+            {
+              users.map(value => (
+                <CenteredBlogCard
+                  key={value.username}
+                  title={value.username}
+                  description=""
+                  action={{
+                    type: "internal",
+                    route: "pages/company/about-us",
+                    color: "info",
+                    label: "Challenge to game"
+                  }}
+                  image={""} />
+              ))
+            }
+
             <MKTypography variant="h6" color="white" mt={8} mb={1}>
               Find us on
             </MKTypography>

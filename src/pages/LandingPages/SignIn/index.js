@@ -77,7 +77,7 @@ function SignInBasic() {
       })
       .then((user1) => {
         localStorage.setItem("auth", encodedString);
-        localStorage.setItem("sessionId", user1.sessionId);
+        localStorage.setItem("username", user1.username);
         navigate(redirectTo.replace(redirectTo, `/`));
       })
       .catch((error) => {

@@ -1,3 +1,4 @@
+import { fetchWithCallBack } from "pages/Presentation/components/Game";
 import { Move } from "./chess/Move";
 
 const jsonHeaders = {
@@ -32,7 +33,7 @@ export const handleResignation = (gameId: string, reason: string, environment: s
 };
 
 export const findById = (gameId: string | undefined, environment: string | null, callback: Function, on401: Function) => {
-  return this.fetchWithCallBack(
+  return fetchWithCallBack(
     `${baseUrl}/chess/${gameId}?environment=${environment}`,
     {
       method: "GET",
@@ -54,26 +55,4 @@ export const createGame = (refId: string | undefined, environment: string | null
     },
     body: "",
   });
-};
-export const fetchWithCallBack = (url: string, params: any, callback: Function, on401: Function) => {
-  fetch(url, params)
-    .then(response => {
-      console.log("response", response);
-      if (!response.ok) {
-        console.log(response);
-        throw Error(`${response.status}`);
-      }
-      return response.json();
-    })
-    .then(
-      data => {
-        console.log("data", data);
-        callback(data);
-      },
-    )
-    .catch((reason: Error) => {
-      if (reason.message === "401") {
-        on401();
-      }
-    });
 };
