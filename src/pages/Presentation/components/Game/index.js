@@ -36,7 +36,7 @@ import { useEffect, useState } from "react";
 import { baseUrl } from "../../../LandingPages/SignIn";
 import { getDatabase, onValue, ref } from "firebase/database";
 
-export const environment = "local";
+export const environment = "remote";
 export const fetchWithCallBack = (url: string, params: any, callback: Function, on401: Function) => {
   fetch(url, params)
     .then(response => {
@@ -79,14 +79,14 @@ const ChessGame = () => {
     );
   };
 
-  const sendMove = (gameId: string, move: any | null, environment: string | null, callBack, on401, crowningTo?: number) => {
-    let url = `${baseUrl}/chess/move?environment=${environment}${crowningTo ? `&&crowningTo=${crowningTo}` : ""}`;
+  const sendMove = (game: any, moveId: any | null, environment: string | null, callBack, on401, crowningTo?: number) => {
+    let url = `${baseUrl}/chess/move/${moveId}?${crowningTo ? `&crowningTo=${crowningTo}` : ""}`;
     fetchWithCallBack(
       url,
       {
         method: "POST",
         headers: jsonHeaders,
-        body: JSON.stringify(move)
+        body: JSON.stringify(game)
       },
       callBack,
       on401
@@ -154,8 +154,8 @@ const ChessGame = () => {
         if (isValidMove(selected.row, selected.col, row, col)) {
           console.log("Applicable:", isValidMove(selected.row, selected.col, row, col));
           sendMove(
-            gameId,
-            getMove(selected.row, selected.col, row, col),
+            game,
+            game.possibleMoves.indexOf(getMove(selected.row, selected.col, row, col)),
             environment,
             (game) => setGame(game),
             () => {
@@ -259,7 +259,7 @@ const ChessGame = () => {
     const dbRef = ref(db, path);
     onValue(dbRef, (snapshot) => {
       if (game !== null) {
-        setUpGame(snapshot.val())
+        setUpGame(snapshot.val());
         console.log("Game updated", snapshot.val());
       } else {
         console.log("Game with id", gameId, "not found");
