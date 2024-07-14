@@ -242,7 +242,7 @@ function SignInBasic() {
                     </MKTypography>
                   </MKBox>
                   <MKBox mt={4} mb={1}>
-                    <MKButton variant="gradient" color="info" fullWidth onClick={send}>
+                    <MKButton style={{ cursor: "pointer" }} variant="gradient" color="info" fullWidth onClick={send} onPointerEnter={send}>
                       {register ? `register` : `sign in`}
                     </MKButton>
                   </MKBox>

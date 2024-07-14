@@ -67,7 +67,7 @@ const ChessGame = () => {
     "Authorization": `Basic ${localStorage.getItem("auth")}`
   };
 
-  const findById = (gameId, environment, callback, on401) => {
+  const findByUser = (environment, callback, on401) => {
     return fetchWithCallBack(
       `${baseUrl}/chess?environment=${environment}`,
       {
@@ -103,7 +103,6 @@ const ChessGame = () => {
   const [game, setGame] = useState();
   // const colors = [light, dark];
   const [rows, setRows] = useState([]);
-  const gameId = "adminmthoko78";
 
   let style = {
     margin: "1.2px",
@@ -120,9 +119,13 @@ const ChessGame = () => {
   }
 
   function getPossibleMovesFrom(row, col) {
-    return game
-      .possibleMoves
-      .filter(move => move.srcRow === row && move.srcCol === col);
+    console.log("Debug game", game);
+    if (game.possibleMovesn) {
+      return game
+        .possibleMoves
+        .filter(move => move.srcRow === row && move.srcCol === col);
+    }
+    return [];
   }
 
   function canMoveFrom(row, col) {
@@ -252,34 +255,36 @@ const ChessGame = () => {
     }
   };
 
-  const listenToPlayersTurn = () => {
+  const listenToPlayersTurn = (game) => {
     const db = getDatabase();
-    let path = "chess/" + gameId;
+    let path = "chess/" + game.refId;
     console.log("path", path);
     const dbRef = ref(db, path);
     onValue(dbRef, (snapshot) => {
       if (game !== null) {
-        setUpGame(snapshot.val());
-        console.log("Game updated", snapshot.val());
+        setUpGame(snapshot.val(), "firebase");
       } else {
-        console.log("Game with id", gameId, "not found");
+        console.log("Game with the specified id");
       }
     });
 
   };
 
-  function setUpGame(game) {
+  function setUpGame(game, src) {
+    console.log("Game is", game, "src", src);
+    if (game === null) {
+      return;
+    }
     setGame(game);
     setRows({ ...(game.board.rows) });
   }
 
   useEffect(() => {
-    findById(
-      gameId,
+    findByUser(
       environment,
       (game) => {
-        setUpGame(game);
-        listenToPlayersTurn();
+        setUpGame(game, "service");
+        listenToPlayersTurn(game);
       },
       (error) => {
         console.log(error);
