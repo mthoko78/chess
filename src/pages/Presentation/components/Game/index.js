@@ -32,7 +32,7 @@ import routes from "routes";
 import bgImage from "assets/images/bg-presentation.jpg";
 import "index.css";
 import { FaChessBishop, FaChessKing, FaChessKnight, FaChessPawn, FaChessQueen, FaChessRook } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { baseUrl } from "../../../LandingPages/SignIn";
 import { getDatabase, onValue, ref } from "firebase/database";
 
@@ -58,26 +58,41 @@ export const fetchWithCallBack = (url: string, params: any, callback: Function, 
     });
 };
 
-const ChessGame = () => {
-  const jsonHeaders = {
+export const findByUser = (callback, on401) => {
+  return fetchWithCallBack(
+    `${baseUrl}/chess?environment=${environment}`,
+    {
+      method: "GET",
+      headers: headersWithAuth()
+    },
+    callback,
+    on401
+  );
+};
+
+export const findAllUsers = (callback, on401) => {
+  return fetchWithCallBack(
+    `${baseUrl}/user?environment=${environment}`,
+    {
+      method: "GET",
+      headers: headersWithAuth()
+    },
+    callback,
+    on401
+  );
+};
+
+export const headersWithAuth = () => {
+  return {
     "Content-type": "application/json",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST",
     "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
     "Authorization": `Basic ${localStorage.getItem("auth")}`
   };
+};
 
-  const findByUser = (environment, callback, on401) => {
-    return fetchWithCallBack(
-      `${baseUrl}/chess?environment=${environment}`,
-      {
-        method: "GET",
-        headers: jsonHeaders
-      },
-      callback,
-      on401
-    );
-  };
+const ChessGame = () => {
 
   const sendMove = (game: any, moveId: any | null, environment: string | null, callBack, on401, crowningTo?: number) => {
     let url = `${baseUrl}/chess/move/${moveId}?${crowningTo ? `&crowningTo=${crowningTo}` : ""}`;
@@ -85,7 +100,7 @@ const ChessGame = () => {
       url,
       {
         method: "POST",
-        headers: jsonHeaders,
+        headers: headersWithAuth(),
         body: JSON.stringify(game)
       },
       callBack,
@@ -98,8 +113,8 @@ const ChessGame = () => {
   // const whiteInDanger = false;
   // const size = "2.14em";
   const size = "10vh";
-  const light = "#d8cfca";
-  const dark = "#495057";
+  const light = "#aa9898";
+  const dark = "#287c22";
   const [game, setGame] = useState();
   // const colors = [light, dark];
   const [rows, setRows] = useState([]);
@@ -120,7 +135,7 @@ const ChessGame = () => {
 
   function getPossibleMovesFrom(row, col) {
     console.log("Debug game", game);
-    if (game.possibleMovesn) {
+    if (game.possibleMoves) {
       return game
         .possibleMoves
         .filter(move => move.srcRow === row && move.srcCol === col);
@@ -184,7 +199,7 @@ const ChessGame = () => {
     console.log("Getting piece");
     const piece = game.board.rows[row].spots[col].piece;
     const spotColor = getSpotColor(row, col);
-    const color = piece <= 5 ? "white" : (piece <= 11 ? "black" : spotColor);
+    const color = piece <= 5 ? "#ffffff" : (piece <= 11 ? "black" : spotColor);
     if (selected && (selected.row === row && selected.col === col)) {
       console.log("TODO: Mark this spot as selected");
     }
@@ -281,7 +296,6 @@ const ChessGame = () => {
 
   useEffect(() => {
     findByUser(
-      environment,
       (game) => {
         setUpGame(game, "service");
         listenToPlayersTurn(game);

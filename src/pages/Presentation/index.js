@@ -33,6 +33,8 @@ import routes from "routes";
 import bgImage from "assets/images/bg-presentation.jpg";
 // import { useNavigate } from "react-router-dom";
 import CenteredBlogCard from "../../examples/Cards/BlogCards/CenteredBlogCard";
+import { useEffect, useState } from "react";
+import { findAllUsers } from "./components/Game";
 
 function Presentation() {
   // const nav = useNavigate();
@@ -41,10 +43,19 @@ function Presentation() {
   //   nav(`/game`);
   // };
 
-  const users = [
-    { username: "mthoko78" },
-    { username: "admin" }
-  ];
+  const [users, setUsers] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+      console.log("fetching all users");
+      if (!loaded) {
+        findAllUsers((users) => {
+          setUsers(users.filter((user) => user.username !== localStorage.getItem("username")));
+          setLoaded(true);
+        }, (error) => console.log(error));
+      }
+    }
+  );
 
   return (
     <>

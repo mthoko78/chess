@@ -40,6 +40,7 @@ import routes from "routes";
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import { Buffer } from "buffer";
+import { findByUser } from "../../Presentation/components/Game";
 
 // eslint-disable-next-line no-undef
 export const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -60,12 +61,28 @@ function SignInBasic() {
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
+  function postLogin(user, redirectTo) {
+    localStorage.setItem("auth", Buffer.from(`${user.username}:${user.password}`).toString("base64"));
+    localStorage.setItem("username", user.username);
+
+    findByUser(
+      (game) => {
+        if (game !== null) {
+          redirectTo = `/game`;
+        } else if (redirectTo === null) {
+          redirectTo = `/`;
+        }
+        navigate(redirectTo);
+      },
+      (error) => console.log(error)
+    );
+  }
+
   const login = (user, redirectTo) => {
-    const encodedString = Buffer.from(`${user.username}:${user.password}`).toString("base64");
-    return fetch(`${baseUrl}/user/current`, {
+    fetch(`${baseUrl}/user/current`, {
       method: "POST",
       headers: {
-        Authorization: `Basic ${encodedString}`
+        Authorization: `Basic ${Buffer.from(`${user.username}:${user.password}`).toString("base64")}`
       }
     })
       .then((response) => {
@@ -75,10 +92,8 @@ function SignInBasic() {
           throw Error(response.status.toString());
         }
       })
-      .then((user1) => {
-        localStorage.setItem("auth", encodedString);
-        localStorage.setItem("username", user1.username);
-        navigate(redirectTo.replace(redirectTo, `/`));
+      .then((user) => {
+        postLogin(user, redirectTo);
       })
       .catch((error) => {
         console.log("Could not login", error.message);
@@ -95,8 +110,7 @@ function SignInBasic() {
 
   const signIn = () => {
     console.log(navigate);
-    login({ username: email, password: password }, `/chess/default/0`).then(() => {
-    });
+    login({ username: email, password: password }, `/chess/default/0`);
   };
 
   const signUp = () => {
@@ -116,7 +130,7 @@ function SignInBasic() {
       })
       .then(() => {
         alert(`Account created successfully`);
-        //TODO: Nav to login page
+        signIn();
       })
       .catch((error) => {
         console.log("Could not register", error.message);
@@ -242,7 +256,8 @@ function SignInBasic() {
                     </MKTypography>
                   </MKBox>
                   <MKBox mt={4} mb={1}>
-                    <MKButton style={{ cursor: "pointer" }} variant="gradient" color="info" fullWidth onClick={send} onPointerEnter={send}>
+                    <MKButton style={{ cursor: "pointer" }} variant="gradient" color="info" fullWidth onClick={send}
+                              onPointerEnter={send}>
                       {register ? `register` : `sign in`}
                     </MKButton>
                   </MKBox>
