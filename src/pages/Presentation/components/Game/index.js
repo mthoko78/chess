@@ -32,8 +32,10 @@ import bgImage from "assets/images/bg-presentation.jpg";
 import "index.css";
 import { FaChessBishop, FaChessKing, FaChessKnight, FaChessPawn, FaChessQueen, FaChessRook } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
-import { baseUrl } from "../../../LandingPages/SignIn";
+import { baseUrl, firebaseHost } from "../../../LandingPages/SignIn";
 import { getDatabase, onValue, ref } from "firebase/database";
+import GameOptions from "../../sections/GameOptions";
+import { useNavigate } from "react-router-dom";
 
 export const environment = "remote";
 export const fetchWithCallBack = (url: string, params: any, callback: Function, on401: Function) => {
@@ -58,6 +60,7 @@ export const fetchWithCallBack = (url: string, params: any, callback: Function, 
 };
 
 export const findByUser = (callback, on401) => {
+  console.log("Fetching game by user:", localStorage.getItem("username"));
   return fetchWithCallBack(
     `${baseUrl}/chess?environment=${environment}`,
     {
@@ -127,7 +130,6 @@ const ChessGame = () => {
   }
 
   function getPossibleMovesFrom(row, col) {
-    console.log("Debug game", game);
     if (game.possibleMoves) {
       return game
         .possibleMoves
@@ -271,6 +273,9 @@ const ChessGame = () => {
   };
 
   const listenToPlayersTurn = (game) => {
+    console.log("Listening", baseUrl);
+    console.log("Listening", firebaseHost);
+    console.log("Listening", process.env.FIREBASE_HOST);
     const db = getDatabase();
     let path = "chess/" + game.refId;
     const dbRef = ref(db, path);
@@ -293,6 +298,8 @@ const ChessGame = () => {
     setRows({ ...(game.board.rows) });
   }
 
+  const nav = useNavigate();
+
   useEffect(() => {
 
     const resizeObserver = new ResizeObserver((event) => {
@@ -310,6 +317,12 @@ const ChessGame = () => {
       });
   }, []);
 
+  let resign = () => {
+    fetch(`${baseUrl}/chess?environment=${environment}`, { method: "DELETE", headers: headersWithAuth() })
+      .then(() => {
+        nav(`/`);
+      });
+  };
   return (
     <>
       <DefaultNavbar
@@ -356,6 +369,7 @@ const ChessGame = () => {
               </>
             }
           </div>
+          <GameOptions onResign={resign} />
         </Container>
       </MKBox>
     </>

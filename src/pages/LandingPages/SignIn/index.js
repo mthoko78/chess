@@ -42,7 +42,8 @@ import { Buffer } from "buffer";
 import { findByUser } from "../../Presentation/components/Game";
 
 // eslint-disable-next-line no-undef
-export const baseUrl = process.env.REACT_APP_BASE_URL;
+export const baseUrl = process.env.REACT_APP_BASE_URL.split(",")[0];
+export const firebaseHost = process.env.REACT_APP_BASE_URL.split(",")[1];
 
 function SignInBasic() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -75,13 +76,14 @@ function SignInBasic() {
         navigate(redirectTo);
       },
       (error) => {
-        alert("Could not load game, please try again later")
+        alert("Could not load game, please try again later");
         console.log(error);
       }
     );
   }
 
   const login = (user, redirectTo) => {
+    console.log(baseUrl);
     fetch(`${baseUrl}/user/current`, {
       method: "POST",
       headers: {
@@ -98,7 +100,8 @@ function SignInBasic() {
       .then((user) => {
         postLogin(user, redirectTo);
       })
-      .catch((error: Response) => {
+      .catch((error: Error) => {
+        console.log(error);
         alert("Error:" + error);
       });
   };
