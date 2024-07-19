@@ -31,24 +31,25 @@ import routes from "routes";
 
 // Images
 import bgImage from "assets/images/bg-presentation.jpg";
-// import { useNavigate } from "react-router-dom";
-import CenteredBlogCard from "../../examples/Cards/BlogCards/CenteredBlogCard";
-import { useEffect, useState } from "react";
-import { findAllUsers } from "./components/Game";
+import React, { useEffect, useState } from "react";
+import GameChallengeArea from "../../examples/Cards/BlogCards/CenteredBlogCard";
+import { findAllUsers, findByUser } from "./components/Game";
+import { useNavigate } from "react-router-dom";
 
 function Presentation() {
-  // const nav = useNavigate();
-  // const joinGame = () => {
-  //   console.log("Joining game");
-  //   nav(`/game`);
-  // };
 
   const [users, setUsers] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const nav = useNavigate();
 
   useEffect(() => {
       console.log("fetching all users");
       if (!loaded) {
+        findByUser((game) => {
+          if (game) {
+            nav(`/game`);
+          }
+        }, (error) => console.log(error));
         findAllUsers((users) => {
           setUsers(users.filter((user) => user.username !== localStorage.getItem("username")));
           setLoaded(true);
@@ -110,7 +111,7 @@ function Presentation() {
             </MKTypography>
             {
               users.map(value => (
-                <CenteredBlogCard
+                <GameChallengeArea
                   key={value.username}
                   title={value.username}
                   description=""

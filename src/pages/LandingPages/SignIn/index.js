@@ -12,8 +12,7 @@
 
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  */
-
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // react-router-dom components
 import { Link, useNavigate } from "react-router-dom";
@@ -67,6 +66,7 @@ function SignInBasic() {
 
     findByUser(
       (game) => {
+        console.log(game);
         if (game !== null) {
           redirectTo = `/game`;
         } else if (redirectTo === null) {
@@ -74,7 +74,10 @@ function SignInBasic() {
         }
         navigate(redirectTo);
       },
-      (error) => console.log(error)
+      (error) => {
+        alert("Could not load game, please try again later")
+        console.log(error);
+      }
     );
   }
 
@@ -89,14 +92,14 @@ function SignInBasic() {
         if (response.ok) {
           return response.json();
         } else {
-          throw Error(response.status.toString());
+          throw Error(response);
         }
       })
       .then((user) => {
         postLogin(user, redirectTo);
       })
-      .catch((error) => {
-        console.log("Could not login", error.message);
+      .catch((error: Response) => {
+        alert("Error:" + error);
       });
   };
 
@@ -256,8 +259,7 @@ function SignInBasic() {
                     </MKTypography>
                   </MKBox>
                   <MKBox mt={4} mb={1}>
-                    <MKButton style={{ cursor: "pointer" }} variant="gradient" color="info" fullWidth onClick={send}
-                              onPointerEnter={send}>
+                    <MKButton style={{ cursor: "pointer" }} variant="gradient" color="info" fullWidth onClick={send}>
                       {register ? `register` : `sign in`}
                     </MKButton>
                   </MKBox>

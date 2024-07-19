@@ -30,7 +30,7 @@ import { useNavigate } from "react-router-dom";
 import { environment, fetchWithCallBack } from "../../../../pages/Presentation/components/Game";
 import { baseUrl } from "../../../../pages/LandingPages/SignIn";
 
-const CenteredBlogCard = ({ title, action }) => {
+const GameChallengeArea = ({ title, action }) => {
   const nav = useNavigate();
   const challengeToGame = (e) => {
     console.log("New challenge to ", title);
@@ -44,11 +44,11 @@ const CenteredBlogCard = ({ title, action }) => {
         }
       },
       (data) => {
-        console.log(data);
-        nav("game?environment=local");
+        console.log("Navigating to game", data);
+        nav(`game?environment=${environment}`);
       },
-      () => {
-        nav("presentation");
+      (error) => {
+        console.log(error);
       }
     );
 
@@ -91,7 +91,7 @@ const CenteredBlogCard = ({ title, action }) => {
 };
 
 // Typechecking props for the CenteredBlogCard
-CenteredBlogCard.propTypes = {
+GameChallengeArea.propTypes = {
   image: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
@@ -112,4 +112,4 @@ CenteredBlogCard.propTypes = {
   }).isRequired
 };
 
-export default CenteredBlogCard;
+export default GameChallengeArea;

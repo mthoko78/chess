@@ -15,7 +15,6 @@ Coded by www.creative-tim.com
 
 // @mui material components
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
 
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
@@ -119,12 +118,6 @@ const ChessGame = () => {
   // const colors = [light, dark];
   const [rows, setRows] = useState([]);
 
-  let style = {
-    margin: "1.2px",
-    padding: "1.8px",
-    width: "100px"
-  };
-
   const [selected, setSelected] = useState(null);
 
   function isValidMove(srcRow, srcCol, destRow, destCol) {
@@ -195,15 +188,22 @@ const ChessGame = () => {
     return (row % 2 === col % 2 ? dark : light);
   }
 
+  const [pieceSize, setSize] = useState(window.innerWidth / 8);
   const getPiece = (row, col) => {
-    console.log("Getting piece");
     const piece = game.board.rows[row].spots[col].piece;
     const spotColor = getSpotColor(row, col);
     const color = piece <= 5 ? "#ffffff" : (piece <= 11 ? "black" : spotColor);
     if (selected && (selected.row === row && selected.col === col)) {
       console.log("TODO: Mark this spot as selected");
     }
-    const pieceStyle = { ...style, color: color, backgroundColor: spotColor };
+    const pieceStyle = {
+      margin: "0.5px",
+      padding: "3.0px",
+      color: color,
+      backgroundColor: spotColor,
+      width: pieceSize,
+      height: pieceSize
+    };
     switch (piece) {
       case 0:
       case 6:
@@ -273,20 +273,19 @@ const ChessGame = () => {
   const listenToPlayersTurn = (game) => {
     const db = getDatabase();
     let path = "chess/" + game.refId;
-    console.log("path", path);
     const dbRef = ref(db, path);
     onValue(dbRef, (snapshot) => {
       if (game !== null) {
         setUpGame(snapshot.val(), "firebase");
       } else {
-        console.log("Game with the specified id");
+        console.log("No game found with the specified id");
       }
     });
 
   };
 
   function setUpGame(game, src) {
-    console.log("Game is", game, "src", src);
+    console.log("Data source", src);
     if (game === null) {
       return;
     }
@@ -295,6 +294,12 @@ const ChessGame = () => {
   }
 
   useEffect(() => {
+
+    const resizeObserver = new ResizeObserver((event) => {
+      setSize(event[0].borderBoxSize[0].inlineSize / 8.3);
+    });
+
+    resizeObserver.observe(document.getElementById("div1"));
     findByUser(
       (game) => {
         setUpGame(game, "service");
@@ -333,31 +338,24 @@ const ChessGame = () => {
         }}
       >
         <Container>
-          <Grid
-            container
-            item
-            xs={12}
-            lg={8}
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="row"
-            sx={{ mx: "auto", textAlign: "center" }}
+          <div
+            id={`div1`}
+            className="masonry-with-columns-2"
+            style={{ opacity: 1 }}
           >
-            <div className="row masonry-with-columns-2" id="masonry-with-columns-2">
-              {
-                (game && game.board.rows) && <>
-                  {rows && game.board.rows.map((row) => {
-                    let black = game.whitePlayer.username;
-                    return (
-                      row.spots.map((spot) => (
-                        getPiece(player === black ? 7 - spot.row : spot.row, player !== black ? 7 - spot.col : spot.col)
-                      ))
-                    );
-                  })}
-                </>
-              }
-            </div>
-          </Grid>
+            {
+              (game && game.board.rows) && <>
+                {rows && game.board.rows.map((row) => {
+                  let black = game.whitePlayer.username;
+                  return (
+                    row.spots.map((spot) => (
+                      getPiece(player === black ? 7 - spot.row : spot.row, player !== black ? 7 - spot.col : spot.col)
+                    ))
+                  );
+                })}
+              </>
+            }
+          </div>
         </Container>
       </MKBox>
     </>

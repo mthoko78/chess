@@ -1,23 +1,23 @@
 /* eslint-disable no-param-reassign */
 /**
-=========================================================
-* Material Kit 2 React - v2.1.0
-=========================================================
+ =========================================================
+ * Material Kit 2 React - v2.1.0
+ =========================================================
 
-* Product Page: https://www.creative-tim.com/product/material-kit-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
+ * Product Page: https://www.creative-tim.com/product/material-kit-react
+ * Copyright 2023 Creative Tim (https://www.creative-tim.com)
 
-Coded by www.creative-tim.com
+ Coded by www.creative-tim.com
 
  =========================================================
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ */
 
 import { Fragment, useEffect, useState } from "react";
 
 // react-router components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -68,10 +68,10 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
       }
     }
 
-    /** 
-     The event listener that's calling the displayMobileNavbar function when 
+    /**
+     The event listener that's calling the displayMobileNavbar function when
      resizing the window.
-    */
+     */
     window.addEventListener("resize", displayMobileNavbar);
 
     // Call the displayMobileNavbar function to set the state with the initial value.
@@ -163,8 +163,8 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
 
                           "&:hover": {
                             backgroundColor: grey[200],
-                            color: dark.main,
-                          },
+                            color: dark.main
+                          }
                         })}
                       >
                         {item.name}
@@ -181,7 +181,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
                       top: "50%",
                       left: "-4px",
                       transform: "translateY(-45%)",
-                      height: "90%",
+                      height: "90%"
                     }}
                   />
                 )}
@@ -198,12 +198,12 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
           component: MuiLink,
           href: item.href,
           target: "_blank",
-          rel: "noreferrer",
+          rel: "noreferrer"
         };
 
         const routeComponent = {
           component: Link,
-          to: item.route,
+          to: item.route
         };
 
         return (
@@ -230,9 +230,9 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
                 color: dark.main,
 
                 "& *": {
-                  color: dark.main,
-                },
-              },
+                  color: dark.main
+                }
+              }
             })}
             onMouseEnter={({ currentTarget }) => {
               if (item.dropdown) {
@@ -293,9 +293,9 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
           name: "arrow",
           enabled: true,
           options: {
-            element: arrowRef,
-          },
-        },
+            element: arrowRef
+          }
+        }
       ]}
       onMouseEnter={() => setDropdown(dropdownEl)}
       onMouseLeave={() => {
@@ -310,7 +310,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
           {...TransitionProps}
           sx={{
             transformOrigin: "left top",
-            background: ({ palette: { white } }) => white.main,
+            background: ({ palette: { white } }) => white.main
           }}
         >
           <MKBox borderRadius="lg">
@@ -332,84 +332,84 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
   const renderNestedRoutes = routes.map(({ collapse, columns }) =>
     collapse && !columns
       ? collapse.map(({ name: parentName, collapse: nestedCollapse }) => {
-          let template;
+        let template;
 
-          if (parentName === nestedDropdownName) {
-            template =
-              nestedCollapse &&
-              nestedCollapse.map((item) => {
-                const linkComponent = {
-                  component: MuiLink,
-                  href: item.href,
-                  target: "_blank",
-                  rel: "noreferrer",
-                };
+        if (parentName === nestedDropdownName) {
+          template =
+            nestedCollapse &&
+            nestedCollapse.map((item) => {
+              const linkComponent = {
+                component: MuiLink,
+                href: item.href,
+                target: "_blank",
+                rel: "noreferrer"
+              };
 
-                const routeComponent = {
-                  component: Link,
-                  to: item.route,
-                };
+              const routeComponent = {
+                component: Link,
+                to: item.route
+              };
 
-                return (
-                  <MKTypography
-                    key={item.name}
-                    {...(item.route ? routeComponent : linkComponent)}
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    variant="button"
-                    textTransform="capitalize"
-                    minWidth={item.description ? "14rem" : "12rem"}
-                    color={item.description ? "dark" : "text"}
-                    fontWeight={item.description ? "bold" : "regular"}
-                    py={item.description ? 1 : 0.625}
-                    px={2}
-                    sx={({ palette: { grey, dark }, borders: { borderRadius } }) => ({
-                      borderRadius: borderRadius.md,
-                      cursor: "pointer",
-                      transition: "all 300ms linear",
+              return (
+                <MKTypography
+                  key={item.name}
+                  {...(item.route ? routeComponent : linkComponent)}
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  variant="button"
+                  textTransform="capitalize"
+                  minWidth={item.description ? "14rem" : "12rem"}
+                  color={item.description ? "dark" : "text"}
+                  fontWeight={item.description ? "bold" : "regular"}
+                  py={item.description ? 1 : 0.625}
+                  px={2}
+                  sx={({ palette: { grey, dark }, borders: { borderRadius } }) => ({
+                    borderRadius: borderRadius.md,
+                    cursor: "pointer",
+                    transition: "all 300ms linear",
 
-                      "&:hover": {
-                        backgroundColor: grey[200],
-                        color: dark.main,
+                    "&:hover": {
+                      backgroundColor: grey[200],
+                      color: dark.main,
 
-                        "& *": {
-                          color: dark.main,
-                        },
-                      },
-                    })}
-                  >
-                    {item.description ? (
-                      <MKBox>
-                        {item.name}
-                        <MKTypography
-                          display="block"
-                          variant="button"
-                          color="text"
-                          fontWeight="regular"
-                          sx={{ transition: "all 300ms linear" }}
-                        >
-                          {item.description}
-                        </MKTypography>
-                      </MKBox>
-                    ) : (
-                      item.name
-                    )}
-                    {item.collapse && (
-                      <Icon
-                        fontSize="small"
-                        sx={{ fontWeight: "normal", verticalAlign: "middle", mr: -0.5 }}
+                      "& *": {
+                        color: dark.main
+                      }
+                    }
+                  })}
+                >
+                  {item.description ? (
+                    <MKBox>
+                      {item.name}
+                      <MKTypography
+                        display="block"
+                        variant="button"
+                        color="text"
+                        fontWeight="regular"
+                        sx={{ transition: "all 300ms linear" }}
                       >
-                        keyboard_arrow_right
-                      </Icon>
-                    )}
-                  </MKTypography>
-                );
-              });
-          }
+                        {item.description}
+                      </MKTypography>
+                    </MKBox>
+                  ) : (
+                    item.name
+                  )}
+                  {item.collapse && (
+                    <Icon
+                      fontSize="small"
+                      sx={{ fontWeight: "normal", verticalAlign: "middle", mr: -0.5 }}
+                    >
+                      keyboard_arrow_right
+                    </Icon>
+                  )}
+                </MKTypography>
+              );
+            });
+        }
 
-          return template;
-        })
+        return template;
+      })
       : null
   );
 
@@ -436,7 +436,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
           {...TransitionProps}
           sx={{
             transformOrigin: "left top",
-            background: ({ palette: { white } }) => white.main,
+            background: ({ palette: { white } }) => white.main
           }}
         >
           <MKBox ml={2.5} mt={-2.5} borderRadius="lg">
@@ -449,6 +449,11 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
     </Popper>
   );
 
+  const nav = useNavigate();
+  const goHome = (e) => {
+    e.preventDefault();
+    nav(`/`);
+  };
   return (
     <Container sx={sticky ? { position: "sticky", top: 0, zIndex: 10 } : null}>
       <MKBox
@@ -465,7 +470,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
         zIndex={3}
         sx={({ palette: { transparent: transparentColor, white }, functions: { rgba } }) => ({
           backgroundColor: transparent ? transparentColor.main : rgba(white.main, 0.8),
-          backdropFilter: transparent ? "none" : `saturate(200%) blur(30px)`,
+          backdropFilter: transparent ? "none" : `saturate(200%) blur(30px)`
         })}
       >
         <MKBox display="flex" justifyContent="space-between" alignItems="center">
@@ -475,6 +480,7 @@ function DefaultNavbar({ brand, routes, transparent, light, action, sticky, rela
             lineHeight={1}
             py={transparent ? 1.5 : 0.75}
             pl={relative || transparent ? 0 : { xs: 0, lg: 1 }}
+            onClick={goHome}
           >
             <MKTypography variant="button" fontWeight="bold" color={light ? "white" : "dark"}>
               {brand}
@@ -523,7 +529,7 @@ DefaultNavbar.defaultProps = {
   action: false,
   sticky: false,
   relative: false,
-  center: false,
+  center: false
 };
 
 // Typechecking props for the DefaultNavbar
@@ -547,14 +553,14 @@ DefaultNavbar.propTypes = {
         "dark",
         "light",
         "default",
-        "white",
+        "white"
       ]),
-      label: PropTypes.string.isRequired,
-    }),
+      label: PropTypes.string.isRequired
+    })
   ]),
   sticky: PropTypes.bool,
   relative: PropTypes.bool,
-  center: PropTypes.bool,
+  center: PropTypes.bool
 };
 
 export default DefaultNavbar;
