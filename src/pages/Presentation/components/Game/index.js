@@ -304,23 +304,35 @@ const ChessGame = () => {
     let htmlBodyElement = document
       .getElementsByTagName("body")
       .item(0);
-    console.log("offsetHeight: ", htmlBodyElement.offsetHeight);
     return htmlBodyElement
       .offsetWidth;
   }
 
-  useEffect(() => {
+  function deviceHeight() {
+    return document
+      .getElementsByTagName("body")
+      .item(0)
+      .offsetHeight;
+  }
 
+  useEffect(() => {
+    let offsetHeight = deviceHeight();
+    localStorage.setItem("offsetHeight", offsetHeight);
+    if (!offsetHeight) {
+      offsetHeight = deviceHeight();
+      console.log("updating offset height to:", offsetHeight);
+    } else {
+      console.log("Height is:", offsetHeight);
+    }
     const resizeObserver = new ResizeObserver((event) => {
       let width = deviceWidth();
       console.log(event[0].devicePixelContentBoxSize);
-      // alert((event[0].devicePixelContentBoxSize[0].inlineSize + "," + event[0].devicePixelContentBoxSize[0].blockSize + "," + body.item(0).offsetWidth));
+
       let divisor = 8;
       if (width >= 768) {
-        width = width * (1 - 0.15);
-        divisor = 8;
+        width = Math.min(deviceWidth(), offsetHeight);
+        divisor = 9.5
       }
-
 
       let newSize = (width) / divisor;
       setSize(newSize);
