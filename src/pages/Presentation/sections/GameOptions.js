@@ -14,15 +14,33 @@ import MKButton from "components/MKButton";
 function DropdownAndDropup(props) {
   const [dropdown, setDropdown] = useState(null);
 
+  const resign = `Resign`;
+  const offerDraw = `Offer draw`;
+  const restart = `Restart game`;
+
   const openDropdown = ({ currentTarget }) => {
     setDropdown(currentTarget);
-  }
-  const closeDropdown = (e) => {
-    alert("UP")
-    // eslint-disable-next-line react/prop-types
-    props.onResign(e)
+  };
+  const closeDropdown = (option) => {
+    switch (option) {
+      case resign: {
+        // eslint-disable-next-line react/prop-types
+        props.resign();
+        break;
+      }
+      case offerDraw: {
+        // eslint-disable-next-line react/prop-types
+        props.offerDraw();
+        break;
+      }
+      case restart: {
+        // eslint-disable-next-line react/prop-types
+        props.restart();
+        break;
+      }
+    }
     setDropdown(null);
-  }
+  };
 
   // Styles
   const iconStyles = {
@@ -35,7 +53,6 @@ function DropdownAndDropup(props) {
     transform: dropdown ? "rotate(180deg)" : "rotate(0)",
     ...iconStyles
   };
-
   return (
     <MKBox component="section" py={12}>
       <Container>
@@ -45,9 +62,9 @@ function DropdownAndDropup(props) {
               Options <Icon sx={dropdownIconStyles}>expand_more</Icon>
             </MKButton>
             <Menu anchorEl={dropdown} open={Boolean(dropdown)} onClose={closeDropdown}>
-              <MenuItem onClick={closeDropdown}>Resign</MenuItem>
-              <MenuItem onClick={closeDropdown}>Offer draw</MenuItem>
-              <MenuItem onClick={closeDropdown}>Request pause</MenuItem>
+              <MenuItem onClick={() => closeDropdown(resign)}>{resign}</MenuItem>
+              <MenuItem onClick={() => closeDropdown(offerDraw)}>{offerDraw}</MenuItem>
+              <MenuItem onClick={() => closeDropdown(restart)}>{restart}</MenuItem>
             </Menu>
           </Grid>
         </Grid>

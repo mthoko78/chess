@@ -331,7 +331,7 @@ const ChessGame = () => {
       let divisor = 8;
       if (width >= 768) {
         width = Math.min(deviceWidth(), offsetHeight);
-        divisor = 9.5
+        divisor = 9.5;
       }
 
       let newSize = (width) / divisor;
@@ -350,10 +350,25 @@ const ChessGame = () => {
   }, []);
 
   let resign = () => {
-    fetch(`${baseUrl}/chess?environment=${environment}`, { method: "DELETE", headers: headersWithAuth() })
-      .then(() => {
-        nav(`/`);
-      });
+    restart().then(() => {
+      fetch(`${baseUrl}/chess?environment=${environment}`, { method: "DELETE", headers: headersWithAuth() })
+        .then(() => {
+          nav(`/`);
+        });
+    })
+  };
+
+  let offerDraw = () => {
+    restart()
+      .then(() => console.log("Successfully reset game"));
+  };
+  let restart = () => {
+    return fetch(`${baseUrl}/chess/reset/${game.refId}?environment=${environment}`, {
+      method: "GET",
+      headers: headersWithAuth()
+    })
+      .then((response) => response.json())
+      .then((game) => setUpGame(game, "firebase"));
   };
   return (
     <>
@@ -403,7 +418,7 @@ const ChessGame = () => {
             </tbody>
           }
         </table>
-        <GameOptions onResign={resign} />
+        <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} />
       </MKBox>
     </>
   );
