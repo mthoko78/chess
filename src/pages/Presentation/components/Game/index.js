@@ -14,7 +14,6 @@ Coded by www.creative-tim.com
 */
 
 // @mui material components
-import Container from "@mui/material/Container";
 
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
@@ -190,7 +189,7 @@ const ChessGame = () => {
     return (row % 2 === col % 2 ? dark : light);
   }
 
-  const [pieceSize, setSize] = useState(window.innerWidth / 8);
+  const [pieceSize, setSize] = useState(window.outerWidth / 8);
   const getPiece = (row, col) => {
     const piece = game.board.rows[row].spots[col].piece;
     const spotColor = getSpotColor(row, col);
@@ -199,8 +198,8 @@ const ChessGame = () => {
       console.log("TODO: Mark this spot as selected");
     }
     const pieceStyle = {
-      margin: "0.5px",
-      padding: "3.0px",
+      margin: "0.0px",
+      padding: "1.0px",
       color: color,
       backgroundColor: spotColor,
       width: pieceSize,
@@ -275,13 +274,14 @@ const ChessGame = () => {
   const listenToPlayersTurn = (game) => {
     console.log("Listening", baseUrl);
     console.log("Listening", firebaseHost);
-    console.log("Listening", process.env.FIREBASE_HOST);
+    console.log("Game", game);
     const db = getDatabase();
     let path = "chess/" + game.refId;
     const dbRef = ref(db, path);
     onValue(dbRef, (snapshot) => {
       if (game !== null) {
-        setUpGame(snapshot.val(), "firebase");
+        let snapshotGame = snapshot.val();
+        setUpGame(snapshotGame, "firebase");
       } else {
         console.log("No game found with the specified id");
       }
@@ -300,13 +300,33 @@ const ChessGame = () => {
 
   const nav = useNavigate();
 
+  function deviceWidth() {
+    let htmlBodyElement = document
+      .getElementsByTagName("body")
+      .item(0);
+    console.log("offsetHeight: ", htmlBodyElement.offsetHeight);
+    return htmlBodyElement
+      .offsetWidth;
+  }
+
   useEffect(() => {
 
     const resizeObserver = new ResizeObserver((event) => {
-      setSize(event[0].borderBoxSize[0].inlineSize / 8.3);
+      let width = deviceWidth();
+      console.log(event[0].devicePixelContentBoxSize);
+      // alert((event[0].devicePixelContentBoxSize[0].inlineSize + "," + event[0].devicePixelContentBoxSize[0].blockSize + "," + body.item(0).offsetWidth));
+      let divisor = 8;
+      if (width >= 768) {
+        width = width * (1 - 0.15);
+        divisor = 8;
+      }
+
+
+      let newSize = (width) / divisor;
+      setSize(newSize);
     });
 
-    resizeObserver.observe(document.getElementById("div1"));
+    resizeObserver.observe(document.getElementById("div0"));
     findByUser(
       (game) => {
         setUpGame(game, "service");
@@ -350,27 +370,28 @@ const ChessGame = () => {
           placeItems: "center"
         }}
       >
-        <Container>
-          <div
-            id={`div1`}
-            className="masonry-with-columns-2"
-            style={{ opacity: 1 }}
-          >
-            {
-              (game && game.board.rows) && <>
-                {rows && game.board.rows.map((row) => {
-                  let black = game.whitePlayer.username;
-                  return (
-                    row.spots.map((spot) => (
-                      getPiece(player === black ? 7 - spot.row : spot.row, player !== black ? 7 - spot.col : spot.col)
-                    ))
-                  );
-                })}
-              </>
-            }
-          </div>
-          <GameOptions onResign={resign} />
-        </Container>
+        <table
+          id={`div0`}
+          style={{
+            borderCollapse: "collapse",
+            border: "0px solid"
+          }}>
+          {
+            (game && game.board.rows) && <tbody style={{ borderSpacing: "0px !important" }}>
+            {rows && game.board.rows.map((row, index) => {
+              let black = game.whitePlayer.username;
+              return (
+                <tr key={index} style={{ height: pieceSize }}>{row.spots.map((spot, i) => (
+                  <td
+                    key={i}>{getPiece(player === black ? 7 - spot.row : spot.row, player !== black ? 7 - spot.col : spot.col)}</td>
+                ))
+                }</tr>
+              );
+            })}
+            </tbody>
+          }
+        </table>
+        <GameOptions onResign={resign} />
       </MKBox>
     </>
   );
