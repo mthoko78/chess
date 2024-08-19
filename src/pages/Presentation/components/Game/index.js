@@ -423,7 +423,7 @@ const ChessGame = () => {
               </tbody>
             }
           </table>
-          <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} />
+          {(game && game.created) && <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} gameDate={game.created} />}
         </Grid>
       </MKBox>
     </>

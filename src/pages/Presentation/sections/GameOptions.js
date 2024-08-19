@@ -8,14 +8,14 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import AppBar from "@mui/material/AppBar";
 
-function DropdownAndDropup(props) {
+const GameOptions = (props) => {
 
   const resign = `Resign`;
   const offerDraw = `Offer draw`;
   const restart = `Restart game`;
 
-  const closeDropdown = (option) => {
-    switch (option) {
+  const performAction = (action) => {
+    switch (action) {
       case resign: {
         // eslint-disable-next-line react/prop-types
         props.resign();
@@ -40,18 +40,45 @@ function DropdownAndDropup(props) {
     // setActiveTab(newValue);
   };
 
-  return (
+  const [time, setTime] = useState(". . .");
 
-    <Grid container item justifyContent="center" xs={10} md={10} lg={10} xl={10} mx="auto" py={2} px={1}>
+  function timeElapsed() {
+    // eslint-disable-next-line react/prop-types
+    let gameDate = new Date(props.gameDate);
+    let date = new Date();
+    let totalSeconds = (9 * 60) - Math.round((date.valueOf() - gameDate.valueOf()) / (1000));
+    const minutes = Math.round(totalSeconds / (60));
+    const seconds = totalSeconds % 60;
+    return (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+  }
+
+  function incrementSeconds() {
+    console.log("Must update time here");
+    let timeElapsed1 = timeElapsed();
+    setTime(timeElapsed1);
+    const minute = parseInt(timeElapsed1.substring(0, 2));
+    const second = parseInt(timeElapsed1.substring(3, 5));
+    if (minute <= 0 && second <= 0) {
+      performAction(restart);
+    }
+  }
+
+  setTimeout(() => incrementSeconds(), 1000);
+
+  return (
+    <Grid container item justifyContent="center" xs={12} md={10} lg={10} xl={10} mx="auto" py={2} px={1}>
       <AppBar position="static">
         <Tabs value={activeTab} onChange={handleTabType}>
-          <Tab label={resign} onClick={() => closeDropdown(resign)} />
-          <Tab label={restart} onClick={() => closeDropdown(restart)} />
-          <Tab label={offerDraw} onClick={() => closeDropdown(offerDraw)} />
+          <Tab style={{ fontSize: 22, background: "lightsalmon" }} label={resign}
+               onClick={() => performAction(resign)} />
+          <Tab style={{ fontSize: 28, fontWeight: "bold", background: "white" }} label={time}
+               onClick={(e) => e.preventDefault()} />
+          <Tab style={{ fontSize: 22, background: "lightskyblue" }} label={offerDraw}
+               onClick={() => performAction(offerDraw)} />
         </Tabs>
       </AppBar>
     </Grid>
   );
-}
+};
 
-export default DropdownAndDropup;
+export default GameOptions;
