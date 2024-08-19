@@ -58,7 +58,7 @@ const GameOptions = (props) => {
     const minute = parseInt(timeElapsed1.substring(0, 2));
     const second = parseInt(timeElapsed1.substring(3, 5));
     if (minute <= 0 && second <= 0) {
-      performAction(restart);
+      performAction(resign);
     }
   }
 
