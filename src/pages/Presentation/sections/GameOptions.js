@@ -1,26 +1,19 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 // @mui material components
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Icon from "@mui/material/Icon";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 
 // Material Kit 2 React components
-import MKBox from "components/MKBox";
-import MKButton from "components/MKButton";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import AppBar from "@mui/material/AppBar";
 
 function DropdownAndDropup(props) {
-  const [dropdown, setDropdown] = useState(null);
 
   const resign = `Resign`;
   const offerDraw = `Offer draw`;
   const restart = `Restart game`;
 
-  const openDropdown = ({ currentTarget }) => {
-    setDropdown(currentTarget);
-  };
   const closeDropdown = (option) => {
     switch (option) {
       case resign: {
@@ -39,37 +32,25 @@ function DropdownAndDropup(props) {
         break;
       }
     }
-    setDropdown(null);
   };
 
-  // Styles
-  const iconStyles = {
-    ml: 1,
-    fontWeight: "bold",
-    transition: "transform 200ms ease-in-out"
+  const [activeTab] = useState(1);
+
+  const handleTabType = () => {
+    // setActiveTab(newValue);
   };
 
-  const dropdownIconStyles = {
-    transform: dropdown ? "rotate(180deg)" : "rotate(0)",
-    ...iconStyles
-  };
   return (
-    <MKBox component="section" py={12}>
-      <Container>
-        <Grid container spacing={3}>
-          <Grid item xs={12} lg={6} textAlign="center">
-            <MKButton variant="gradient" color="info" onClick={openDropdown}>
-              Options <Icon sx={dropdownIconStyles}>expand_more</Icon>
-            </MKButton>
-            <Menu anchorEl={dropdown} open={Boolean(dropdown)} onClose={closeDropdown}>
-              <MenuItem onClick={() => closeDropdown(resign)}>{resign}</MenuItem>
-              <MenuItem onClick={() => closeDropdown(offerDraw)}>{offerDraw}</MenuItem>
-              <MenuItem onClick={() => closeDropdown(restart)}>{restart}</MenuItem>
-            </Menu>
-          </Grid>
-        </Grid>
-      </Container>
-    </MKBox>
+
+    <Grid container item justifyContent="center" xs={10} md={10} lg={10} xl={10} mx="auto" py={2} px={1}>
+      <AppBar position="static">
+        <Tabs value={activeTab} onChange={handleTabType}>
+          <Tab label={resign} onClick={() => closeDropdown(resign)} />
+          <Tab label={restart} onClick={() => closeDropdown(restart)} />
+          <Tab label={offerDraw} onClick={() => closeDropdown(offerDraw)} />
+        </Tabs>
+      </AppBar>
+    </Grid>
   );
 }
 

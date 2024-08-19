@@ -35,9 +35,10 @@ import { baseUrl, firebaseHost } from "../../../LandingPages/SignIn";
 import { getDatabase, onValue, ref } from "firebase/database";
 import GameOptions from "../../sections/GameOptions";
 import { useNavigate } from "react-router-dom";
+import Grid from "@mui/material/Grid";
 
 export const environment = "remote";
-export const fetchWithCallBack = (url: string, params: any, callback: Function, on401: Function) => {
+export const fetchWithCallBack = (url, params, callback, on401) => {
   fetch(url, params)
     .then(response => {
       if (!response.ok) {
@@ -355,7 +356,7 @@ const ChessGame = () => {
         .then(() => {
           nav(`/`);
         });
-    })
+    });
   };
 
   let offerDraw = () => {
@@ -370,6 +371,7 @@ const ChessGame = () => {
       .then((response) => response.json())
       .then((game) => setUpGame(game, "firebase"));
   };
+
   return (
     <>
       <DefaultNavbar
@@ -397,28 +399,30 @@ const ChessGame = () => {
           placeItems: "center"
         }}
       >
-        <table
-          id={`div0`}
-          style={{
-            borderCollapse: "collapse",
-            border: "0px solid"
-          }}>
-          {
-            (game && game.board.rows) && <tbody style={{ borderSpacing: "0px !important" }}>
-            {rows && game.board.rows.map((row, index) => {
-              let black = game.whitePlayer.username;
-              return (
-                <tr key={index} style={{ height: pieceSize }}>{row.spots.map((spot, i) => (
-                  <td
-                    key={i}>{getPiece(player === black ? 7 - spot.row : spot.row, player !== black ? 7 - spot.col : spot.col)}</td>
-                ))
-                }</tr>
-              );
-            })}
-            </tbody>
-          }
-        </table>
-        <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} />
+        <Grid>
+          <table
+            id={`div0`}
+            style={{
+              borderCollapse: "collapse",
+              border: "0px solid"
+            }}>
+            {
+              (game && game.board.rows) && <tbody style={{ borderSpacing: "0px !important" }}>
+              {rows && game.board.rows.map((row, index) => {
+                let black = game.whitePlayer.username;
+                return (
+                  <tr key={index} style={{ height: pieceSize }}>{row.spots.map((spot, i) => (
+                    <td
+                      key={i}>{getPiece(player === black ? 7 - spot.row : spot.row, player !== black ? 7 - spot.col : spot.col)}</td>
+                  ))
+                  }</tr>
+                );
+              })}
+              </tbody>
+            }
+          </table>
+          <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} />
+        </Grid>
       </MKBox>
     </>
   );
