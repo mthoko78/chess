@@ -52,7 +52,7 @@ export const fetchWithCallBack = (url, params, callback, on401) => {
         callback(data);
       }
     )
-    .catch((reason: Error) => {
+    .catch((reason) => {
       if (reason.message === "401") {
         on401();
       }
@@ -96,7 +96,7 @@ export const headersWithAuth = () => {
 
 const ChessGame = () => {
 
-  const sendMove = (game: any, moveId: any | null, environment: string | null, callBack, on401, crowningTo?: number) => {
+  const sendMove = (game, moveId, environment, callBack, on401, crowningTo) => {
     let url = `${baseUrl}/chess/move/${moveId}?${crowningTo ? `&crowningTo=${crowningTo}` : ""}`;
     fetchWithCallBack(
       url,
@@ -191,6 +191,7 @@ const ChessGame = () => {
   }
 
   const [pieceSize, setSize] = useState(window.outerWidth / 8);
+
   const getPiece = (row, col) => {
     const piece = game.board.rows[row].spots[col].piece;
     const spotColor = getSpotColor(row, col);
@@ -363,6 +364,7 @@ const ChessGame = () => {
     restart()
       .then(() => console.log("Successfully reset game"));
   };
+
   let restart = () => {
     return fetch(`${baseUrl}/chess/reset/${game.refId}?environment=${environment}`, {
       method: "GET",
