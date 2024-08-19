@@ -45,6 +45,12 @@ export const fetchWithCallBack = (url, params, callback, on401) => {
         console.log(response);
         throw Error(`${response.status}`);
       }
+      console.log("Status:", response.status);
+      try {
+        return response.json();
+      } catch (e) {
+        console.log("Something happened", e);
+      }
       return response.json();
     })
     .then(
@@ -337,8 +343,13 @@ const ChessGame = () => {
     resizeObserver.observe(document.getElementById("div0"));
     findByUser(
       (game) => {
-        setUpGame(game, "service");
-        listenToPlayersTurn(game);
+        console.log("Fetched game:", game);
+        if (game) {
+          setUpGame(game, "service");
+          listenToPlayersTurn(game);
+        } else {
+          alert("Game not found");
+        }
       },
       (error) => {
         console.log(error);
@@ -365,7 +376,10 @@ const ChessGame = () => {
       headers: headersWithAuth()
     })
       .then((response) => response.json())
-      .then((game) => setUpGame(game, "firebase"));
+      .then((game) => setUpGame(game, "firebase"))
+      .catch(reason => {
+        console.log("Game not found", reason);
+      });
   };
 
   return (
@@ -417,7 +431,8 @@ const ChessGame = () => {
               </tbody>
             }
           </table>
-          {(game && game.created) && <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} gameDate={game.created} />}
+          {(game && game.created) &&
+            <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} gameDate={game.created} />}
         </Grid>
       </MKBox>
     </>
