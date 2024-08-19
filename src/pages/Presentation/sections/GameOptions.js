@@ -53,7 +53,6 @@ const GameOptions = (props) => {
   }
 
   function incrementSeconds() {
-    console.log("Must update time here");
     let timeElapsed1 = timeElapsed();
     setTime(timeElapsed1);
     const minute = parseInt(timeElapsed1.substring(0, 2));

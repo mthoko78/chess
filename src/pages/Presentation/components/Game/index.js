@@ -31,7 +31,7 @@ import bgImage from "assets/images/bg-presentation.jpg";
 import "index.css";
 import { FaChessBishop, FaChessKing, FaChessKnight, FaChessPawn, FaChessQueen, FaChessRook } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
-import { baseUrl, firebaseHost } from "../../../LandingPages/SignIn";
+import { baseUrl } from "../../../LandingPages/SignIn";
 import { getDatabase, onValue, ref } from "firebase/database";
 import GameOptions from "../../sections/GameOptions";
 import { useNavigate } from "react-router-dom";
@@ -157,7 +157,6 @@ const ChessGame = () => {
   const clickHandler = (piece, row, col) => {
     console.log("player", player);
     if (myTurn()) {
-      console.log("Clicked ", piece, row, col);
       if (selectingPiece()) {
         if (canMoveFrom(row, col)) {
           setSelected({ row: row, col: col });
@@ -165,7 +164,6 @@ const ChessGame = () => {
       } else {
         //placing piece
         if (isValidMove(selected.row, selected.col, row, col)) {
-          console.log("Applicable:", isValidMove(selected.row, selected.col, row, col));
           sendMove(
             game,
             game.possibleMoves.indexOf(getMove(selected.row, selected.col, row, col)),
@@ -274,9 +272,6 @@ const ChessGame = () => {
   };
 
   const listenToPlayersTurn = (game) => {
-    console.log("Listening", baseUrl);
-    console.log("Listening", firebaseHost);
-    console.log("Game", game);
     const db = getDatabase();
     let path = "chess/" + game.refId;
     const dbRef = ref(db, path);
@@ -291,8 +286,7 @@ const ChessGame = () => {
 
   };
 
-  function setUpGame(game, src) {
-    console.log("Data source", src);
+  function setUpGame(game) {
     if (game === null) {
       return;
     }

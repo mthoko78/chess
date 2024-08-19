@@ -25,10 +25,7 @@ import MKBox from "components/MKBox";
 import DefaultCounterCard from "examples/Cards/CounterCards/DefaultCounterCard";
 
 function Counters(visible) {
-  console.log(visible.visible);
-  console.log(visible.visible);
   if (!visible.visible) {
-    console.log("Hiding");
     return <></>;
   }
   return (

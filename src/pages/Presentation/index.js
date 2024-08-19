@@ -43,7 +43,6 @@ function Presentation() {
   const nav = useNavigate();
 
   useEffect(() => {
-      console.log("fetching all users");
       if (!loaded) {
         findByUser((game) => {
           if (game) {

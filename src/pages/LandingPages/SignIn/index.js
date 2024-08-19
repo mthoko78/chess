@@ -43,6 +43,7 @@ import { findByUser } from "../../Presentation/components/Game";
 
 // eslint-disable-next-line no-undef
 export const baseUrl = process.env.REACT_APP_BASE_URL.split(",")[0];
+// eslint-disable-next-line no-undef
 export const firebaseHost = process.env.REACT_APP_BASE_URL.split(",")[1];
 
 function SignInBasic() {
@@ -83,7 +84,6 @@ function SignInBasic() {
   }
 
   const login = (user, redirectTo) => {
-    console.log(baseUrl);
     fetch(`${baseUrl}/user/current`, {
       method: "POST",
       headers: {
@@ -100,7 +100,7 @@ function SignInBasic() {
       .then((user) => {
         postLogin(user, redirectTo);
       })
-      .catch((error: Error) => {
+      .catch((error) => {
         console.log(error);
         alert("Error:" + error);
       });
@@ -115,7 +115,6 @@ function SignInBasic() {
   };
 
   const signIn = () => {
-    console.log(navigate);
     login({ username: email, password: password }, `/chess/default/0`);
   };
 
