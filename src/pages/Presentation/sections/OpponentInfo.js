@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -8,11 +8,11 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import AppBar from "@mui/material/AppBar";
 
-const OpponentInfo = (props) => {
+const OpponentInfo = forwardRef((props, ref) => {
 
   const [activeTab] = useState(1);
 
-  const [time, setTime] = useState(". . .");
+  const [time, setTime] = useState("10:00");
 
   function timeElapsed() {
     // eslint-disable-next-line react/prop-types
@@ -24,21 +24,22 @@ const OpponentInfo = (props) => {
     return (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
   }
 
-  function incrementSeconds() {
-    let timeElapsed1 = timeElapsed();
-    setTime(timeElapsed1);
-    const minute = parseInt(timeElapsed1.substring(0, 2));
-    const second = parseInt(timeElapsed1.substring(3, 5));
-    if (minute <= 0 && second <= 0) {
-      console.log("Game ended");
+  useImperativeHandle(ref, () => ({
+    incrementSeconds() {
+      let timeElapsed1 = timeElapsed();
+      setTime(timeElapsed1);
+      const minute = parseInt(timeElapsed1.substring(0, 2));
+      const second = parseInt(timeElapsed1.substring(3, 5));
+      if (minute <= 0 && second <= 0) {
+        // performAction(resign);
+        console.log("TODO: report end of game to parent");
+      }
     }
-  }
-
-  setTimeout(() => incrementSeconds(), 1000);
+  }));
 
   return (
     <Grid container item justifyContent="center" xs={12} md={10} lg={10} xl={10} mx="auto" py={2} px={1}>
-      <AppBar position="static" style={{backgroundColor:"gray !important"}}>
+      <AppBar position="static" style={{ backgroundColor: "gray !important" }}>
         <Tabs value={activeTab}>
           {/* eslint-disable-next-line react/prop-types */}
           <Tab style={{ fontSize: 22, background: "antiquewhite" }} label={props.opponentName} />
@@ -47,6 +48,6 @@ const OpponentInfo = (props) => {
       </AppBar>
     </Grid>
   );
-};
+});
 
 export default OpponentInfo;

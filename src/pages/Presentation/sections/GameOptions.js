@@ -8,8 +8,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import AppBar from "@mui/material/AppBar";
 
-const GameOptions = forwardRef((props, ref) => {
-
+const GameOptions = forwardRef((props, optionsRef) => {
   const resign = `Resign`;
   const offerDraw = `Offer draw`;
   const restart = `Restart game`;
@@ -37,10 +36,9 @@ const GameOptions = forwardRef((props, ref) => {
   const [activeTab] = useState(1);
 
   const handleTabType = () => {
-    // setActiveTab(newValue);
   };
 
-  const [time, setTime] = useState(". . .");
+  const [time, setTime] = useState("10:00");
 
   function timeElapsed() {
     // eslint-disable-next-line react/prop-types
@@ -52,24 +50,17 @@ const GameOptions = forwardRef((props, ref) => {
     return (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
   }
 
-  function incrementSeconds() {
-    let timeElapsed1 = timeElapsed();
-    setTime(timeElapsed1);
-    const minute = parseInt(timeElapsed1.substring(0, 2));
-    const second = parseInt(timeElapsed1.substring(3, 5));
-    if (minute <= 0 && second <= 0) {
-      performAction(resign);
+  useImperativeHandle(optionsRef, () => ({
+    incrementSeconds() {
+      let timeElapsed1 = timeElapsed();
+      setTime(timeElapsed1);
+      const minute = parseInt(timeElapsed1.substring(0, 2));
+      const second = parseInt(timeElapsed1.substring(3, 5));
+      if (minute <= 0 && second <= 0) {
+        performAction(resign);
+      }
     }
-  }
-
-  setTimeout(() => incrementSeconds(), 1000);
-
-  useImperativeHandle(ref, () => ({
-    updateSeconds() {
-      console.log("Must update seconds from here");
-      alert("Zakhala")
-    }
-  }))
+  }));
 
   return (
     <Grid container item justifyContent="center" xs={12} md={10} lg={10} xl={10} mx="auto" py={2} px={1}>

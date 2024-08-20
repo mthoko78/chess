@@ -101,7 +101,19 @@ export const headersWithAuth = () => {
 
 const ChessGame = () => {
 
-  const optionsRef = useRef()
+  const optionsRef = useRef();
+  const opponentRef = useRef();
+
+  setInterval(() => {
+    // @ts-ignore
+    if (game && optionsRef && opponentRef) {
+      if (game.currentPlayer === localStorage.getItem("username")) {
+        optionsRef.current.incrementSeconds();
+      } else {
+        opponentRef.current.incrementSeconds();
+      }
+    }
+  }, 1000);
 
   const sendMove = (game, moveId, environment, callBack, on401, crowningTo) => {
     let url = `${baseUrl}/chess/move/${moveId}?${crowningTo ? `&crowningTo=${crowningTo}` : ""}`;
@@ -348,9 +360,6 @@ const ChessGame = () => {
         if (game) {
           setUpGame(game, "service");
           listenToPlayersTurn(game);
-          console.log("Calling updateSeconds");
-          // @ts-ignore
-          optionsRef.current.updateSeconds()
         } else {
           console.log("Game not found");
           nav(`/presentation`);
@@ -414,7 +423,9 @@ const ChessGame = () => {
       >
         <Grid>
           {(game && game.created) &&
-            <OpponentInfo gameDate={game.created} opponentName={localStorage.getItem("username") === game.whitePlayer.username ? game.blackPlayer.username:game.whitePlayer.username}/>}
+            <OpponentInfo gameDate={game.created}
+                          ref={opponentRef}
+                          opponentName={localStorage.getItem("username") === game.whitePlayer.username ? game.blackPlayer.username : game.whitePlayer.username} />}
           <table
             id={`div0`}
             style={{
@@ -437,7 +448,8 @@ const ChessGame = () => {
             }
           </table>
           {(game && game.created) &&
-            <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} gameDate={game.created} ref={optionsRef} />}
+            <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} gameDate={game.created}
+                         ref={optionsRef} />}
         </Grid>
       </MKBox>
     </>
