@@ -19,12 +19,10 @@ Coded by www.creative-tim.com
 import MKBox from "components/MKBox";
 
 // Material Kit 2 React examples
-import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 
 // Presentation page sections
 // Presentation page components
 // Routes
-import routes from "routes";
 
 // Images
 import bgImage from "assets/images/bg-presentation.jpg";
@@ -36,6 +34,7 @@ import { getDatabase, onValue, ref } from "firebase/database";
 import GameOptions from "../../sections/GameOptions";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
+import OpponentInfo from "../../sections/OpponentInfo";
 
 export const environment = "remote";
 export const fetchWithCallBack = (url, params, callback, on401) => {
@@ -348,7 +347,8 @@ const ChessGame = () => {
           setUpGame(game, "service");
           listenToPlayersTurn(game);
         } else {
-          alert("Game not found");
+          console.log("Game not found");
+          nav(`/presentation`);
         }
       },
       (error) => {
@@ -360,7 +360,7 @@ const ChessGame = () => {
     restart().then(() => {
       fetch(`${baseUrl}/chess?environment=${environment}`, { method: "DELETE", headers: headersWithAuth() })
         .then(() => {
-          nav(`/`);
+          nav(`/presentation`);
         });
     });
   };
@@ -375,25 +375,22 @@ const ChessGame = () => {
       method: "GET",
       headers: headersWithAuth()
     })
-      .then((response) => response.json())
-      .then((game) => setUpGame(game, "firebase"))
+      .then((response) => response.text())
+      .then((game) => {
+        if (game.length > 0) {
+          setUpGame(JSON.parse(game), "firebase");
+        } else {
+          console.log("Game not found");
+          nav(``);
+        }
+      })
       .catch(reason => {
-        console.log("Game not found", reason);
+        console.log("Could not fetch game", reason);
       });
   };
 
   return (
     <>
-      <DefaultNavbar
-        routes={routes}
-        action={{
-          type: "external",
-          route: "https://www.creative-tim.com/product/material-kit-react",
-          label: "free download",
-          color: "info"
-        }}
-        sticky
-      />
       <MKBox
         minHeight="100vh"
         width="100%"
@@ -410,6 +407,8 @@ const ChessGame = () => {
         }}
       >
         <Grid>
+          {(game && game.created) &&
+            <OpponentInfo gameDate={game.created} opponentName={`Mthoko`}/>}
           <table
             id={`div0`}
             style={{
