@@ -28,7 +28,7 @@ import MKBox from "components/MKBox";
 import bgImage from "assets/images/bg-presentation.jpg";
 import "index.css";
 import { FaChessBishop, FaChessKing, FaChessKnight, FaChessPawn, FaChessQueen, FaChessRook } from "react-icons/fa";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { baseUrl } from "../../../LandingPages/SignIn";
 import { getDatabase, onValue, ref } from "firebase/database";
 import GameOptions from "../../sections/GameOptions";
@@ -100,6 +100,8 @@ export const headersWithAuth = () => {
 };
 
 const ChessGame = () => {
+
+  const optionsRef = useRef()
 
   const sendMove = (game, moveId, environment, callBack, on401, crowningTo) => {
     let url = `${baseUrl}/chess/move/${moveId}?${crowningTo ? `&crowningTo=${crowningTo}` : ""}`;
@@ -346,6 +348,9 @@ const ChessGame = () => {
         if (game) {
           setUpGame(game, "service");
           listenToPlayersTurn(game);
+          console.log("Calling updateSeconds");
+          // @ts-ignore
+          optionsRef.current.updateSeconds()
         } else {
           console.log("Game not found");
           nav(`/presentation`);
@@ -432,7 +437,7 @@ const ChessGame = () => {
             }
           </table>
           {(game && game.created) &&
-            <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} gameDate={game.created} />}
+            <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} gameDate={game.created} ref={optionsRef} />}
         </Grid>
       </MKBox>
     </>

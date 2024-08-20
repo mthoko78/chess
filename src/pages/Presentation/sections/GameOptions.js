@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -8,7 +8,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import AppBar from "@mui/material/AppBar";
 
-const GameOptions = (props) => {
+const GameOptions = forwardRef((props, ref) => {
 
   const resign = `Resign`;
   const offerDraw = `Offer draw`;
@@ -64,6 +64,13 @@ const GameOptions = (props) => {
 
   setTimeout(() => incrementSeconds(), 1000);
 
+  useImperativeHandle(ref, () => ({
+    updateSeconds() {
+      console.log("Must update seconds from here");
+      alert("Zakhala")
+    }
+  }))
+
   return (
     <Grid container item justifyContent="center" xs={12} md={10} lg={10} xl={10} mx="auto" py={2} px={1}>
       <AppBar position="static">
@@ -78,6 +85,6 @@ const GameOptions = (props) => {
       </AppBar>
     </Grid>
   );
-};
+});
 
 export default GameOptions;
