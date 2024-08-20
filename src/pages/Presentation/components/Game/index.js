@@ -353,6 +353,7 @@ const ChessGame = () => {
       },
       (error) => {
         console.log(error);
+        nav(`/pages/authentication/sign-in`);
       });
   }, []);
 
@@ -408,7 +409,7 @@ const ChessGame = () => {
       >
         <Grid>
           {(game && game.created) &&
-            <OpponentInfo gameDate={game.created} opponentName={`Mthoko`}/>}
+            <OpponentInfo gameDate={game.created} opponentName={localStorage.getItem("username") === game.whitePlayer.username ? game.blackPlayer.username:game.whitePlayer.username}/>}
           <table
             id={`div0`}
             style={{

@@ -18,7 +18,7 @@ const OpponentInfo = (props) => {
     // eslint-disable-next-line react/prop-types
     let gameDate = new Date(props.gameDate);
     let date = new Date();
-    let totalSeconds = (120) - Math.round((date.valueOf() - gameDate.valueOf()) / (1000));
+    let totalSeconds = (9 * 60) - Math.round((date.valueOf() - gameDate.valueOf()) / (1000));
     const minutes = Math.round(totalSeconds / (60));
     const seconds = totalSeconds % 60;
     return (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
