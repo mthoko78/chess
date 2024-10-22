@@ -19,11 +19,9 @@ Coded by www.creative-tim.com
 import MKBox from "components/MKBox";
 
 // Material Kit 2 React examples
-
 // Presentation page sections
 // Presentation page components
 // Routes
-
 // Images
 import bgImage from "assets/images/bg-presentation.jpg";
 import "index.css";
@@ -44,7 +42,6 @@ export const fetchWithCallBack = (url, params, callback, on401) => {
         console.log(response);
         throw Error(`${response.status}`);
       }
-      console.log("Status:", response.status);
       try {
         return response.json();
       } catch (e) {
@@ -103,17 +100,6 @@ const ChessGame = () => {
 
   const optionsRef = useRef();
   const opponentRef = useRef();
-
-  setInterval(() => {
-    // @ts-ignore
-    if (game && optionsRef && opponentRef) {
-      if (game.currentPlayer === localStorage.getItem("username")) {
-        optionsRef.current.incrementSeconds();
-      } else {
-        opponentRef.current.incrementSeconds();
-      }
-    }
-  }, 1000);
 
   const sendMove = (game, moveId, environment, callBack, on401, crowningTo) => {
     let url = `${baseUrl}/chess/move/${moveId}?${crowningTo ? `&crowningTo=${crowningTo}` : ""}`;
@@ -174,7 +160,6 @@ const ChessGame = () => {
     return filter[0];
   };
   const clickHandler = (piece, row, col) => {
-    console.log("player", player);
     if (myTurn()) {
       if (selectingPiece()) {
         if (canMoveFrom(row, col)) {
@@ -187,7 +172,7 @@ const ChessGame = () => {
             game,
             game.possibleMoves.indexOf(getMove(selected.row, selected.col, row, col)),
             environment,
-            (game) => setGame(game),
+            (game) => console.log(game),
             () => {
             }
           )
@@ -295,6 +280,7 @@ const ChessGame = () => {
     let path = "chess/" + game.refId;
     const dbRef = ref(db, path);
     onValue(dbRef, (snapshot) => {
+      console.log("On value");
       if (game !== null) {
         let snapshotGame = snapshot.val();
         setUpGame(snapshotGame, "firebase");
@@ -306,11 +292,28 @@ const ChessGame = () => {
   };
 
   function setUpGame(game) {
+    console.log("setting up:", game);
     if (game === null) {
       return;
     }
     setGame(game);
     setRows({ ...(game.board.rows) });
+    localStorage.setItem("currentPlayer", game.currentPlayer);
+    if (!interval) {
+      interval = setInterval(() => {
+        // @ts-ignore
+        console.log("Current player:", localStorage.getItem("currentPlayer"));
+        console.log(game);
+        if (game && optionsRef && opponentRef) {
+          console.log("options:", optionsRef);
+          if (localStorage.getItem("currentPlayer") === localStorage.getItem("username")) {
+            optionsRef.current.countDown();
+          } else {
+            opponentRef.current.countDown();
+          }
+        }
+      }, 1000);
+    }
   }
 
   const nav = useNavigate();
@@ -329,6 +332,8 @@ const ChessGame = () => {
       .item(0)
       .offsetHeight;
   }
+
+  let interval;
 
   useEffect(() => {
     let offsetHeight = deviceHeight();
@@ -396,7 +401,7 @@ const ChessGame = () => {
           setUpGame(JSON.parse(game), "firebase");
         } else {
           console.log("Game not found");
-          nav(``);
+          nav(`/presentation`);
         }
       })
       .catch(reason => {
@@ -435,11 +440,11 @@ const ChessGame = () => {
             {
               (game && game.board.rows) && <tbody style={{ borderSpacing: "0px !important" }}>
               {rows && game.board.rows.map((row, index) => {
-                let black = game.whitePlayer.username;
+                let white = game.whitePlayer.username;
                 return (
                   <tr key={index} style={{ height: pieceSize }}>{row.spots.map((spot, i) => (
                     <td
-                      key={i}>{getPiece(player === black ? 7 - spot.row : spot.row, player !== black ? 7 - spot.col : spot.col)}</td>
+                      key={i}>{getPiece(player === white ? 7 - spot.row : spot.row, player !== white ? 7 - spot.col : spot.col)}</td>
                   ))
                   }</tr>
                 );
@@ -448,7 +453,7 @@ const ChessGame = () => {
             }
           </table>
           {(game && game.created) &&
-            <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} gameDate={game.created}
+            <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} gameDate={new Date(game.created)}
                          ref={optionsRef} />}
         </Grid>
       </MKBox>

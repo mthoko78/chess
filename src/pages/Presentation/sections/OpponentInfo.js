@@ -10,29 +10,25 @@ import AppBar from "@mui/material/AppBar";
 
 const OpponentInfo = forwardRef((props, ref) => {
 
+  const [timeLeft, setTimeLeft] = useState(10 * 60);
   const [activeTab] = useState(1);
-
   const [time, setTime] = useState("10:00");
 
-  function timeElapsed() {
-    // eslint-disable-next-line react/prop-types
-    let gameDate = new Date(props.gameDate);
-    let date = new Date();
-    let totalSeconds = (9 * 60) - Math.round((date.valueOf() - gameDate.valueOf()) / (1000));
-    const minutes = Math.round(totalSeconds / (60));
+  function secondsToTime(totalSeconds) {
+    const minutes = Math.floor(totalSeconds / (60));
     const seconds = totalSeconds % 60;
+    console.log("total seconds", totalSeconds);
+    console.log("mins", minutes);
+    console.log("secs", seconds);
     return (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
   }
 
   useImperativeHandle(ref, () => ({
-    incrementSeconds() {
-      let timeElapsed1 = timeElapsed();
-      setTime(timeElapsed1);
-      const minute = parseInt(timeElapsed1.substring(0, 2));
-      const second = parseInt(timeElapsed1.substring(3, 5));
-      if (minute <= 0 && second <= 0) {
-        // performAction(resign);
-        console.log("TODO: report end of game to parent");
+    countDown() {
+      setTimeLeft(timeLeft - 1);
+      setTime(secondsToTime(timeLeft));
+      if (timeLeft <= 0) {
+        console.log("Game ended");
       }
     }
   }));
