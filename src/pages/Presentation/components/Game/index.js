@@ -75,6 +75,7 @@ export const findByUser = (callback, on401) => {
 };
 
 export const findAllUsers = (callback, on401) => {
+  console.log("Fetching game from ", `${baseUrl}/user?environment=${environment}`)
   return fetchWithCallBack(
     `${baseUrl}/user?environment=${environment}`,
     {
@@ -280,7 +281,7 @@ const ChessGame = () => {
     let path = "chess/" + game.refId;
     const dbRef = ref(db, path);
     onValue(dbRef, (snapshot) => {
-      console.log("On value");
+      console.log("Notification received:", snapshot.val());
       if (game !== null) {
         let snapshotGame = snapshot.val();
         setUpGame(snapshotGame, "firebase");
@@ -292,7 +293,6 @@ const ChessGame = () => {
   };
 
   function setUpGame(game) {
-    console.log("setting up:", game);
     if (game === null) {
       return;
     }
@@ -301,11 +301,7 @@ const ChessGame = () => {
     localStorage.setItem("currentPlayer", game.currentPlayer);
     if (!interval) {
       interval = setInterval(() => {
-        // @ts-ignore
-        console.log("Current player:", localStorage.getItem("currentPlayer"));
-        console.log(game);
         if (game && optionsRef && opponentRef) {
-          console.log("options:", optionsRef);
           if (localStorage.getItem("currentPlayer") === localStorage.getItem("username")) {
             optionsRef.current.countDown();
           } else {
@@ -429,6 +425,7 @@ const ChessGame = () => {
         <Grid>
           {(game && game.created) &&
             <OpponentInfo gameDate={game.created}
+                          game={game}
                           ref={opponentRef}
                           opponentName={localStorage.getItem("username") === game.whitePlayer.username ? game.blackPlayer.username : game.whitePlayer.username} />}
           <table
@@ -454,6 +451,7 @@ const ChessGame = () => {
           </table>
           {(game && game.created) &&
             <GameOptions resign={resign} offerDraw={offerDraw} restart={restart} gameDate={new Date(game.created)}
+                         game={game}
                          ref={optionsRef} />}
         </Grid>
       </MKBox>

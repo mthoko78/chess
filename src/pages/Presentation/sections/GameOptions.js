@@ -8,20 +8,24 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import AppBar from "@mui/material/AppBar";
 
-const TIME_TRACKER = "timeTracker";
+export const GAME_DURATION = 30*60 // 30 minutes
 
-
-
-const dateDiffInMillis = (dateFrom, dateTo) => {
+export const dateDiffInMillis = (dateFrom, dateTo) => {
   return Math.abs(dateTo.valueOf() - dateFrom.valueOf());
 };
+
+export const secondsToTime = (totalSeconds) => {
+ const minutes = Math.floor(totalSeconds / (60));
+ const seconds = totalSeconds % 60;
+ return (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+}
 
 export const calculateTimeSpent = (game, username) => {
   let whiteTime = 0;
   let blackTime = 0;
   let current = new Date(game.created);
 
-  if (game.moves) {
+  if (game.moves && (game.moves.length > 0)) {
     for (let i = 0; i < game.moves.length; i++) {
       const diff = dateDiffInMillis(current.valueOf(), new Date(game.moves[i].timestamp));
       if (i % 2 === 0) { //even number for white
@@ -35,7 +39,6 @@ export const calculateTimeSpent = (game, username) => {
     if (game.currentPlayer === username) {
       time += dateDiffInMillis(current, new Date());
     }
-    console.log(blackTime, whiteTime);
     return Math.floor(time / 1000);
   } else {
     //no moves yet so white is to move and elapsed time counts for them
@@ -47,7 +50,12 @@ const GameOptions = forwardRef((props, optionsRef) => {
   const resign = `Resign`;
   const offerDraw = `Offer draw`;
   const restart = `Restart game`;
-  const [timeLeft, setTimeLeft] = useState(10 * 60);
+  // eslint-disable-next-line react/prop-types
+  const timeSpent = calculateTimeSpent(props.game, localStorage.getItem("username"))
+  // eslint-disable-next-line react/prop-types
+  const [timeLeft, setTimeLeft] = useState(GAME_DURATION - timeSpent);
+
+  const [time, setTime] = useState(secondsToTime(GAME_DURATION - timeSpent));
 
   const performAction = (action) => {
     console.log("Performing");
@@ -75,43 +83,8 @@ const GameOptions = forwardRef((props, optionsRef) => {
   const handleTabType = () => {
   };
 
-  const [time, setTime] = useState();
-
-  function secondsToTime(totalSeconds) {
-    const minutes = Math.floor(totalSeconds / (60));
-    const seconds = totalSeconds % 60;
-    console.log("total seconds", totalSeconds);
-    console.log("mins", minutes);
-    console.log("secs", seconds);
-    return (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-  }
-
   useImperativeHandle(optionsRef, () => ({
     countDown() {
-      console.log("Time tracker BEFORE update:", timeTracker);
-      let updatedTracker;
-      if (!timeTracker.timeUpToDate) {
-        const lostTime = Math.round((new Date().valueOf() - new Date(timeTracker.timestamp).valueOf()) / 1000);
-        console.log("lost time:", lostTime);
-        updatedTracker = {
-          ...timeTracker,
-          timeUpToDate: true,
-          secondsLeft: timeTracker.secondsLeft - lostTime - 1,
-          timestamp: new Date()
-        };
-        //   TODO: Check is player's time is up and take appropriate action(s)
-      } else {
-        updatedTracker = {
-          ...timeTracker,
-          timeUpToDate: true,
-          secondsLeft: timeTracker.secondsLeft - 1,
-          timestamp: new Date()
-        };
-      }
-      setTimeTracker(updatedTracker);
-      localStorage.setItem(TIME_TRACKER, JSON.stringify(updatedTracker));
-      console.log("Time tracker AFTER update:", updatedTracker);
-
       setTimeLeft(timeLeft - 1);
       setTime(secondsToTime(timeLeft));
       if (timeLeft <= 0) {
@@ -120,10 +93,17 @@ const GameOptions = forwardRef((props, optionsRef) => {
     }
   }));
 
-  const [timeTracker, setTimeTracker] = useState({ timestamp: new Date(), secondsLeft: 10 * 60, timeUpToDate: false });
-
   useEffect(() => {
-    console.log("Hello")
+
+    // eslint-disable-next-line react/prop-types
+    const timeSpent = calculateTimeSpent(props.game, localStorage.getItem("username"))
+    console.log("time spent", timeSpent);
+
+    const timeLeft = GAME_DURATION - timeSpent
+    console.log("your time left", timeLeft);
+    // eslint-disable-next-line react/prop-types
+    const seconds = Math.round(dateDiffInMillis(new Date(props.game.created), new Date())/1000)
+    console.log("game duration", seconds);
   }, []);
 
   return (
